@@ -35,20 +35,190 @@
   ---------------------------------------------------------------------------
 */
 
-package grizzled.classutil.classfinder
+package org.clapper.classfinder
 
-import org.clapper.util.classutil._
+import grizzled.slf4j.Logger
 
-class ClassFilterBuilder(cf1: ClassFilter)
+import java.io.IOException
+
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.commons.EmptyVisitor;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Opcodes;
+
+import java.util.jar.JarFile;
+import java.util.zip.ZipFile;
+import java.io.File
+
+object Modifier extends Enumeration
 {
-    def &(cf2: ClassFilter): AndClassFilter = new AndClassFilter(cf1, cf2)
-    def |(cf2: ClassFilter): OrClassFilter = new OrClassFilter(cf1, cf2)
-    def unary_! = new NotClassFilter(cf1)
+    type Modifier = Value
+
+    val Abstract     = Value("abstract")
+    val Final        = Value("final")
+    val Interface    = Value("interface")
+    val Native       = Value("native")
+    val Private      = Value("private")
+    val Protected    = Value("protected")
+    val Public       = Value("public")
+    val Static       = Value("static")
+    val Strict       = Value("strict")
+    val Synchronized = Value("synchronized")
+    val Transient    = Value("transient")
+    val Volatile     = Value("volatile")
 }
 
-object ClassFilter
+trait MethodInfo
 {
-    implicit def classFilterToBuilder(cf: ClassFilter): ClassFilterBuilder =
-        new ClassFilterBuilder(cf)
+    val name: String
+    val signature: String
+    val exceptions: List[String]
+    val access: Set[Modifier]
 }
 
+trait FieldInfo
+{
+    val name: String
+    val signature: String
+    val access: Set[Modifier]
+}
+
+trait ClassInfo
+{
+    def name: String
+    def superClassName: String
+    def interfaces: List[String]
+    def signature: String
+    def modifiers: Set[Modifier]
+    def location: File
+    def methods: Set[MethodInfo]
+    def fields: Set[FieldInfo]
+}
+
+class ClassFinder(path: List[String])
+{
+    def classes: Iterator[ClassInfo]
+
+    
+}
+
+object ClassFinder
+{
+    import java.io.File
+
+    private val log = Logger("org.clapper.classfinder.ClassFinder")
+
+    def classpath = 
+        System.getProperty("java.class.path").
+        split(File.pathSeparator).
+        map(s => if (s.trim.length == 0) "." else s)
+
+    def find(path: List[File]) =
+    {
+        path match
+        {
+            case Nil =>
+                Nil
+
+            case item :: Nil =>
+                handle(item)
+
+            case item :: tail =>
+                handle(item) ::: find(tail)
+        }
+    }
+
+    private def handle(f: File)
+    {
+        if (name.endsWith(".jar"))
+            processJarOrZip(f, new JarFile(f))
+        else if (name.endsWith(".zip"))
+            processZip(f, new ZipFile(f))
+        else if (f.isDirectory)
+            processDirectory(f)
+    }
+
+    private def processJarOrZip(file: File, open: File => ZipFile)
+    {
+        try
+        {
+            val opened = open(file)
+            try
+            {
+                processOpenZip(file.getPath, opened)
+            }
+            finally
+            {
+                opened.close
+            }
+        }
+
+        catch
+        {
+            case e: IOException =>
+                log.error("Cannot open file \"" + file.getPath + "\"", e)
+        }
+    }
+
+    private def processOpenZip(file: File, zipFile: ZipFile)
+    {
+    }
+
+    private def processDirectory(dir: File)
+    {
+    }
+}
+
+private[classfinder] class ClassInfoImpl(val name: String,
+                                         val superClassName: String,
+                                         val interfaces: List[String],
+                                         val signature: String,
+                                         access: Int,
+                                         val location: File)
+extends ClassInfo
+{
+    import java.lang.reflect.Modifier
+
+    private val ModifierMap = new Map(
+        Modifier.ABSTRACT     -> Modifier.Abstract,
+        Modifier.FINAL        -> Modifier.Final,
+        Modifier.INTERFACE    -> Modifier.Interface,
+        Modifier.NATIVE       -> Modifier.Native,
+        Modifier.PRIVATE      -> Modifier.Private,
+        Modifier.PROTECTED    -> Modifier.Protected,
+        Modifier.PUBLIC       -> Modifier.Public,
+        Modifier.STATIC       -> Modifier.Static,
+        Modifier.STRICT       -> Modifier.Strict,
+        Modifier.SYNCHRONIZED -> Modifier.Synchronized,
+        Modifier.TRANSIENT    -> Modifier.Transient,
+        Modifier.VOLATILE     -> Modifier.Volatile
+    )
+
+    val modifiers = ModifierMap.filter(t => (t._1 & access) != 0).map(_._2)
+
+    val methods = Set.empty[MethodInfo]
+    val fields = Set.empty[FieldInfo]
+}
+
+private[classfinder] class ClassVisitor(location: File) extends EmptyVisitor
+{
+    import scala.collection.mutable.{Map => MutableMap}
+
+    val classes = MutableMap.empty[String, ClassInfo]
+
+    override def visit(version: Int, 
+                       access: Int, 
+                       name: String,
+                       signature: String, 
+                       superName: String,
+                       interfaces: Array[String])
+    {
+        classes = name -> new ClassInfoImpl(name,
+                                            superName,
+                                            interfaces.toList,
+                                            signature,
+                                            access,
+                                            location)
+    }
+}
