@@ -37,8 +37,6 @@
 
 package org.clapper.classfinder
 
-import grizzled.slf4j.Logger
-
 import java.io.IOException
 
 import org.objectweb.asm.FieldVisitor;
@@ -74,14 +72,14 @@ trait MethodInfo
     val name: String
     val signature: String
     val exceptions: List[String]
-    val access: Set[Modifier]
+    val access: Set[Modifier.Modifier]
 }
 
 trait FieldInfo
 {
     val name: String
     val signature: String
-    val access: Set[Modifier]
+    val access: Set[Modifier.Modifier]
 }
 
 trait ClassInfo
@@ -90,22 +88,16 @@ trait ClassInfo
     def superClassName: String
     def interfaces: List[String]
     def signature: String
-    def modifiers: Set[Modifier]
+    def modifiers: Set[Modifier.Modifier]
     def location: File
     def methods: Set[MethodInfo]
     def fields: Set[FieldInfo]
 }
 
-class ClassFinder(path: List[String])
-{
-    def classes: Iterator[ClassInfo]
-
-    
-}
-
 object ClassFinder
 {
     import java.io.File
+    import grizzled.slf4j._
 
     private val log = Logger("org.clapper.classfinder.ClassFinder")
 
@@ -114,7 +106,7 @@ object ClassFinder
         split(File.pathSeparator).
         map(s => if (s.trim.length == 0) "." else s)
 
-    def find(path: List[File]) =
+    def find(path: List[File]): List[ClassInfo] =
     {
         path match
         {
@@ -129,24 +121,28 @@ object ClassFinder
         }
     }
 
-    private def handle(f: File)
+    private def handle(f: File): List[ClassInfo] =
     {
+        val name = f.getPath
+
         if (name.endsWith(".jar"))
             processJarOrZip(f, new JarFile(f))
         else if (name.endsWith(".zip"))
-            processZip(f, new ZipFile(f))
+            processJarOrZip(f, new ZipFile(f))
         else if (f.isDirectory)
             processDirectory(f)
+        else
+            Nil
     }
 
-    private def processJarOrZip(file: File, open: File => ZipFile)
+    private def processJarOrZip(file: File, open: => ZipFile): List[ClassInfo] =
     {
         try
         {
-            val opened = open(file)
+            val opened = open
             try
             {
-                processOpenZip(file.getPath, opened)
+                processOpenZip(file, opened)
             }
             finally
             {
@@ -158,15 +154,18 @@ object ClassFinder
         {
             case e: IOException =>
                 log.error("Cannot open file \"" + file.getPath + "\"", e)
+                Nil
         }
     }
 
-    private def processOpenZip(file: File, zipFile: ZipFile)
+    private def processOpenZip(file: File, zipFile: ZipFile): List[ClassInfo] =
     {
+        Nil
     }
 
-    private def processDirectory(dir: File)
+    private def processDirectory(dir: File): List[ClassInfo] =
     {
+        Nil
     }
 }
 
@@ -178,24 +177,28 @@ private[classfinder] class ClassInfoImpl(val name: String,
                                          val location: File)
 extends ClassInfo
 {
-    import java.lang.reflect.Modifier
+    import java.lang.reflect.{Modifier => JModifier}
 
-    private val ModifierMap = new Map(
-        Modifier.ABSTRACT     -> Modifier.Abstract,
-        Modifier.FINAL        -> Modifier.Final,
-        Modifier.INTERFACE    -> Modifier.Interface,
-        Modifier.NATIVE       -> Modifier.Native,
-        Modifier.PRIVATE      -> Modifier.Private,
-        Modifier.PROTECTED    -> Modifier.Protected,
-        Modifier.PUBLIC       -> Modifier.Public,
-        Modifier.STATIC       -> Modifier.Static,
-        Modifier.STRICT       -> Modifier.Strict,
-        Modifier.SYNCHRONIZED -> Modifier.Synchronized,
-        Modifier.TRANSIENT    -> Modifier.Transient,
-        Modifier.VOLATILE     -> Modifier.Volatile
+    private val ModifierMap = Map(
+        JModifier.ABSTRACT     -> Modifier.Abstract,
+        JModifier.FINAL        -> Modifier.Final,
+        JModifier.INTERFACE    -> Modifier.Interface,
+        JModifier.NATIVE       -> Modifier.Native,
+        JModifier.PRIVATE      -> Modifier.Private,
+        JModifier.PROTECTED    -> Modifier.Protected,
+        JModifier.PUBLIC       -> Modifier.Public,
+        JModifier.STATIC       -> Modifier.Static,
+        JModifier.STRICT       -> Modifier.Strict,
+        JModifier.SYNCHRONIZED -> Modifier.Synchronized,
+        JModifier.TRANSIENT    -> Modifier.Transient,
+        JModifier.VOLATILE     -> Modifier.Volatile
     )
 
-    val modifiers = ModifierMap.filter(t => (t._1 & access) != 0).map(_._2)
+    // Map the class's modifiers integer bitmap into a set of Modifier
+    // enumeration values by filtering and keeping only the ones that match
+    // the masks, extracting the corresponding map value, and converting the
+    // whole thing to a set.
+    val modifiers = ModifierMap.filterKeys(k => (k & access) != 0).values.toSet
 
     val methods = Set.empty[MethodInfo]
     val fields = Set.empty[FieldInfo]
@@ -214,11 +217,11 @@ private[classfinder] class ClassVisitor(location: File) extends EmptyVisitor
                        superName: String,
                        interfaces: Array[String])
     {
-        classes = name -> new ClassInfoImpl(name,
-                                            superName,
-                                            interfaces.toList,
-                                            signature,
-                                            access,
-                                            location)
+        classes += name -> new ClassInfoImpl(name,
+                                             superName,
+                                             interfaces.toList,
+                                             signature,
+                                             access,
+                                             location)
     }
 }

@@ -58,6 +58,13 @@ with posterous.Publish
     override def compileOptions = Unchecked :: super.compileOptions.toList
     override def parallelExecution = true // why not?
 
+    // Disable cross-paths, since we're only building under one version.
+    // This simplifies publishing and importing. See
+    // http://groups.google.com/group/simple-build-tool/browse_thread/thread/973b5a2956b5ecbe
+
+    override def disableCrossPaths = true
+
+
     /* ---------------------------------------------------------------------- *\
                              Various settings
     \* ---------------------------------------------------------------------- */
@@ -99,7 +106,7 @@ with posterous.Publish
     val orgClapperRepo = "clapper.org Maven Repository" at
         "http://maven.clapper.org"
     val grizzled = "org.clapper" % "grizzled-scala" % "0.5"
-    val grizzled_slf4j = "org.clapper" % "grizzled-slf4j" % "0.1"
+    val grizzledSlf4j = "org.clapper" % "grizzled-slf4j" % "0.1"
 
     /* ---------------------------------------------------------------------- *\
                          Custom tasks and actions
