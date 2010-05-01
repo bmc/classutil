@@ -100,12 +100,12 @@ with posterous.Publish
     val scalatest = "org.scalatest" % "scalatest" %
         "1.0.1-for-scala-2.8.0.Beta1-with-test-interfaces-0.3-SNAPSHOT"
 
-    val asmUtil = "asm" % "asm-util" % "3.2"
+    val asm = "asm" % "asm" % "3.2"
     val asmCommons = "asm" % "asm-commons" % "3.2"
 
     val orgClapperRepo = "clapper.org Maven Repository" at
         "http://maven.clapper.org"
-    val grizzled = "org.clapper" % "grizzled-scala" % "0.5"
+    val grizzled = "org.clapper" % "grizzled-scala" % "0.5.1"
     val grizzledSlf4j = "org.clapper" % "grizzled-slf4j" % "0.1"
 
     /* ---------------------------------------------------------------------- *\

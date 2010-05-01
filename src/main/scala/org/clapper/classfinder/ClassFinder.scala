@@ -45,7 +45,7 @@ import org.objectweb.asm.commons.EmptyVisitor;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 
-import java.util.jar.JarFile
+import java.util.jar.{JarFile, Manifest => JarManifest}
 import java.util.zip.{ZipFile, ZipEntry}
 import java.io.{File, InputStream, IOException}
 
@@ -137,40 +137,62 @@ object ClassFinder
 
     private def handle(f: File): List[ClassInfo] =
     {
-        val name = f.getPath
+        val name = f.getPath.toLowerCase
 
         if (name.endsWith(".jar"))
-            processJarOrZip(f, new JarFile(f))
+            processJar(f)
         else if (name.endsWith(".zip"))
-            processJarOrZip(f, new ZipFile(f))
+            processZip(f)
         else if (f.isDirectory)
             processDirectory(f)
         else
             Nil
     }
 
-    private def processJarOrZip(file: File, open: => ZipFile): List[ClassInfo] =
+    private def processJar(file: File): List[ClassInfo] =
     {
-        try
-        {
-            val opened = open
-            try
-            {
-                processOpenZip(file, opened)
-            }
-            finally
-            {
-                opened.close
-            }
-        }
+        val jar = new JarFile(file)
+        val list1 = processOpenZip(file, jar)
 
-        catch
+        var manifest = jar.getManifest
+        if (manifest == null)
+            list1
+
+        else
         {
-            case e: IOException =>
-                log.error("Cannot open file \"" + file.getPath + "\"", e)
-                Nil
+            val path = loadManifestPath(jar, file, manifest)
+            val list2 = find(path)
+            list1 ++ list2
         }
     }
+
+    private def loadManifestPath(jar: JarFile,
+                                 jarFile: File,
+                                 manifest: JarManifest): List[File] =
+    {
+        import scala.collection.JavaConversions._
+
+        val attrs = manifest.getMainAttributes
+        val value = attrs.get("Class-Path").asInstanceOf[String]
+
+        if (value == null)
+            Nil
+
+        else
+        {
+            log.debug("Adding ClassPath from jar " + jar.getName)
+            val parent = jarFile.getParent
+            val tokens = value.split("""\s+""").toList
+
+            if (parent == null)
+                tokens.map(new File(_))
+            else
+                tokens.map(s => new File(parent + File.separator + s))
+        }
+    }
+
+    private def processZip(file: File): List[ClassInfo] =
+        processOpenZip(file, new ZipFile(file))
 
     private def processOpenZip(file: File, zipFile: ZipFile): List[ClassInfo] =
     {
@@ -184,12 +206,26 @@ object ClassFinder
             flatten
     }
 
-    private def isClass(e: ZipEntry): Boolean =
+    // Matches both ZipEntry and File
+    type FileEntry =
+    {
+        def isDirectory(): Boolean
+        def getName(): String
+    }
+
+    private def isClass(e: FileEntry): Boolean =
         (! e.isDirectory) && (e.getName.toLowerCase.endsWith(".class"))
 
     private def processDirectory(dir: File): List[ClassInfo] =
     {
-        Nil
+        import grizzled.file.implicits._
+        import java.io.FileInputStream
+
+        dir.listRecursively.
+            filter((f: File) => isClass(f)).
+            map((f: File) => classData(new FileInputStream(f), dir)).
+            toList.
+            flatten
     }
 
     private def classData(is: InputStream, location: File): List[ClassInfo] =
