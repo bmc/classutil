@@ -47,15 +47,21 @@ import org.clapper.sbtplugins.MarkdownPlugin
  * To build Novus via SBT.
  */
 class Project(info: ProjectInfo)
-extends DefaultProject(info)
-with MarkdownPlugin
-with posterous.Publish
+    extends DefaultProject(info)
+    with MarkdownPlugin
+    with AutoCompilerPlugins
+    with posterous.Publish
 {
     /* ---------------------------------------------------------------------- *\
                          Compiler and SBT Options
     \* ---------------------------------------------------------------------- */
 
-    override def compileOptions = Unchecked :: super.compileOptions.toList
+    val continuationsPlugin = compilerPlugin("org.scala-lang.plugins" %
+                                             "continuations" % "2.8.0.RC1")
+    override def compileOptions = Unchecked :: 
+        (super.compileOptions ++ compileOptions("-P:continuations:enable"))
+
+    //override def compileOptions = Unchecked :: super.compileOptions.toList
     override def parallelExecution = true // why not?
 
     // Disable cross-paths, since we're only building under one version.

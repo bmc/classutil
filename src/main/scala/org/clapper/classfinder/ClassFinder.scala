@@ -38,12 +38,9 @@
 package org.clapper.classfinder
 
 import scala.collection.mutable.{Set => MutableSet}
+import scala.util.continuations.cps
 
-import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.commons.EmptyVisitor;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.Opcodes;
+import grizzled.generator._
 
 import java.util.jar.{JarFile, Manifest => JarManifest}
 import java.util.zip.{ZipFile, ZipEntry}
@@ -67,11 +64,13 @@ object Modifier extends Enumeration
     val Volatile     = Value("volatile")
 }
 
-class MethodInfo(val name: String,
-                 val signature: String,
-                 val exceptions: List[String],
-                 val access: Set[Modifier.Modifier])
+trait MethodInfo
 {
+    val name: String
+    val signature: String
+    val exceptions: List[String]
+    val modifiers: Set[Modifier.Modifier]
+
     override def toString = signature
     override def hashCode = signature.hashCode
 
@@ -82,10 +81,12 @@ class MethodInfo(val name: String,
     }
 }
 
-class FieldInfo(val name: String,
-                val signature: String,
-                val access: Set[Modifier.Modifier])
+trait FieldInfo
 {
+    val name: String
+    val signature: String
+    val modifiers: Set[Modifier.Modifier]
+
     override def toString = signature
     override def hashCode = signature.hashCode
 
@@ -106,6 +107,15 @@ trait ClassInfo
     def location: File
     def methods: Set[MethodInfo]
     def fields: Set[FieldInfo]
+
+    def isInterface = modifiers contains Modifier.Interface
+    def isAbstract = modifiers contains Modifier.Abstract
+    def isPrivate = modifiers contains  Modifier.Private
+    def isProtected = modifiers contains  Modifier.Protected
+    def isPublic = modifiers contains  Modifier.Public
+    def isFinal = modifiers contains  Modifier.Final
+    def isStatic = modifiers contains  Modifier.Static
+    def isSynchronized = modifiers contains  Modifier.Synchronized
 }
 
 object ClassFinder
@@ -120,22 +130,22 @@ object ClassFinder
         split(File.pathSeparator).
         map(s => if (s.trim.length == 0) "." else s)
 
-    def find(path: List[File]): List[ClassInfo] =
+    def find(path: List[File]): Iterator[ClassInfo] =
     {
         path match
         {
             case Nil =>
-                Nil
+                Iterator.empty
 
             case item :: Nil =>
                 handle(item)
 
             case item :: tail =>
-                handle(item) ::: find(tail)
+                handle(item) ++ find(tail)
         }
     }
 
-    private def handle(f: File): List[ClassInfo] =
+    private def handle(f: File): Iterator[ClassInfo] =
     {
         val name = f.getPath.toLowerCase
 
@@ -146,10 +156,10 @@ object ClassFinder
         else if (f.isDirectory)
             processDirectory(f)
         else
-            Nil
+            Iterator.empty
     }
 
-    private def processJar(file: File): List[ClassInfo] =
+    private def processJar(file: File): Iterator[ClassInfo] =
     {
         val jar = new JarFile(file)
         val list1 = processOpenZip(file, jar)
@@ -191,19 +201,20 @@ object ClassFinder
         }
     }
 
-    private def processZip(file: File): List[ClassInfo] =
+    private def processZip(file: File): Iterator[ClassInfo] =
         processOpenZip(file, new ZipFile(file))
 
-    private def processOpenZip(file: File, zipFile: ZipFile): List[ClassInfo] =
+    private def processOpenZip(file: File, zipFile: ZipFile) =
     {
         import scala.collection.JavaConversions._
 
         val zipFileName = file.getPath
-        zipFile.entries.
+        val classInfoIterators =
+            zipFile.entries.
             filter((e: ZipEntry) => isClass(e)).
-            map((e: ZipEntry) => classData(zipFile.getInputStream(e), file)).
-            toList.
-            flatten
+            map((e: ZipEntry) => classData(zipFile.getInputStream(e), file))
+
+        generateFromIterators(classInfoIterators)
     }
 
     // Matches both ZipEntry and File
@@ -216,142 +227,50 @@ object ClassFinder
     private def isClass(e: FileEntry): Boolean =
         (! e.isDirectory) && (e.getName.toLowerCase.endsWith(".class"))
 
-    private def processDirectory(dir: File): List[ClassInfo] =
+    private def processDirectory(dir: File): Iterator[ClassInfo] =
     {
         import grizzled.file.implicits._
         import java.io.FileInputStream
 
-        dir.listRecursively.
+        val classInfoIterators =
+            dir.listRecursively.
             filter((f: File) => isClass(f)).
-            map((f: File) => classData(new FileInputStream(f), dir)).
-            toList.
-            flatten
+            map((f: File) => classData(new FileInputStream(f), dir))
+
+        generateFromIterators(classInfoIterators)
     }
 
-    private def classData(is: InputStream, location: File): List[ClassInfo] =
+    private def classData(is: InputStream, 
+                          location: File): Iterator[ClassInfo] =
     {
-        val cr = new ClassReader(is)
-        val ASMAcceptCriteria = 0
-        val visitor = new ClassVisitor(location)
-        cr.accept(visitor, ASMAcceptCriteria)
-        visitor.classes.toList
+        import org.clapper.classfinder.asm.ClassFile
+
+        ClassFile.load(is, location)
     }
-}
 
-private[classfinder] class ClassInfoImpl(val name: String,
-                                         val superClassName: String,
-                                         val interfaces: List[String],
-                                         val signature: String,
-                                         val modifiers: Set[Modifier.Modifier],
-                                         val location: File)
-extends ClassInfo
-{
-    import java.lang.reflect.{Modifier => JModifier}
-
-    override def toString = name
-
-    def methods = Set.empty[MethodInfo] ++ methodSet
-    def fields  = Set.empty[FieldInfo] ++ fieldSet
-
-    var methodSet = MutableSet.empty[MethodInfo]
-    var fieldSet = MutableSet.empty[FieldInfo]
-}
-
-private[classfinder] class ClassVisitor(location: File) extends EmptyVisitor
-{
-    import java.lang.reflect.{Modifier => JModifier}
-
-    private val ModifierMap = Map(
-        JModifier.ABSTRACT     -> Modifier.Abstract,
-        JModifier.FINAL        -> Modifier.Final,
-        JModifier.INTERFACE    -> Modifier.Interface,
-        JModifier.NATIVE       -> Modifier.Native,
-        JModifier.PRIVATE      -> Modifier.Private,
-        JModifier.PROTECTED    -> Modifier.Protected,
-        JModifier.PUBLIC       -> Modifier.Public,
-        JModifier.STATIC       -> Modifier.Static,
-        JModifier.STRICT       -> Modifier.Strict,
-        JModifier.SYNCHRONIZED -> Modifier.Synchronized,
-        JModifier.TRANSIENT    -> Modifier.Transient,
-        JModifier.VOLATILE     -> Modifier.Volatile
-    )
-
-    private val AccessMap = Map(
-        Opcodes.ACC_ABSTRACT     -> Modifier.Abstract,
-        Opcodes.ACC_FINAL        -> Modifier.Final,
-        Opcodes.ACC_INTERFACE    -> Modifier.Interface,
-        Opcodes.ACC_NATIVE       -> Modifier.Native,
-        Opcodes.ACC_PRIVATE      -> Modifier.Private,
-        Opcodes.ACC_PROTECTED    -> Modifier.Protected,
-        Opcodes.ACC_PUBLIC       -> Modifier.Public,
-        Opcodes.ACC_STATIC       -> Modifier.Static,
-        Opcodes.ACC_STRICT       -> Modifier.Strict,
-        Opcodes.ACC_SYNCHRONIZED -> Modifier.Synchronized,
-        Opcodes.ACC_TRANSIENT    -> Modifier.Transient,
-        Opcodes.ACC_VOLATILE     -> Modifier.Volatile
-    )
-
-    var classes = MutableSet.empty[ClassInfo]
-    var currentClass: Option[ClassInfoImpl] = None
-
-    override def visit(version: Int, 
-                       access: Int, 
-                       name: String,
-                       signature: String, 
-                       superName: String,
-                       interfaces: Array[String])
+    private def generateFromIterators(iterators: Iterator[Iterator[ClassInfo]])=
+    generator[ClassInfo]
     {
-        val classInfo = new ClassInfoImpl(
-            mapClassName(name),
-            mapClassName(superName),
-            interfaces.toList.map(mapClassName(_)),
-            signature,
-            mapModifiers(access, AccessMap),
-            location
-        )
-        classes += classInfo
-        currentClass = Some(classInfo)
-    }
+        def doIterator(iterator: Iterator[ClassInfo]):
+        Unit @cps[Iteration[ClassInfo]] =
+        {
+            if (iterator.hasNext)
+            {
+                generate(iterator.next)
+                doIterator(iterator)
+            }
+        }
 
-    override def visitMethod(access: Int,
-                             name: String,
-                             description: String,
-                             signature: String,
-                             exceptions: Array[String]): MethodVisitor =
-    {
-        assert(currentClass != None)
-        val sig = if (signature != null) signature else name
-        val excList = if (exceptions == null) Nil else exceptions.toList
-        currentClass.get.methodSet += new MethodInfo(
-            name, sig, excList, mapModifiers(access, ModifierMap)
-        )
-        null
-    }
+        def doIterators(iterators: Iterator[Iterator[ClassInfo]]):
+        Unit @cps[Iteration[ClassInfo]] =
+        {
+            if (iterators.hasNext)
+            {
+                doIterator(iterators.next)
+                doIterators(iterators)
+            }
+        }
 
-    override def visitField(access: Int,
-                            name: String,
-                            description: String,
-                            signature: String,
-                            value: java.lang.Object): FieldVisitor =
-    {
-        assert(currentClass != None)
-        val sig = if (signature != null) signature else name
-        currentClass.get.fieldSet += new FieldInfo(
-            name, sig, mapModifiers(access, ModifierMap)
-        )
-        null
+        doIterators(iterators)
     }
-
-    private def mapModifiers(bitmap: Int, 
-                             map: Map[Int, Modifier.Modifier]):
-        Set[Modifier.Modifier] =
-    {
-        // Map the class's modifiers integer bitmap into a set of Modifier
-        // enumeration values by filtering and keeping only the ones that
-        // match the masks, extracting the corresponding map value, and
-        // converting the whole thing to a set.
-        map.filterKeys(k => (k & bitmap) != 0).values.toSet
-    }
-
-    private def mapClassName(name: String): String = name.replaceAll("/", ".")
 }
