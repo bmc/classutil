@@ -1,5 +1,5 @@
 ---
-title: ClassUtil—A Scala-friend, fast class-finder library (with extras)
+title: ClassUtil—A Scala-friendly, fast class-finder library (with extras)
 layout: withTOC
 ---
 
