@@ -116,6 +116,18 @@ trait ClassInfo
     def isFinal = modifiers contains  Modifier.Final
     def isStatic = modifiers contains  Modifier.Static
     def isSynchronized = modifiers contains  Modifier.Synchronized
+
+    /**
+     * Determine whether this class directly implements a specific interface.
+     * Since a `ClassInfo` object contains information about a single class,
+     * this method cannot determine whether a class indirectly implements
+     * an interface. That capability is a higher-order operation.
+     *
+     * @param interface the name of the interface
+     *
+     * @return whether the class implements the interface
+     */
+    def implements(interface: String) = interfaces contains interface
 }
 
 object ClassFinder
