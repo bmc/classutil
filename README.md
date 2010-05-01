@@ -1,5 +1,5 @@
-classfinder: Fast class finder utilities
-========================================
+classutil: Fast class finder utilities, plus some extras
+========================================================
 
 ## NOTICE
 
@@ -17,13 +17,15 @@ are vanquished.**
 
 ## Introduction
 
-The *org.clapper.classfinder* library is a Scala package that wraps a
+The *org.clapper.classutil* library is a Scala package that wraps a
 portion of the [ASM][] bytecode library and provides methods for locating
 and filtering classes quickly, returning the information about the classes
 in a lazy iterator. The package's home page is at
-<http://bmc.github.com/classfinder>; please see that page for complete
+<http://bmc.github.com/classutil>; please see that page for complete
 details.
 
-[ASM]: http://asm.ow2.org/
 ---
-Copyright &copy; 2010 Brian M. Clapper, <i>bmc@clapper.org</i>
+Copyright &copy; 2010 [Brian M. Clapper][].
+
+[ASM]: http://asm.ow2.org/
+[Brian M. Clapper]: mailto:bmc@clapper.org

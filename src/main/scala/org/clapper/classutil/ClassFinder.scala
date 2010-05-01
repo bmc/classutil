@@ -35,7 +35,7 @@
   ---------------------------------------------------------------------------
 */
 
-package org.clapper.classfinder
+package org.clapper.classutil
 
 import scala.collection.mutable.{Set => MutableSet}
 import scala.util.continuations.cps
@@ -135,7 +135,7 @@ object ClassFinder
     import java.io.File
     import grizzled.slf4j._
 
-    private val log = Logger("org.clapper.classfinder.ClassFinder")
+    private val log = Logger("org.clapper.classutil.ClassFinder")
 
     def classpath = 
         System.getProperty("java.class.path").
@@ -255,7 +255,7 @@ object ClassFinder
     private def classData(is: InputStream, 
                           location: File): Iterator[ClassInfo] =
     {
-        import org.clapper.classfinder.asm.ClassFile
+        import org.clapper.classutil.asm.ClassFile
 
         ClassFile.load(is, location)
     }

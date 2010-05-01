@@ -38,9 +38,9 @@
 /**
  * The ASM-specific implementation of the Class Finder capabilities.
  */
-package org.clapper.classfinder.asm
+package org.clapper.classutil.asm
 
-import org.clapper.classfinder._
+import org.clapper.classutil._
 
 import scala.collection.mutable.{Set => MutableSet}
 
@@ -97,12 +97,12 @@ trait ASMBitmapMapper
     }
 }
 
-private[classfinder] class ClassInfoImpl(val name: String,
-                                         val superClassName: String,
-                                         val interfaces: List[String],
-                                         val signature: String,
-                                         val access: Int,
-                                         val location: File)
+private[classutil] class ClassInfoImpl(val name: String,
+                                       val superClassName: String,
+                                       val interfaces: List[String],
+                                       val signature: String,
+                                       val access: Int,
+                                       val location: File)
 extends ClassInfo with ASMBitmapMapper
 {
     import java.lang.reflect.{Modifier => JModifier}
@@ -143,7 +143,7 @@ extends FieldInfo with ASMBitmapMapper
     val modifiers = mapModifiers(access, AccessMap)
 }
 
-private[classfinder] class ClassVisitor(location: File)
+private[classutil] class ClassVisitor(location: File)
 extends EmptyVisitor with ASMBitmapMapper
 {
     var classes = MutableSet.empty[ClassInfo]
@@ -197,7 +197,7 @@ extends EmptyVisitor with ASMBitmapMapper
     private def mapClassName(name: String): String = name.replaceAll("/", ".")
 }
 
-private[classfinder] object ClassFile
+private[classutil] object ClassFile
 {
     val ASMAcceptCriteria = 0
 
