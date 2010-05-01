@@ -19,7 +19,8 @@ are vanquished.**
 
 The *org.clapper.classfinder* library is a Scala package that wraps a
 portion of the [ASM][] bytecode library and provides methods for locating
-and filtering classes quickly. The package's home page is at
+and filtering classes quickly, returning the information about the classes
+in a lazy iterator. The package's home page is at
 <http://bmc.github.com/classfinder>; please see that page for complete
 details.
 
