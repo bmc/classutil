@@ -35,6 +35,15 @@
   ---------------------------------------------------------------------------
 */
 
+/**
+ * This library provides methods for locating and filtering classes
+ * quickly--faster, in fact, than can be done with Java or Scala runtime
+ * reflection. Under the covers, it uses the ASM bytecode library, though
+ * it can easily be extended to use other bytecode libraries. ClassUtil
+ * loads and returns information about classes using an efficient lazy
+ * iterator approach, which offers minimal startup penalty and the ability
+ * to cut the traversal short.
+ */
 package org.clapper.classutil
 
 import scala.collection.mutable.{Set => MutableSet}
@@ -46,6 +55,10 @@ import java.util.jar.{JarFile, Manifest => JarManifest}
 import java.util.zip.{ZipFile, ZipEntry}
 import java.io.{File, InputStream, IOException}
 
+/**
+ * An enumerated high-level view of the modifiers that can be attached
+ * to a method, class or field.
+ */
 object Modifier extends Enumeration
 {
     type Modifier = Value
@@ -64,14 +77,38 @@ object Modifier extends Enumeration
     val Volatile     = Value("volatile")
 }
 
+/**
+ * Information about a method, as read from a class file.
+ */
 trait MethodInfo
 {
+    /**
+     * The name of the method.
+     */
     val name: String
+
+    /**
+     * The method's JVM signature.
+     */
     val signature: String
+
+    /**
+     * A list of the checked exceptions (as class names) that the method
+     * throws, or an empty list if it throws no known checked exceptions.
+     */
     val exceptions: List[String]
+
+    /**
+     * The method's modifiers.
+     */
     val modifiers: Set[Modifier.Modifier]
 
+    /**
+     * A printable version of the method. Currently, the string version is
+     * the signature.
+     */
     override def toString = signature
+
     override def hashCode = signature.hashCode
 
     override def equals(o: Any) = o match
@@ -81,13 +118,32 @@ trait MethodInfo
     }
 }
 
+/**
+ * Information about a field, as read from a class file.
+ */
 trait FieldInfo
 {
+    /**
+     * The field's name.
+     */
     val name: String
+
+    /**
+     * The field's JVM signature.
+     */
     val signature: String
+
+    /**
+     * The field's modifiers.
+     */
     val modifiers: Set[Modifier.Modifier]
 
+    /**
+     * A printable version of the field. Currently, the string version is
+     * the signature.
+     */
     override def toString = signature
+
     override def hashCode = signature.hashCode
 
     override def equals(o: Any) = o match
@@ -97,24 +153,122 @@ trait FieldInfo
     }
 }
 
+/**
+ * Information about a class, as read from a class file.
+ */
 trait ClassInfo
 {
+    /**
+     * The class's fully qualified name.
+     */
     def name: String
+
+    /**
+     * The parent class's fully qualified name.
+     */
     def superClassName: String
+
+    /**
+     * A list of the interfaces, as class names, that the class implements;
+     * or, an empty list if it implements no interfaces.
+     */
     def interfaces: List[String]
+
+    /**
+     * The class's JVM signature.
+     */
     def signature: String
+
+    /**
+     * The class's modifiers.
+     */
     def modifiers: Set[Modifier.Modifier]
+
+    /**
+     * Where the class was found (directory, jar file, or zip file).
+     */
     def location: File
+
+    /**
+     * A set of the methods in the class.
+     */
     def methods: Set[MethodInfo]
+
+    /**
+     * A set of the fields in the class.
+     */
     def fields: Set[FieldInfo]
 
+    /**
+     * Convenience method that determines whether the class implements an
+     * interface. This method is just shorthand for:
+     * {{{
+     * modifiers contains Modifier.Interface
+     * }}}
+     */
     def isInterface = modifiers contains Modifier.Interface
+
+    /**
+     * Convenience method that determines whether the class is abstract
+     * This method is just shorthand for:
+     * {{{
+     * modifiers contains Modifier.Abstract
+     * }}}
+     */
     def isAbstract = modifiers contains Modifier.Abstract
+
+    /**
+     * Convenience method that determines whether the class is private.
+     * This method is just shorthand for:
+     * {{{
+     * modifiers contains Modifier.Private
+     * }}}
+     */
     def isPrivate = modifiers contains  Modifier.Private
+
+    /**
+     * Convenience method that determines whether the class is protected.
+     * This method is just shorthand for:
+     * {{{
+     * modifiers contains Modifier.Protected
+     * }}}
+     */
     def isProtected = modifiers contains  Modifier.Protected
+
+    /**
+     * Convenience methods that determines whether the class is public.
+     * This method is just shorthand for:
+     * {{{
+     * modifiers contains Modifier.Public
+     * }}}
+     */
     def isPublic = modifiers contains  Modifier.Public
+
+    /**
+     * Convenience methods that determines whether the class is final.
+     * This method is just shorthand for:
+     * {{{
+     * modifiers contains Modifier.Final
+     * }}}
+     */
     def isFinal = modifiers contains  Modifier.Final
+
+    /**
+     * Convenience methods that determines whether the class is static.
+     * This method is just shorthand for:
+     * {{{
+     * modifiers contains Modifier.Static
+     * }}}
+     */
     def isStatic = modifiers contains  Modifier.Static
+
+    /**
+     * Convenience methods that determines whether the class is synchronized.
+     * This method is just shorthand for:
+     * {{{
+     * modifiers contains Modifier.Synchronized
+     * }}}
+     */
     def isSynchronized = modifiers contains  Modifier.Synchronized
 
     /**
