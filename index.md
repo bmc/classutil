@@ -19,10 +19,14 @@ are vanquished.**
 
 ## Introduction
 
-The *org.clapper.classutil* library is a Scala package that wraps a
-portion of the [ASM][] bytecode library and provides methods for locating
-and filtering classes quickly, returning the information about the classes
-in a lazy iterator.
+The *org.clapper.classutil* (ClassUtil) library is a Scala package that
+provides methods for locating and filter classes quickly, at runtime—more
+quickly, in fact, than can be done with the JVM's runtime reflection
+capabilities. Under the covers, ClassUtil uses the [ASM][] bytecode
+library, though it can easily be extended to use a different byte code
+library. ClassUtil loads and returns information about classes using an
+efficient lazy iterator approach, which offers minimal startup penalty and
+the ability to cut the traversal short.
 
 *more coming*
 
