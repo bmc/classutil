@@ -48,7 +48,9 @@ package org.clapper.classutil
 
 import scala.collection.mutable.{Set => MutableSet}
 import scala.util.continuations.cps
+import scala.annotation.tailrec
 
+import grizzled.slf4j._
 import grizzled.generator._
 
 import java.util.jar.{JarFile, Manifest => JarManifest}
@@ -224,7 +226,7 @@ trait ClassInfo
      * modifiers contains Modifier.Private
      * }}}
      */
-    def isPrivate = modifiers contains  Modifier.Private
+    def isPrivate = modifiers contains Modifier.Private
 
     /**
      * Convenience method that determines whether the class is protected.
@@ -233,7 +235,7 @@ trait ClassInfo
      * modifiers contains Modifier.Protected
      * }}}
      */
-    def isProtected = modifiers contains  Modifier.Protected
+    def isProtected = modifiers contains Modifier.Protected
 
     /**
      * Convenience methods that determines whether the class is public.
@@ -242,7 +244,7 @@ trait ClassInfo
      * modifiers contains Modifier.Public
      * }}}
      */
-    def isPublic = modifiers contains  Modifier.Public
+    def isPublic = modifiers contains Modifier.Public
 
     /**
      * Convenience methods that determines whether the class is final.
@@ -251,7 +253,7 @@ trait ClassInfo
      * modifiers contains Modifier.Final
      * }}}
      */
-    def isFinal = modifiers contains  Modifier.Final
+    def isFinal = modifiers contains Modifier.Final
 
     /**
      * Convenience methods that determines whether the class is static.
@@ -260,7 +262,7 @@ trait ClassInfo
      * modifiers contains Modifier.Static
      * }}}
      */
-    def isStatic = modifiers contains  Modifier.Static
+    def isStatic = modifiers contains Modifier.Static
 
     /**
      * Convenience methods that determines whether the class is synchronized.
@@ -269,13 +271,20 @@ trait ClassInfo
      * modifiers contains Modifier.Synchronized
      * }}}
      */
-    def isSynchronized = modifiers contains  Modifier.Synchronized
+    def isSynchronized = modifiers contains Modifier.Synchronized
 
     /**
-     * Determine whether this class directly implements a specific interface.
-     * Since a `ClassInfo` object contains information about a single class,
-     * this method cannot determine whether a class indirectly implements
-     * an interface. That capability is a higher-order operation.
+     * Convenience method to determine whether the class is concrete (i.e.,
+     * isn't abstract and isn't an interface).
+     */
+    def isConcrete = ! ( (modifiers contains Modifier.Abstract) ||
+                         (modifiers contains Modifier.Interface) )
+    /**
+     * Convenience method to determine whether this class directly
+     * implements a specific interface. Since a `ClassInfo` object contains
+     * information about a single class, this method cannot determine
+     * whether a class indirectly implements an interface. That capability
+     * is a higher-order operation.
      *
      * @param interface the name of the interface
      *
@@ -284,19 +293,34 @@ trait ClassInfo
     def implements(interface: String) = interfaces contains interface
 }
 
-object ClassFinder
+/**
+ * A ClassFinder finds classes in a class path.
+ *
+ * @param path  a sequence of directories, jars and zips to search
+ */
+class ClassFinder(path: Seq[File])
 {
-    import java.io.File
-    import grizzled.slf4j._
+    val classpath = path.toList
 
-    private val log = Logger("org.clapper.classutil.ClassFinder")
+    private val log = Logger(this.getClass)
 
-    def classpath = 
-        System.getProperty("java.class.path").
-        split(File.pathSeparator).
-        map(s => if (s.trim.length == 0) "." else s)
+    /**
+     * Find all classes in the specified path, which can contain directories,
+     * zip files and jar files. Returns metadata about each class in a
+     * `ClassInfo` object. The `ClassInfo` objects are returned lazily,
+     * rather than loaded all up-front.
+     *
+     * @param path  the class path
+     *
+     * @return an iterator over `ClassInfo` objects
+     */
+    def getClasses: Iterator[ClassInfo] = find(classpath)
 
-    def find(path: List[File]): Iterator[ClassInfo] =
+    /* ---------------------------------------------------------------------- *\
+                              Private Methods
+    \* ---------------------------------------------------------------------- */
+
+    private def find(path: Seq[File]): Iterator[ClassInfo] =
     {
         path match
         {
@@ -304,14 +328,14 @@ object ClassFinder
                 Iterator.empty
 
             case item :: Nil =>
-                handle(item)
+                findClassesIn(item)
 
             case item :: tail =>
-                handle(item) ++ find(tail)
+                findClassesIn(item) ++ find(tail)
         }
     }
 
-    private def handle(f: File): Iterator[ClassInfo] =
+    private def findClassesIn(f: File): Iterator[ClassInfo] =
     {
         val name = f.getPath.toLowerCase
 
@@ -414,6 +438,9 @@ object ClassFinder
         ClassFile.load(is, location)
     }
 
+    /**
+     * Generate classes from an iterator of iterators.
+     */
     private def generateFromIterators(iterators: Iterator[Iterator[ClassInfo]])=
     generator[ClassInfo]
     {
@@ -438,5 +465,83 @@ object ClassFinder
         }
 
         doIterators(iterators)
+    }
+}
+
+/**
+ * The entrance to the factory floor, providing methods for finding and
+ * filtering classes.
+ */
+object ClassFinder
+{
+    /**
+     * Convenient method for getting the standard JVM classpath, into a
+     * variable suitable for use with the `find()` method.
+     *
+     * @return the classpath, as a list of `File` objects
+     */
+    def classpath = 
+        System.getProperty("java.class.path").
+        split(File.pathSeparator).
+        map(s => if (s.trim.length == 0) "." else s).
+        map(new File(_)).
+        toList
+
+    def apply(classpath: Seq[File]) = new ClassFinder(classpath)
+
+    /**
+     * Create a map from an Iterator of ClassInfo objects. The resulting
+     * map is indexed by class name.
+     */
+    def classInfoMap(iterator: Iterator[ClassInfo]): Map[String, ClassInfo] =
+        iterator.map(c => (c.name -> c)).toMap
+
+    /**
+     * Convenience method that scans the specified classes for all concrete
+     * classes that are subclasses of the named class. A subclass, in this
+     * definition, is a class that directly or indirectly (a) implements an
+     * interface (if the named class is an interface) or (b) extends a
+     * subclass (if the named class is a class). The class must be
+     * concrete, so intermediate abstract classes are not returned, though
+     * any children of such abstract classes will be.
+     *
+     * WARNING: This method can chew up a lot of temporary heap space, if
+     * called with a large classpath.
+     */
+    def concreteSubclassesOf(ancestor: String, classes: Map[String, ClassInfo]):
+        Iterator[ClassInfo] =
+    {
+        // Convert the set of classes to search into a map of ClassInfo objects
+        // indexed by class name.
+
+        @tailrec def classMatches(ancestorClassInfo: ClassInfo, 
+                                  classToCheck: ClassInfo): Boolean =
+        {
+            if (classToCheck.name == ancestorClassInfo.name)
+                true
+            else if ((classToCheck.superClassName == ancestorClassInfo.name) ||
+                     (classToCheck implements ancestorClassInfo.name))
+                true
+            else
+            {
+                classes.get(classToCheck.superClassName) match
+                {
+                    case None            => false
+                    case Some(classInfo) => classMatches(ancestorClassInfo,
+                                                         classInfo)
+                }
+            }            
+        }
+
+        // Find the ancestor class
+        classes.get(ancestor) match
+        {
+            case None     =>
+                Iterator.empty
+            case Some(ci) => 
+                classes.values.toIterator.
+                filter(_.isConcrete).
+                filter(classMatches(ci, _))
+        }
     }
 }
