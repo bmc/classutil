@@ -23,8 +23,26 @@ ClassUtil is fast for several reasons:
 
 ## Requirements
 
+### Compile-time
+
 * ClassUtil requires a Scala 2.8 environment, because it uses the
   [continuations][] plug-in available in 2.8.
+* Other compile-time requirements are automatically satisfied, if you
+  use Maven or SBT. See below.
+
+### Runtime requirements
+
+ClassUtil uses the following libraries, which must be present in the
+classpath at runtime:
+
+* The main [ASM][] library (version 3), e.g., `asm-3.2.jar`
+* The [ASM][] commons library (version 3), e.g., `asm-commons3.2.jar`
+* The [Grizzled Scala][] library
+* The [Grizzled SLF4J][] library, for logging
+* The [SLF4J][] API library, for logging (e.g., `slf4j-api-1.5.11.jar`)
+* An SLF4J implementation, such as [Logback][] or [AVSL][], if you want
+  logging.
+
 
 ## Installation
 
@@ -202,19 +220,6 @@ Please see the [API documentation][] for additional information.
 ### API Docs
 
 The full Scaladoc API documentation is available [here][API documentation].
-
-## Runtime requirements
-
-ClassUtil uses the following libraries, which must be present in the
-classpath at runtime:
-
-* The main [ASM][] library (version 3), e.g., `asm-3.2.jar`
-* The [ASM][] commons library (version 3), e.g., `asm-commons3.2.jar`
-* The [Grizzled Scala][] library
-* The [Grizzled SLF4J][] library, for logging
-* The [SLF4J][] API library, for logging (e.g., `slf4j-api-1.5.11.jar`)
-* An SLF4J implementation, such as [Logback][] or [AVSL][], if you want
-  logging.
 
 ## Author
 
