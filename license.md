@@ -1,5 +1,5 @@
 ---
-title: License for classutil
+title: License for ClassUtil
 layout: default
 ---
 
