@@ -156,10 +156,10 @@ library.
 ### Finding all classes that implement an interface, directly or indirectly
 
 Being able to locate all classes that implement an interface or extend an
-abstract class is sometimes useful. Perhaps you're implementing a plugin
-capability, and you want to discover all concrete classes that implement
-some plugin interface, for instance. ClassUtil provides a special utility
-method for that:
+abstract class is sometimes useful. For example, if you're implementing a
+plugin capability, you may need to discover all concrete classes that
+implement your plugin interface. The `ClassFinder` companion object
+provides a special utility function for that:
 
     import org.clapper.classutil
     import java.io.File
@@ -184,9 +184,9 @@ converting the iterator to a map first, as shown below:
     val foos = ClassFinder.concreteSubclasses("org.example.Foo", classMap)
     val bars = ClassFinder.concreteSubclasses("org.example.Bar", classMap)
 
-**WARNING**: `concreteSubclasses` can chew up a lot of temporary heap
-space, if called with a large classpath. Either use a "focused" classpath,
-or make sure you run with a large enough maximum heap.
+**WARNING**: `concreteSubclasses` can chew up a lot of heap space
+temporarily, if called with a large classpath. Either use a "focused"
+classpath, or make sure you run with a large enough maximum heap.
 
 ### The ClassInfo classes
 
