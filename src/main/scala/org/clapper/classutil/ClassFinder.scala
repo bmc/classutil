@@ -294,7 +294,9 @@ trait ClassInfo
 }
 
 /**
- * A ClassFinder finds classes in a class path.
+ * A `ClassFinder` finds classes in a class path, returning the result in a
+ * lazy iterator. The iterator can then be filtered, mapped, or passed to
+ * the utility methods in the `ClassFinder` companion object.
  *
  * @param path  a sequence of directories, jars and zips to search
  */
@@ -487,7 +489,18 @@ object ClassFinder
         map(new File(_)).
         toList
 
-    def apply(classpath: Seq[File]) = new ClassFinder(classpath)
+    /**
+     * Instantiate a new `ClassFinder` that will search the specified
+     * classpath, or the default classpath, if no classpath is defined.
+     *
+     * @param path  the classpath, which is a sequence of `File`
+     *               objects representing directories, jars and zip files
+     *               to search. Defaults to `classpath`.
+     *
+     * @return a new `ClassFinder` object
+     */
+    def apply(path: Seq[File] = Seq.empty[File]) =
+        new ClassFinder(if (path.length > 0) path else classpath)
 
     /**
      * Create a map from an Iterator of ClassInfo objects. The resulting
@@ -505,10 +518,59 @@ object ClassFinder
      * concrete, so intermediate abstract classes are not returned, though
      * any children of such abstract classes will be.
      *
+     * '''WARNINGS'''
+     *
+     * This method converts the iterator to a map of classes, for easier
+     * lookup. Thus, upon its return, the iterator will be empty. You can
+     * certainly recreate the iterator, but at a cost. If you need to make
+     * multiple calls to this method with the same classpath, consider
+     * converting the iterator to a map first, as shown below:
+     * {{{
+     * val finder = ClassFinder(myPath)
+     * val classes = finder.getClasses  // classes is an Iterator[ClassInfo]
+     * val classMap = ClassFinder.classInfoMap // runs the iterator out, once
+     * val foos = ClassFinder.concreteSubclasses("org.example.Foo", classMap)
+     * val bars = ClassFinder.concreteSubclasses("org.example.Bar", classMap)
+     * }}}
+     *
+     * This method can chew up a lot of temporary heap space, if called
+     * with a large classpath.
+     *
+     * @param ancestor the name of the class for which to find descendent
+     *                 concrete subclasses
+     * @param classes  the iterator of `ClassInfo` objects to search
+     * 
+     * @return an iterator of `ClassInfo` objects that are concrete subclasses
+     *         of `ancestor`. The iterator will be empty if no matching classes
+     *         could be found.
+     */
+    def concreteSubclasses(ancestor: String, classes: Iterator[ClassInfo]):
+        Iterator[ClassInfo] =
+    {
+        concreteSubclasses(ancestor, ClassFinder.classInfoMap(classes))
+    }
+
+    /**
+     * Convenience method that scans the specified classes for all concrete
+     * classes that are subclasses of the named class. A subclass, in this
+     * definition, is a class that directly or indirectly (a) implements an
+     * interface (if the named class is an interface) or (b) extends a
+     * subclass (if the named class is a class). The class must be
+     * concrete, so intermediate abstract classes are not returned, though
+     * any children of such abstract classes will be.
+     *
      * WARNING: This method can chew up a lot of temporary heap space, if
      * called with a large classpath.
+     *
+     * @param ancestor the name of the class for which to find descendent
+     *                 concrete subclasses
+     * @param classes  the iterator of `ClassInfo` objects to search
+     * 
+     * @return an iterator of `ClassInfo` objects that are concrete subclasses
+     *         of `ancestor`. The iterator will be empty if no matching classes
+     *         could be found.
      */
-    def concreteSubclassesOf(ancestor: String, classes: Map[String, ClassInfo]):
+    def concreteSubclasses(ancestor: String, classes: Map[String, ClassInfo]):
         Iterator[ClassInfo] =
     {
         // Convert the set of classes to search into a map of ClassInfo objects
