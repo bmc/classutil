@@ -36,7 +36,7 @@ ClassUtil uses the following libraries, which must be present in the
 classpath at runtime:
 
 * The main [ASM][] library (version 3), e.g., `asm-3.2.jar`
-* The [ASM][] commons library (version 3), e.g., `asm-commons3.2.jar`
+* The [ASM][] commons library (version 3), e.g., `asm-commons-3.2.jar`
 * The [Grizzled Scala][] library
 * The [Grizzled SLF4J][] library, for logging
 * The [SLF4J][] API library, for logging (e.g., `slf4j-api-1.5.11.jar`)
