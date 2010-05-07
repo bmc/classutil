@@ -41,14 +41,12 @@ import scala.io.Source
 
 import java.io.File
 import grizzled.file.implicits._
-import org.clapper.sbtplugins.MarkdownPlugin
 
 /**
  * To build Novus via SBT.
  */
 class Project(info: ProjectInfo)
     extends DefaultProject(info)
-    with MarkdownPlugin
     with AutoCompilerPlugins
     with posterous.Publish
 {
@@ -67,19 +65,6 @@ class Project(info: ProjectInfo)
     /* ---------------------------------------------------------------------- *\
                              Various settings
     \* ---------------------------------------------------------------------- */
-
-    val LocalLibDir = "local_lib"
-
-    val sourceDocsDir = "src" / "docs"
-    val targetDocsDir = "target" / "doc"
-    val usersGuide = sourceDocsDir / "users-guide.md"
-    val markdownFiles = (path(".") * "*.md") +++ usersGuide
-    val markdownHtmlFiles = transformPaths(targetDocsDir,
-                                           markdownFiles,
-                                           {_.replaceAll("\\.md$", ".html")})
-    val markdownSources = markdownFiles +++
-                          (sourceDocsDir / "markdown.css") +++
-                          (sourceDocsDir ** "*.js")
 
     val scalaVersionDir = "scala-" + buildScalaVersion
 
@@ -111,74 +96,7 @@ class Project(info: ProjectInfo)
                          Custom tasks and actions
     \* ---------------------------------------------------------------------- */
 
-    // Create the target/docs directory
-    lazy val makeTargetDocsDir = task 
-    {
-        FileUtilities.createDirectory(targetDocsDir, log)
-    }
-
-    // Generate HTML docs from Markdown sources
-    lazy val htmlDocs = fileTask(markdownHtmlFiles from markdownSources)
-    { 
-        val markdownCSS = Some(sourceDocsDir / "markdown.css")
-        def markdownWithTOC(src: Path, target: Path) =
-            runMarkdown(src, target, true)
-        def markdownWithoutTOC(src: Path, target: Path) =
-            runMarkdown(src, target, false)
-
-        markdownWithoutTOC("README.md", targetDocsDir / "README.html")
-        markdownWithoutTOC("LICENSE.md", targetDocsDir / "LICENSE.html")
-        None
-    } 
-    .dependsOn(makeTargetDocsDir)
-
-    // Copy Markdown sources into target/docs
-    lazy val markdownDocs = copyTask(markdownFiles, targetDocsDir)
-
-    // Local doc production
-    lazy val targetDocs = task {None} dependsOn(htmlDocs, markdownDocs)
-
-    // Override the "doc" action to depend on additional doc targets
-    override def docAction = super.docAction dependsOn(targetDocs)
-
     /* ---------------------------------------------------------------------- *\
                           Private Helper Methods
     \* ---------------------------------------------------------------------- */
-
-    /**
-     * Run Markdown to convert a source (Markdown) file to HTML.
-     *
-     * @param markdownSource  the path to the source file
-     * @param targetHTML      the path to the output file
-     * @param useToc          whether or not to include the table of contents
-     */
-    private def runMarkdown(markdownSource: Path, 
-                            targetHTML: Path, 
-                            useToc: Boolean) = 
-    {
-
-        import scala.xml.Comment
-
-        val cssLines = fileLines(sourceDocsDir / "markdown.css")
-        val css = <style type="text/css">{cssLines mkString ""}</style>
-        val toc =
-            if (useToc)
-                <script text="text/javascript" src={"toc.js"}/>
-            else
-                new Comment("No table of contents Javascript")
-
-        markdown(markdownSource, targetHTML, css :: toc :: Nil, log)
-    }
-
-    private def fileLines(path: Path): Iterator[String] =
-        Source.fromFile(new File(path.absolutePath)).getLines
-
-    private def transformPaths(targetDir: Path, 
-                               paths: PathFinder,
-                               transform: (String) => String): Iterable[Path] =
-    {
-        val justFileNames = paths.get.map(p => p.asFile.basename.getPath)
-        val transformedNames = justFileNames.map(s => transform(s))
-        transformedNames.map(s => targetDir / s)
-    }
 }
