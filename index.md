@@ -77,7 +77,7 @@ your `project/build/` directory):
 
     val orgClapperRepo = "clapper.org Maven Repository" at
         "http://maven.clapper.org"
-    val grizzled = "org.clapper" %% "classutil" % "0.1"
+    val classutil = "org.clapper" %% "classutil" % "0.1"
 
 **NOTE:** The first doubled percent is *not* a typo. It tells SBT to treat
 ClassUtil as a cross-built library and automatically inserts the Scala
@@ -110,7 +110,7 @@ Windows), run:
 
     sbt update
 
-That command will pull down the external jars on which the Grizzled SLF4J
+That command will pull down the external jars on which the ClassUtil
 Library depends. After that step, build the library with:
 
     sbt +compile +package
