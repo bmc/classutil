@@ -237,7 +237,7 @@ patches to me or to fork the [GitHub repository][] and send me a pull
 request. Along with any patch you send:
 
 * Please state that the patch is your original work.
-* Please indicate that you license the work to the PROJECT project
+* Please indicate that you license the work to the ClassUtil project
   under a [BSD License][].
 
 [BSD License]: license.html
