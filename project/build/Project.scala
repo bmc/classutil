@@ -55,7 +55,7 @@ class Project(info: ProjectInfo)
     \* ---------------------------------------------------------------------- */
 
     val continuationsPlugin = compilerPlugin("org.scala-lang.plugins" %
-                                             "continuations" % "2.8.0.RC1")
+                                             "continuations" % "2.8.0.RC2")
     override def compileOptions = Unchecked :: 
         (super.compileOptions ++ compileOptions("-P:continuations:enable"))
 
@@ -70,10 +70,6 @@ class Project(info: ProjectInfo)
 
     /* ---------------------------------------------------------------------- *\
                        Managed External Dependencies
-
-               NOTE: Additional dependencies are declared in
-         project/plugins/Plugins.scala. (Declaring them there allows them
-                       to be imported in this file.)
     \* ---------------------------------------------------------------------- */
 
     val scalaToolsRepo = "Scala-Tools Maven Repository" at 
@@ -82,15 +78,15 @@ class Project(info: ProjectInfo)
     val newReleaseToolsRepository = "Scala Tools Repository" at
         "http://nexus.scala-tools.org/content/repositories/snapshots/"
     val scalatest = "org.scalatest" % "scalatest" %
-        "1.0.1-for-scala-2.8.0.Beta1-with-test-interfaces-0.3-SNAPSHOT"
+        "1.2-for-scala-2.8.0.RC2-SNAPSHOT"
 
     val asm = "asm" % "asm" % "3.2"
     val asmCommons = "asm" % "asm-commons" % "3.2"
 
     val orgClapperRepo = "clapper.org Maven Repository" at
         "http://maven.clapper.org"
-    val grizzled = "org.clapper" % "grizzled-scala" % "0.5.1"
-    val grizzledSlf4j = "org.clapper" % "grizzled-slf4j" % "0.1"
+    val grizzled = "org.clapper" %% "grizzled-scala" % "0.6"
+    val grizzledSlf4j = "org.clapper" %% "grizzled-slf4j" % "0.2.1"
 
     /* ---------------------------------------------------------------------- *\
                          Custom tasks and actions
