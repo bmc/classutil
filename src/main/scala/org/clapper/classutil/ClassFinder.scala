@@ -421,7 +421,7 @@ class ClassFinder(path: Seq[File])
 
     private def processDirectory(dir: File): Iterator[ClassInfo] =
     {
-        import grizzled.file.implicits._
+        import grizzled.file.GrizzledFile._
         import java.io.FileInputStream
 
         val classInfoIterators =

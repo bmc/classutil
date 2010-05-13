@@ -1,0 +1,3 @@
+* Updated to version 0.6.1 of [Grizzled Scala][].
+
+[Grizzled Scala]: http://bmc.github.com/grizzled-scala/
