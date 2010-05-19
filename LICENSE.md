@@ -1,5 +1,5 @@
-Grizzled Scala Library License
-==============================
+ClassUtil Library License
+=========================
 
 This software is released under BSD license, adapted from
 <http://opensource.org/licenses/bsd-license.php>
