@@ -425,7 +425,7 @@ class ClassFinder(path: Seq[File])
         import java.io.FileInputStream
 
         val classInfoIterators =
-            dir.listRecursively.
+            dir.listRecursively().
             filter((f: File) => isClass(f)).
             map((f: File) => classData(new FileInputStream(f), dir))
 

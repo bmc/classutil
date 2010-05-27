@@ -1,3 +1,8 @@
-* Updated to version 0.6.1 of [Grizzled Scala][].
+* Updated to version 0.7 of [Grizzled Scala][].
+* Updated to version 0.2.2 of [Grizzled-SLF4J][].
+* Bumped to [SBT][] version 0.7.4.
+* Now compiles under Scala 2.8.0.RC3 and RC2. Dropped support for RC1.
 
+[SBT]: http://code.google.com/p/simple-build-tool
 [Grizzled Scala]: http://bmc.github.com/grizzled-scala/
+[Grizzled SLF4J]: http://bmc.github.com/grizzled-slf4j/

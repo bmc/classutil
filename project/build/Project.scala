@@ -55,7 +55,8 @@ class Project(info: ProjectInfo)
     \* ---------------------------------------------------------------------- */
 
     val continuationsPlugin = compilerPlugin("org.scala-lang.plugins" %
-                                             "continuations" % "2.8.0.RC2")
+                                             "continuations" %
+                                             buildScalaVersion)
     override def compileOptions = Unchecked :: 
         (super.compileOptions ++ compileOptions("-P:continuations:enable"))
 
@@ -97,8 +98,8 @@ class Project(info: ProjectInfo)
 
     val orgClapperRepo = "clapper.org Maven Repository" at
         "http://maven.clapper.org"
-    val grizzled = "org.clapper" %% "grizzled-scala" % "0.6.1"
-    val grizzledSlf4j = "org.clapper" %% "grizzled-slf4j" % "0.2.1"
+    val grizzled = "org.clapper" %% "grizzled-scala" % "0.7"
+    val grizzledSlf4j = "org.clapper" %% "grizzled-slf4j" % "0.2.2"
 
     /* ---------------------------------------------------------------------- *\
                          Custom tasks and actions
