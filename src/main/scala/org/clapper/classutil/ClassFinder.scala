@@ -326,14 +326,9 @@ class ClassFinder(path: Seq[File])
     {
         path match
         {
-            case Nil =>
-                Iterator.empty
-
-            case item :: Nil =>
-                findClassesIn(item)
-
-            case item :: tail =>
-                findClassesIn(item) ++ find(tail)
+            case Nil          => Iterator.empty
+            case item :: Nil  => findClassesIn(item)
+            case item :: tail => findClassesIn(item) ++ find(tail)
         }
     }
 

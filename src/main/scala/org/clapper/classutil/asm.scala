@@ -52,7 +52,7 @@ import org.objectweb.asm.Opcodes;
 
 import java.io.{File, InputStream, IOException}
 
-trait ASMBitmapMapper
+private[classutil] trait ASMBitmapMapper
 {
     import java.lang.reflect.{Modifier => JModifier}
 
@@ -117,18 +117,18 @@ extends ClassInfo with ASMBitmapMapper
     val modifiers = mapModifiers(access, AccessMap)
 }
 
-class MethodInfoImpl(val name: String,
-                     val signature: String,
-                     val exceptions: List[String],
-                     val access: Int)
+private[classutil] class MethodInfoImpl(val name: String,
+                                        val signature: String,
+                                        val exceptions: List[String],
+                                        val access: Int)
 extends MethodInfo with ASMBitmapMapper
 {
     val modifiers = mapModifiers(access, AccessMap)
 }
 
-class FieldInfoImpl(val name: String,
-                    val signature: String,
-                    val access: Int)
+private[classutil] class FieldInfoImpl(val name: String,
+                                       val signature: String,
+                                       val access: Int)
 extends FieldInfo with ASMBitmapMapper
 {
     override def toString = signature
