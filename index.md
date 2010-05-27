@@ -56,8 +56,8 @@ If you're using [Maven][], you can get ClassUtil from the
 [*clapper.org* Maven Repository][]. The relevant pieces of information are:
 
 * Group ID: `org.clapper`
-* Artifact ID: `classutil_2.8.0.RC1`
-* Version: `0.1`
+* Artifact ID: `classutil_2.8.0.RC3`
+* Version: `0.1.2`
 * Type: `jar`
 * Repository: `http://maven.clapper.org/`
 
@@ -65,8 +65,8 @@ Here's a sample Maven POM "dependency" snippet:
 
     <dependency>
       <groupId>org.clapper</groupId>
-      <artifactId>classutil_2.8.0.RC1</artifactId>
-      <version>0.1</version>
+      <artifactId>classutil_2.8.0.RC3</artifactId>
+      <version>0.1.2</version>
     </dependency>
 
 ### Using with SBT
@@ -77,12 +77,12 @@ your `project/build/` directory):
 
     val orgClapperRepo = "clapper.org Maven Repository" at
         "http://maven.clapper.org"
-    val classutil = "org.clapper" %% "classutil" % "0.1"
+    val classutil = "org.clapper" %% "classutil" % "0.1.2"
 
 **NOTE:** The first doubled percent is *not* a typo. It tells SBT to treat
 ClassUtil as a cross-built library and automatically inserts the Scala
 version you're using into the artifact ID. Currently, it will *only* work
-if you are building with Scala 2.8.0.RC1. See the [SBT cross-building][]
+if you are building with Scala 2.8.0.RC2 or RC3. See the [SBT cross-building][]
 page for details.
 
 ## Building from Source
