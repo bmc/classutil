@@ -44,9 +44,6 @@ package org.clapper.classutil
  * Takes a Scala `Map`, with `String` keys and object values, and generates
  * an object, with fields for each map value. Field that are, themselves,
  * `Map[String,Any]` objects can be recursively mapped, as well.
- *
- * There are some restrictions imposed on the map. First, the key must be
- * a valid Java identifier.
  */
 trait MapToBeanMapper
 {
@@ -65,20 +62,23 @@ trait MapToBeanMapper
 }
 
 /**
-
  * Takes a Scala `Map`, with `String` keys and object values, and generates
  * a Java Bean object, with fields for each map value. Field that are,
  * themselves, `Map[String,Any]` objects can be recursively mapped, as
- * well.
+ * well. The map's keys are mapped to Java Bean `get` accessors. For
+ * instance, a key name "foo" is mapped to a method called `getFoo()`.
  *
  * The transformation results in an object that can only really be used
  * via reflection; however, that fits fine with some APIs that want to receive
  * Java Beans as parameters.
  *
- * There are some restrictions imposed on the map. First, each key must be
- * a valid Java identifier. Second, the keys are mapped to Java Bean
- * `get` accessors. For instance, a key name "foo" is mapped to a method
- * called `getFoo()`.
+ *
+ * There are some restrictions imposed on any map that is to be converted.
+ *
+ * <ul>
+ *   <li> Only maps with string keys can be converted.
+ *   <li> The string keys must be valid Java identifiers.
+ * </ul>
  *
  * In addition, the generated class will also have an `asMap()` method that
  * returns the original map.
@@ -98,6 +98,8 @@ trait MapToBeanMapper
  *              "fiveMap" -> subMap,
  *              "sixList" -> charList)
  * val obj = MapToBean(m)
+ *
+ * def showName(name: String) = (name startsWith "get") || (name == "asMap")
  *
  * obj.getClass.getMethods.filter(m => showName(m.getName)).foreach(println _)
  *
@@ -135,20 +137,6 @@ object MapToBean
 {
     private val mapper = new org.clapper.classutil.asm.MapToBeanMapperImpl
     private val rng = new java.security.SecureRandom
-
-    /**
-     * Transform a map into an object.
-     *
-     * @param map       the map
-     * @param className the name to give the class
-     * @param recurse   `true` to recursively map nested maps, `false` otherwise
-     *
-     * @return an instantiated object representing the map
-     */
-    def apply(map: Map[String, Any],
-              className: String,
-              recurse: Boolean): AnyRef =
-        mapper.makeObject(map, className, recurse)
 
     /**
      * Transform a map into an object. The class name will be generated,
