@@ -77,6 +77,57 @@ trait MapToObjectMapper
  * a valid Java identifier. Second, the keys are mapped to Java Bean
  * `get` accessors. For instance, a key name "foo" is mapped to a method
  * called `getFoo()`.
+ *
+ * In addition, the generated class will also have an `asMap()` method that
+ * returns the original map.
+ *
+ * Here's a simple example:
+ *
+ * {{{
+ * import org.clapper.classutil._
+ *
+ * val charList = List('1', '2', '3')
+ *
+ * val subMap = Map("sub1" -> 1, "sub2" -> 2)
+ * val m =  Map("oneInt" -> 1,
+ *              "twoFloat" -> 2f,
+ *              "threeString" -> "three",
+ *              "fourIntClass" -> classOf[Int],
+ *              "fiveMap" -> subMap,
+ *              "sixList" -> charList)
+ * val obj = MapToObject(m)
+ *
+ * obj.getClass.getMethods.filter(m => showName(m.getName)).foreach(println _)
+ *
+ * def call(methodName: String) =
+ * {
+ *     val method = obj.getClass.getMethod(methodName)
+ *     method.invoke(obj)
+ * }
+ *
+ * println
+ * println("getFiveMap returns " + call("getFiveMap"))
+ * val fiveMap = call("asMap").asInstanceOf[Map[String,Any]]
+ * println("keys=" + fiveMap.keys)
+ * }}}
+ *
+ * That Scala script will produce output like the following:
+ *
+ * {{{
+ * public final scala.collection.immutable.HashMap$HashTrieMap $Proxy1.asMap()
+ * public final $Proxy0 $Proxy1.getFiveMap()
+ * public final java.lang.Integer $Proxy1.getOneInt()
+ * public final java.lang.Class $Proxy1.getFourIntClass()
+ * public final scala.collection.immutable.$colon$colon $Proxy1.getSixList()
+ * public final java.lang.Float $Proxy1.getTwoFloat()
+ * public final java.lang.String $Proxy1.getThreeString()
+ * public static java.lang.Class java.lang.reflect.Proxy.getProxyClass(java.lang.ClassLoader,java.lang.Class[]) throws java.lang.IllegalArgumentException
+ * public static java.lang.reflect.InvocationHandler java.lang.reflect.Proxy.getInvocationHandler(java.lang.Object) throws java.lang.IllegalArgumentException
+ * public final native java.lang.Class java.lang.Object.getClass()
+ *
+ * getFiveMap returns Map(getSub1 -> 1, getSub2 -> 2)
+ * keys=Set(fiveMap, sixList, fourIntClass, twoFloat, threeString, oneInt)
+ * }}}
  */
 object MapToObject
 {
@@ -92,7 +143,7 @@ object MapToObject
      *
      * @return an instantiated object representing the map
      */
-    def apply(map: Map[String, Any], 
+    def apply(map: Map[String, Any],
               className: String,
               recurse: Boolean): AnyRef =
         mapper.makeObject(map, className, recurse)
@@ -116,5 +167,5 @@ object MapToObject
      * @return the class name
      */
     private[classutil] def generatedClassName =
-        "org.clapper.classutil.MapToObject_" + rng.nextInt(100000)
+        "org.clapper.classutil.MapToObject$" + rng.nextInt(100000)
 }
