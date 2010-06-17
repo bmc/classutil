@@ -51,8 +51,9 @@ import scala.reflect.Manifest
 
 /**
  * Takes a Scala `Map`, with `String` keys and object values, and generates
- * an object, with fields for each map value. Field that are, themselves,
- * `Map[String,Any]` objects can be recursively mapped, as well.
+ * a Java Bean object, with fields for each map value. Field that are,
+ * themselves, `Map[String,Any]` objects can be recursively mapped, as
+ * well.
  *
  * The transformation results in an object that can only really be used
  * via reflection; however, that fits fine with some APIs that want to receive
@@ -63,7 +64,7 @@ import scala.reflect.Manifest
  * `get` accessors. For instance, a key name "foo" is mapped to a method
  * called `getFoo()`.
  */
-private[classutil] class MapToObjectMapperImpl extends MapToObjectMapper
+private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper
 {
     private val AS_MAP_METHOD_NAME = "asMap"
 
@@ -93,7 +94,7 @@ private[classutil] class MapToObjectMapperImpl extends MapToObjectMapper
         {
             if (recurse && isOfType[Map[String,Any]](value))
                 makeObject(value.asInstanceOf[Map[String,Any]],
-                           MapToObject.generatedClassName,
+                           MapToBean.generatedClassName,
                            recurse)
             else
                 value

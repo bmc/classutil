@@ -45,18 +45,18 @@
 */
 
 import org.scalatest.{FunSuite, Assertions}
-import org.clapper.classutil.MapToObject
+import org.clapper.classutil.MapToBean
 
-class MapToObjectTest extends FunSuite
+class MapToBeanTest extends FunSuite
 {
-    test("MapToObject")
+    test("MapToBean")
     {
         val map =  Map("oneInt" -> 1,
                        "twoFloat" -> 2f,
                        "threeString" -> "three",
                        "fourIntClass" -> classOf[Int],
                        "fiveMap" -> Map("one" -> 1, "two" -> 2))
-        val bean = MapToObject(map)
+        val bean = MapToBean(map)
         val methodNames = bean.getClass.getMethods.map(_.getName).toSet
         val expectedNames = List(("getOneInt", classOf[java.lang.Integer]),
                                  ("getTwoFloat", classOf[java.lang.Float]),

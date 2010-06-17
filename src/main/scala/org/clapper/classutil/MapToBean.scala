@@ -48,7 +48,7 @@ package org.clapper.classutil
  * There are some restrictions imposed on the map. First, the key must be
  * a valid Java identifier.
  */
-trait MapToObjectMapper
+trait MapToBeanMapper
 {
     /**
      * Transform a map into an object.
@@ -65,9 +65,11 @@ trait MapToObjectMapper
 }
 
 /**
+
  * Takes a Scala `Map`, with `String` keys and object values, and generates
- * an object, with fields for each map value. Field that are, themselves,
- * `Map[String,Any]` objects can be recursively mapped, as well.
+ * a Java Bean object, with fields for each map value. Field that are,
+ * themselves, `Map[String,Any]` objects can be recursively mapped, as
+ * well.
  *
  * The transformation results in an object that can only really be used
  * via reflection; however, that fits fine with some APIs that want to receive
@@ -95,7 +97,7 @@ trait MapToObjectMapper
  *              "fourIntClass" -> classOf[Int],
  *              "fiveMap" -> subMap,
  *              "sixList" -> charList)
- * val obj = MapToObject(m)
+ * val obj = MapToBean(m)
  *
  * obj.getClass.getMethods.filter(m => showName(m.getName)).foreach(println _)
  *
@@ -129,9 +131,9 @@ trait MapToObjectMapper
  * keys=Set(fiveMap, sixList, fourIntClass, twoFloat, threeString, oneInt)
  * }}}
  */
-object MapToObject
+object MapToBean
 {
-    private val mapper = new org.clapper.classutil.asm.MapToObjectMapperImpl
+    private val mapper = new org.clapper.classutil.asm.MapToBeanMapperImpl
     private val rng = new java.security.SecureRandom
 
     /**
@@ -151,7 +153,7 @@ object MapToObject
     /**
      * Transform a map into an object. The class name will be generated,
      * will be in the `org.clapper.classutil` package, and will have
-     * a class name prefix of `MapToObject_`.
+     * a class name prefix of `MapToBean_`.
      *
      * @param map       the map
      * @param recurse   `true` to recursively map nested maps, `false` otherwise
@@ -167,5 +169,5 @@ object MapToObject
      * @return the class name
      */
     private[classutil] def generatedClassName =
-        "org.clapper.classutil.MapToObject$" + rng.nextInt(100000)
+        "org.clapper.classutil.MapToBean$" + rng.nextInt(100000)
 }
