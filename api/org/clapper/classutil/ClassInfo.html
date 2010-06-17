@@ -26,7 +26,7 @@
         <span class="name">ClassInfo</span><span class="result"> extends AnyRef</span>
       </span>
       </h4>
-      <div class="fullcomment" id="comment"><div class="comment cmt"><p>Information about a class, as read from a class file . 
+      <div class="fullcomment" id="comment"><div class="comment cmt"><p>Information about a class, as read from a class file.
 </p></div>
             
             
@@ -38,12 +38,12 @@
 
         <div id="mbrsel">
           <div id="ancestors">
-                <h3>Inherited</h3>
+                <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
                 <ol id="linearization"><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
               </div>
           <div id="visbl">
-            <h3>Visibility</h3>
+            <span class="filtertype">Visibility</span>
             <ol><li class="public in">Public</li><li class="all out">All</li></ol>
           </div>
         </div>
@@ -79,7 +79,7 @@
       
             <p class="shortcomment cmt"><code>o != arg0</code> is the same as <code>!(o == (arg0))</code>.</p>
             <div class="fullcomment"><div class="comment cmt"><p><code>o != arg0</code> is the same as <code>!(o == (arg0))</code>.
-</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for dis-equality .</p></dd><dt>returns</dt><dd class="cmt"><p><code>false</code> if the receiver object is equivalent to the argument; <code>true</code> otherwise.</p></dd></dl><div class="block">
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for dis-equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>false</code> if the receiver object is equivalent to the argument; <code>true</code> otherwise.</p></dd></dl><div class="block">
           attributes: final 
         </div><div class="block">
           definition classes: Any
@@ -145,7 +145,7 @@
       
             <p class="shortcomment cmt"><code>o == arg0</code> is the same as <code>if (o eq null) arg0 eq null else o.equals(arg0)</code>.</p>
             <div class="fullcomment"><div class="comment cmt"><p><code>o == arg0</code> is the same as <code>if (o eq null) arg0 eq null else o.equals(arg0)</code>.
-</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality .</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
           attributes: final 
         </div><div class="block">
           definition classes: AnyRef
@@ -166,7 +166,7 @@
       
             <p class="shortcomment cmt"><code>o == arg0</code> is the same as <code>o.equals(arg0)</code>.</p>
             <div class="fullcomment"><div class="comment cmt"><p><code>o == arg0</code> is the same as <code>o.equals(arg0)</code>.
-</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality .</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
           attributes: final 
         </div><div class="block">
           definition classes: Any
@@ -188,7 +188,7 @@
             <p class="shortcomment cmt">This method is used to cast the receiver object to be of type <code>T0</code>.</p>
             <div class="fullcomment"><div class="comment cmt"><p>This method is used to cast the receiver object to be of type <code>T0</code>.</p><p>Note that the success of a cast at runtime is modulo Scala's erasure semantics.  Therefore the expression<code>1.asInstanceOf[String]</code> will throw a <code>ClassCastException</code> at runtime, while the expression<code>List(1).asInstanceOf[List[String]]</code> will not.  In the latter example, because the type argument is erased as
 part of compilation it is not possible to check whether the contents of the list are of the requested typed.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the receiver object .</p></dd></dl><div class="block">
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the receiver object.</p></dd></dl><div class="block">
           attributes: final 
         </div><div class="block">
           definition classes: Any
@@ -207,9 +207,9 @@ part of compilation it is not possible to check whether the contents of the list
       </span>
       </h4>
       
-            <p class="shortcomment cmt">This method creates and returns a copy of the receiver object .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>This method creates and returns a copy of the receiver object .</p><p>The default implementation of the <code>clone</code> method is platform dependent.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a copy of the receiver object .</p></dd></dl><div class="block">
+            <p class="shortcomment cmt">This method creates and returns a copy of the receiver object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>This method creates and returns a copy of the receiver object.</p><p>The default implementation of the <code>clone</code> method is platform dependent.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a copy of the receiver object.</p></dd></dl><div class="block">
           attributes: protected 
         </div><div class="block">
           definition classes: AnyRef
@@ -243,7 +243,7 @@ non-null instances of <code>AnyRef</code>:
  * <code>null.eq(null)</code> returns <code>true</code>.</p><p>When overriding the <code>equals</code> or <code>hashCode</code> methods, it is important to ensure that their behavior is
 consistent with reference equality.  Therefore, if two objects are references to each other (<code>o1 eq o2</code>), they
 should be equal to each other (<code>o1 == o2</code>) and they should hash to the same value (<code>o1.hashCode == o2.hashCode</code>).
-</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for reference equality .</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the argument is a reference to the receiver object; <code>false</code> otherwise.</p></dd></dl><div class="block">
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for reference equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the argument is a reference to the receiver object; <code>false</code> otherwise.</p></dd></dl><div class="block">
           attributes: final 
         </div><div class="block">
           definition classes: AnyRef
@@ -271,10 +271,10 @@ relation]:
  * It is transitive: for any instances <code>x</code>, <code>y</code>, and <code>z</code> of type <code>AnyRef</code> if <code>x.equals(y)</code> returns <code>true</code> and
    <code>y.equals(z)</code> returns <code>true</code>, then <code>x.equals(z)</code> should return <code>true</code>.</p><p>If you override this method, you should verify that your implementation remains an equivalence relation.
 Additionally, when overriding this method it is often necessary to override <code>hashCode</code> to ensure that objects
-that are "equal" (<code>o1.equals(o2)</code> returns <code>true</code>) hash to the same 
+that are &quot;equal&quot; (<code>o1.equals(o2)</code> returns <code>true</code>) hash to the same 
 scala.Int
 (<code>o1.hashCode.equals(o2.hashCode)</code>).
-</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality .</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>true</code> if the receiver object is equivalent to the argument; <code>false</code> otherwise.</p></dd></dl><div class="block">
           definition classes: AnyRef → Any
         </div>
             
@@ -291,8 +291,8 @@ scala.Int
       </span>
       </h4>
       
-            <p class="shortcomment cmt">A set of the fields in the class .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>A set of the fields in the class . 
+            <p class="shortcomment cmt">A set of the fields in the class.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>A set of the fields in the class.
 </p></div><div class="block">
           attributes: abstract 
         </div>
@@ -311,9 +311,9 @@ scala.Int
       </h4>
       
             <p class="shortcomment cmt">This method is called by the garbage collector on the receiver object when garbage collection determines that
-there are no more references to the object .</p>
+there are no more references to the object.</p>
             <div class="fullcomment"><div class="comment cmt"><p>This method is called by the garbage collector on the receiver object when garbage collection determines that
-there are no more references to the object .</p><p>The details of when and if the <code>finalize</code> method are invoked, as well as the interaction between <code>finalize</code>and non-local returns and exceptions, are all platform dependent.</p></div><div class="block">
+there are no more references to the object.</p><p>The details of when and if the <code>finalize</code> method are invoked, as well as the interaction between <code>finalize</code>and non-local returns and exceptions, are all platform dependent.</p></div><div class="block">
           attributes: protected 
         </div><div class="block">
           definition classes: AnyRef
@@ -332,9 +332,9 @@ there are no more references to the object .</p><p>The details of when and if th
       </span>
       </h4>
       
-            <p class="shortcomment cmt">Returns a representation that corresponds to the dynamic class of the receiver object .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Returns a representation that corresponds to the dynamic class of the receiver object .</p><p>The nature of the representation is platform dependent.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a representation that corresponds to the dynamic class of the receiver object .</p></dd></dl><div class="block">
+            <p class="shortcomment cmt">Returns a representation that corresponds to the dynamic class of the receiver object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Returns a representation that corresponds to the dynamic class of the receiver object.</p><p>The nature of the representation is platform dependent.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a representation that corresponds to the dynamic class of the receiver object.</p></dd></dl><div class="block">
           attributes: final 
         </div><div class="block">
           definition classes: AnyRef
@@ -353,13 +353,13 @@ there are no more references to the object .</p><p>The details of when and if th
       </span>
       </h4>
       
-            <p class="shortcomment cmt">Returns a hash code value for the object .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Returns a hash code value for the object .</p><p>The default hashing algorithm is platform dependent.</p><p>Note that it is allowed for two objects to have identical hash codes (<code>o1.hashCode.equals(o2.hashCode)</code>) yet
+            <p class="shortcomment cmt">Returns a hash code value for the object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Returns a hash code value for the object.</p><p>The default hashing algorithm is platform dependent.</p><p>Note that it is allowed for two objects to have identical hash codes (<code>o1.hashCode.equals(o2.hashCode)</code>) yet
 not be equal (<code>o1.equals(o2)</code> returns <code>false</code>).  A degenerate implementation could always return <code>0</code>.
 However, it is required that if two objects are equal (<code>o1.equals(o2)</code> returns <code>true</code>) that they have
 identical hash codes (<code>o1.hashCode.equals(o2.hashCode)</code>).  Therefore, when overriding this method, be sure
 to verify that the behavior is consistent with the <code>equals</code> method.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the hash code value for the object .</p></dd></dl><div class="block">
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the hash code value for the object.</p></dd></dl><div class="block">
           definition classes: AnyRef → Any
         </div>
             
@@ -377,7 +377,7 @@ to verify that the behavior is consistent with the <code>equals</code> method.
       </h4>
       
             <p class="shortcomment cmt">Convenience method to determine whether this class directly
-implements a specific interface .</p>
+implements a specific interface.</p>
             <div class="fullcomment"><div class="comment cmt"><p>Convenience method to determine whether this class directly
 implements a specific interface. Since a <code>ClassInfo</code> object contains
 information about a single class, this method cannot determine
@@ -401,9 +401,9 @@ is a higher-order operation.
       </h4>
       
             <p class="shortcomment cmt">A list of the interfaces, as class names, that the class implements;
-or, an empty list if it implements no interfaces .</p>
+or, an empty list if it implements no interfaces.</p>
             <div class="fullcomment"><div class="comment cmt"><p>A list of the interfaces, as class names, that the class implements;
-or, an empty list if it implements no interfaces . 
+or, an empty list if it implements no interfaces.
 </p></div><div class="block">
           attributes: abstract 
         </div>
@@ -441,8 +441,8 @@ modifiers contains Modifier.Abstract
       </span>
       </h4>
       
-            <p class="shortcomment cmt">Convenience method to determine whether the class is concrete (i .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Convenience method to determine whether the class is concrete (i . e.,
+            <p class="shortcomment cmt">Convenience method to determine whether the class is concrete (i.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Convenience method to determine whether the class is concrete (i.e.,
 isn't abstract and isn't an interface).
 </p></div>
             
@@ -459,8 +459,8 @@ isn't abstract and isn't an interface).
       </span>
       </h4>
       
-            <p class="shortcomment cmt">Convenience methods that determines whether the class is final .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is final . 
+            <p class="shortcomment cmt">Convenience methods that determines whether the class is final.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is final.
 This method is just shorthand for:</p><pre>
 modifiers contains Modifier.Final
 </pre></div>
@@ -502,9 +502,9 @@ possible to check whether the contents of the list are of the requested typed.
       </h4>
       
             <p class="shortcomment cmt">Convenience method that determines whether the class implements an
-interface .</p>
+interface.</p>
             <div class="fullcomment"><div class="comment cmt"><p>Convenience method that determines whether the class implements an
-interface .  This method is just shorthand for:</p><pre>
+interface. This method is just shorthand for:</p><pre>
 modifiers contains Modifier.Interface
 </pre></div>
             
@@ -521,8 +521,8 @@ modifiers contains Modifier.Interface
       </span>
       </h4>
       
-            <p class="shortcomment cmt">Convenience method that determines whether the class is private .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Convenience method that determines whether the class is private . 
+            <p class="shortcomment cmt">Convenience method that determines whether the class is private.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Convenience method that determines whether the class is private.
 This method is just shorthand for:</p><pre>
 modifiers contains Modifier.Private
 </pre></div>
@@ -540,8 +540,8 @@ modifiers contains Modifier.Private
       </span>
       </h4>
       
-            <p class="shortcomment cmt">Convenience method that determines whether the class is protected .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Convenience method that determines whether the class is protected . 
+            <p class="shortcomment cmt">Convenience method that determines whether the class is protected.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Convenience method that determines whether the class is protected.
 This method is just shorthand for:</p><pre>
 modifiers contains Modifier.Protected
 </pre></div>
@@ -559,8 +559,8 @@ modifiers contains Modifier.Protected
       </span>
       </h4>
       
-            <p class="shortcomment cmt">Convenience methods that determines whether the class is public .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is public . 
+            <p class="shortcomment cmt">Convenience methods that determines whether the class is public.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is public.
 This method is just shorthand for:</p><pre>
 modifiers contains Modifier.Public
 </pre></div>
@@ -578,8 +578,8 @@ modifiers contains Modifier.Public
       </span>
       </h4>
       
-            <p class="shortcomment cmt">Convenience methods that determines whether the class is static .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is static . 
+            <p class="shortcomment cmt">Convenience methods that determines whether the class is static.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is static.
 This method is just shorthand for:</p><pre>
 modifiers contains Modifier.Static
 </pre></div>
@@ -597,8 +597,8 @@ modifiers contains Modifier.Static
       </span>
       </h4>
       
-            <p class="shortcomment cmt">Convenience methods that determines whether the class is synchronized .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is synchronized . 
+            <p class="shortcomment cmt">Convenience methods that determines whether the class is synchronized.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is synchronized.
 This method is just shorthand for:</p><pre>
 modifiers contains Modifier.Synchronized
 </pre></div>
@@ -616,8 +616,8 @@ modifiers contains Modifier.Synchronized
       </span>
       </h4>
       
-            <p class="shortcomment cmt">Where the class was found (directory, jar file, or zip file) .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Where the class was found (directory, jar file, or zip file) . 
+            <p class="shortcomment cmt">Where the class was found (directory, jar file, or zip file).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Where the class was found (directory, jar file, or zip file).
 </p></div><div class="block">
           attributes: abstract 
         </div>
@@ -635,8 +635,8 @@ modifiers contains Modifier.Synchronized
       </span>
       </h4>
       
-            <p class="shortcomment cmt">A set of the methods in the class .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>A set of the methods in the class . 
+            <p class="shortcomment cmt">A set of the methods in the class.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>A set of the methods in the class.
 </p></div><div class="block">
           attributes: abstract 
         </div>
@@ -654,8 +654,8 @@ modifiers contains Modifier.Synchronized
       </span>
       </h4>
       
-            <p class="shortcomment cmt">The class's modifiers .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>The class's modifiers . 
+            <p class="shortcomment cmt">The class's modifiers.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>The class's modifiers.
 </p></div><div class="block">
           attributes: abstract 
         </div>
@@ -673,8 +673,8 @@ modifiers contains Modifier.Synchronized
       </span>
       </h4>
       
-            <p class="shortcomment cmt">The class's fully qualified name .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>The class's fully qualified name . 
+            <p class="shortcomment cmt">The class's fully qualified name.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>The class's fully qualified name.
 </p></div><div class="block">
           attributes: abstract 
         </div>
@@ -694,7 +694,7 @@ modifiers contains Modifier.Synchronized
       
             <p class="shortcomment cmt"><code>o.ne(arg0)</code> is the same as <code>!(o.eq(arg0))</code>.</p>
             <div class="fullcomment"><div class="comment cmt"><p><code>o.ne(arg0)</code> is the same as <code>!(o.eq(arg0))</code>.
-</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for reference dis-equality .</p></dd><dt>returns</dt><dd class="cmt"><p><code>false</code> if the argument is not a reference to the receiver object; <code>true</code> otherwise.</p></dd></dl><div class="block">
+</p></div><dl class="paramcmts block"><dt class="param">arg0</dt><dd class="cmt"><p>the object to compare against this object for reference dis-equality.</p></dd><dt>returns</dt><dd class="cmt"><p><code>false</code> if the argument is not a reference to the receiver object; <code>true</code> otherwise.</p></dd></dl><div class="block">
           attributes: final 
         </div><div class="block">
           definition classes: AnyRef
@@ -713,8 +713,8 @@ modifiers contains Modifier.Synchronized
       </span>
       </h4>
       
-            <p class="shortcomment cmt">Wakes up a single thread that is waiting on the receiver object's monitor .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Wakes up a single thread that is waiting on the receiver object's monitor .</p></div><div class="block">
+            <p class="shortcomment cmt">Wakes up a single thread that is waiting on the receiver object's monitor.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Wakes up a single thread that is waiting on the receiver object's monitor.</p></div><div class="block">
           attributes: final 
         </div><div class="block">
           definition classes: AnyRef
@@ -733,8 +733,8 @@ modifiers contains Modifier.Synchronized
       </span>
       </h4>
       
-            <p class="shortcomment cmt">Wakes up all threads that are waiting on the receiver object's monitor .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Wakes up all threads that are waiting on the receiver object's monitor .</p></div><div class="block">
+            <p class="shortcomment cmt">Wakes up all threads that are waiting on the receiver object's monitor.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Wakes up all threads that are waiting on the receiver object's monitor.</p></div><div class="block">
           attributes: final 
         </div><div class="block">
           definition classes: AnyRef
@@ -753,8 +753,8 @@ modifiers contains Modifier.Synchronized
       </span>
       </h4>
       
-            <p class="shortcomment cmt">The class's JVM signature .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>The class's JVM signature . 
+            <p class="shortcomment cmt">The class's JVM signature.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>The class's JVM signature.
 </p></div><div class="block">
           attributes: abstract 
         </div>
@@ -772,8 +772,8 @@ modifiers contains Modifier.Synchronized
       </span>
       </h4>
       
-            <p class="shortcomment cmt">The parent class's fully qualified name .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>The parent class's fully qualified name . 
+            <p class="shortcomment cmt">The parent class's fully qualified name.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>The parent class's fully qualified name.
 </p></div><div class="block">
           attributes: abstract 
         </div>
@@ -806,9 +806,9 @@ modifiers contains Modifier.Synchronized
       </span>
       </h4>
       
-            <p class="shortcomment cmt">Returns a string representation of the object .</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Returns a string representation of the object .</p><p>The default representation is platform dependent.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a string representation of the object .</p></dd></dl><div class="block">
+            <p class="shortcomment cmt">Returns a string representation of the object.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Returns a string representation of the object.</p><p>The default representation is platform dependent.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a string representation of the object.</p></dd></dl><div class="block">
           definition classes: AnyRef → Any
         </div>
             
