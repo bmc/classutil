@@ -92,7 +92,7 @@ class Project(info: ProjectInfo)
     val newReleaseToolsRepository = "Scala Tools Repository" at
         "http://nexus.scala-tools.org/content/repositories/snapshots/"
     val scalatest = "org.scalatest" % "scalatest" %
-        "1.2-for-scala-2.8.0.RC5-SNAPSHOT"
+        ("1.2-for-scala-" + buildScalaVersion + "-SNAPSHOT")
 
     val asm = "asm" % "asm" % "3.2"
     val asmCommons = "asm" % "asm-commons" % "3.2"
