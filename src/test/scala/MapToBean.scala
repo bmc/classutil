@@ -49,13 +49,14 @@ import org.clapper.classutil.MapToBean
 
 class MapToBeanTest extends FunSuite
 {
-    test("MapToBean")
+    val map =  Map("oneInt" -> 1,
+                   "twoFloat" -> 2f,
+                   "threeString" -> "three",
+                   "fourIntClass" -> classOf[Int],
+                   "fiveMap" -> Map("one" -> 1, "two" -> 2))
+
+    test("MapToBean, recursive")
     {
-        val map =  Map("oneInt" -> 1,
-                       "twoFloat" -> 2f,
-                       "threeString" -> "three",
-                       "fourIntClass" -> classOf[Int],
-                       "fiveMap" -> Map("one" -> 1, "two" -> 2))
         val bean = MapToBean(map)
         val methodNames = bean.getClass.getMethods.map(_.getName).toSet
         val expectedNames = List(("getOneInt", classOf[java.lang.Integer]),
@@ -63,6 +64,30 @@ class MapToBeanTest extends FunSuite
                                  ("getThreeString", classOf[String]),
                                  ("getFourIntClass", classOf[Class[Int]]),
                                  ("getFiveMap", classOf[Object]))
+        for ((name, cls) <- expectedNames)
+        {
+            expect(true, "Looking for method name " + name + "()")
+            {
+                methodNames.contains(name)
+            }
+
+            val method = bean.getClass.getMethod(name)
+            expect(true, "Method " + name + " has appropriate type.")
+            {
+                cls.isAssignableFrom(method.getReturnType)
+            }
+        }
+    }
+
+    test("MapToBean, non-recursive")
+    {
+        val bean = MapToBean(map, false)
+        val methodNames = bean.getClass.getMethods.map(_.getName).toSet
+        val expectedNames = List(("getOneInt", classOf[java.lang.Integer]),
+                                 ("getTwoFloat", classOf[java.lang.Float]),
+                                 ("getThreeString", classOf[String]),
+                                 ("getFourIntClass", classOf[Class[Int]]),
+                                 ("getFiveMap", classOf[Map[String, Any]]))
         for ((name, cls) <- expectedNames)
         {
             expect(true, "Looking for method name " + name + "()")

@@ -74,9 +74,11 @@ class Project(info: ProjectInfo)
 
     // "publish" will prompt (via a Swing pop-up) for the username and
     // password.
+    lazy val home = Path.fileProperty("user.home")
     lazy val publishTo = Resolver.sftp("clapper.org Maven Repo",
                                        "maven.clapper.org",
-                                       "/var/www/maven.clapper.org/html")
+                                       "/var/www/maven.clapper.org/html") as
+                         ("bmc", (home / ".ssh" / "id_dsa").asFile)
 
     override def managedStyle = ManagedStyle.Maven
 
