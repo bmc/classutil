@@ -225,6 +225,8 @@ Please see the [API documentation][] for additional information.
 
 ## Generating Java Beans from Scala maps
 
+### Overview
+
 ClassUtil also supports a `MapToBean` capability, which generates Java
 Beans on the fly, from Scala maps. It traverses a map, converting each
 name/value pair into a Java Beans `get` method. This capability is useful
@@ -241,6 +243,8 @@ transformation.
 The first parameter is the map that is to be converted to a Java Bean. The
 second parameter (`recurse`) indicates whether or not nested maps should be
 automatically converted; it defaults to `true`.
+
+### An example
 
 An example will help clarify this part of the API:
 
@@ -340,20 +344,33 @@ The above Scala script produces the following output:
     getSubMap returns Map(getSub1 -> 1, getSub2 -> 2)
     keys=Set(intClass, float, someString, int, subMap, list)
 
-The resulting bean can really only be used via reflection. Its type (class)
-is created on the fly, so it cannot be imported ahead of time. However, a
-reflected bean works well with APIs that expect such things.
-
 Note the inclusion of an `asMap()` method that returns the original map that
 was used to create the bean.
 
 Nested maps are automatically converted via `MapToBean`, unless `recurse` is
 `false`.
 
+### Caveats
+
+The resulting bean can really only be used via reflection. Its type (class)
+is created on the fly, so it cannot be imported ahead of time. However, a
+reflected bean works well with APIs that expect such things.
+
 There are a few restrictions imposed on any map that is to be converted.
 
 * Only maps with string keys can be converted.
 * The string keys must be valid Java identifiers.
+
+### Under the covers
+
+Internally, `MapToBean` uses [ASM][] to create a Java interface from the map.
+It then uses [`java.lang.reflect.Proxy`](http://java.sun.com/javase/6/docs/api/java/lang/reflect/Proxy.html) to create a dynamic implementation of that
+interface that satisfies the `get` method calls directly from the original map.
+
+This approach turns out to be simpler to implement (and, therefore, simpler
+to reason about) than directly generating a class that serves up the map's
+values.
+
 
 ## API Docs
 
