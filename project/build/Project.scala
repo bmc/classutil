@@ -40,7 +40,6 @@ import sbt._
 import scala.io.Source
 
 import java.io.File
-import grizzled.file.implicits._
 
 /**
  * To build Novus via SBT.
@@ -91,15 +90,16 @@ class Project(info: ProjectInfo)
     val newReleaseToolsRepository = "Scala Tools Repository" at
         "http://nexus.scala-tools.org/content/repositories/snapshots/"
     val scalatest = "org.scalatest" % "scalatest" %
-        "1.2-for-scala-2.8.0.RC2-SNAPSHOT"
+        "1.2-for-scala-2.8.0.RC5-SNAPSHOT"
 
     val asm = "asm" % "asm" % "3.2"
     val asmCommons = "asm" % "asm-commons" % "3.2"
+    val asmUtil = "asm" % "asm-util" % "3.2"
 
     val orgClapperRepo = "clapper.org Maven Repository" at
         "http://maven.clapper.org"
-    val grizzled = "org.clapper" %% "grizzled-scala" % "0.7"
-    val grizzledSlf4j = "org.clapper" %% "grizzled-slf4j" % "0.2.2"
+    val grizzled = "org.clapper" %% "grizzled-scala" % "0.7.2"
+    val grizzledSlf4j = "org.clapper" %% "grizzled-slf4j" % "0.2.3"
 
     /* ---------------------------------------------------------------------- *\
                          Custom tasks and actions

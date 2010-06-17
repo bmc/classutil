@@ -1,0 +1,15 @@
+* Added new `MapToObject` module, which takes a Scala map of type
+  `Map[String, Any]` and converts it to a Java Bean. By default, it also
+  recursively converts any nested maps of type `Map[String, Any]` that it
+  finds. The transformation results in an object that can only really be used
+  via reflection; however, that fits fine with some APIs that want to receive
+  Java Beans as parameters.
+* Updated to version 0.7.1 of [Grizzled Scala][].
+* Updated to version 0.2.2 of [Grizzled-SLF4J][].
+* Removed unnecessary dependency on old version of [Grizzled Scala][] in
+  build file.
+* Now compiles under Scala 2.8.0.RC5. Dropped support for prior versions.
+
+[SBT]: http://code.google.com/p/simple-build-tool
+[Grizzled Scala]: http://bmc.github.com/grizzled-scala/
+[Grizzled SLF4J]: http://bmc.github.com/grizzled-slf4j/
