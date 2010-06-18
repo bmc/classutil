@@ -158,7 +158,7 @@ private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper
                            "()" + returnType,
                            null,
                            null).
-               visitEnd
+            visitEnd
         }
 
         val asMapClass = originalMap.getClass
@@ -170,7 +170,7 @@ private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper
                        "()" + asMapReturnType,
                        null,
                        null).
-            visitEnd
+        visitEnd
 
         cw.visitEnd
         cw.toByteArray
