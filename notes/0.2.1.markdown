@@ -1,0 +1,1 @@
+* Updated to build with Scala 2.8.0.RC7. Now builds against RC3, RC5 and RC7.

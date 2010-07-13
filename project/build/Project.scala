@@ -100,8 +100,8 @@ class Project(info: ProjectInfo)
 
     val orgClapperRepo = "clapper.org Maven Repository" at
         "http://maven.clapper.org"
-    val grizzled = "org.clapper" %% "grizzled-scala" % "0.7.2"
-    val grizzledSlf4j = "org.clapper" %% "grizzled-slf4j" % "0.2.3"
+    val grizzled = "org.clapper" %% "grizzled-scala" % "0.7.3"
+    val grizzledSlf4j = "org.clapper" %% "grizzled-slf4j" % "0.2.4"
 
     /* ---------------------------------------------------------------------- *\
                          Custom tasks and actions
