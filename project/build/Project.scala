@@ -94,8 +94,7 @@ class Project(info: ProjectInfo)
 /*
     val ScalaTestVersion = buildScalaVersion
 */
-    // Until a new build of ScalaTest is released.
-    val ScalaTestVersion = "2.8.0.RC7"
+    val ScalaTestVersion = "2.8.0.final"
 
     val scalatest = "org.scalatest" % "scalatest" %
         ("1.2-for-scala-" + ScalaTestVersion + "-SNAPSHOT")

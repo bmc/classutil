@@ -1,0 +1,1 @@
+* Updated to newest 2.8.0-compliant version of ScalaTest.
