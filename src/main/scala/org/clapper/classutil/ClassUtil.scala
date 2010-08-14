@@ -37,6 +37,8 @@
 
 package org.clapper.classutil
 
+import scala.reflect.Manifest
+
 /**
  * Some general-purpose class-related utility functions.
  */
@@ -110,5 +112,48 @@ object ClassUtil
         }
 
         scalaPrimitive || javaPrimitive
+    }
+
+    /**
+     * Determine if a value is of, or is assignable to, a specified type.
+     * Works with generics. Example of use:
+     *
+     * {{{
+     * val value: Any = ...
+     * assert(isOfType[Map[String,Int]](value))
+     * }}}
+     *
+     * @tparam T     the type against which to check the value
+     * @param  value the value to check
+     *
+     * @return whether or not `value` conforms to type `T`
+     */
+    def isOfType[T](v: Any)(implicit man: Manifest[T]): Boolean =
+        man >:> Manifest.classType(v.asInstanceOf[AnyRef].getClass)
+
+    /**
+     * Convenience method to load a class from an array of class bytes.
+     *
+     * @param classLoader  the class loader to use
+     * @param className    the name of the class
+     * @param classBytes   the class's byte code
+     *
+     * @return the loaded class
+     */
+    def loadClass(classLoader: ClassLoader,
+                  className: String,
+                  classBytes: Array[Byte]): Class[_] =
+    {
+        val cls = Class.forName("java.lang.ClassLoader")
+        val method = cls.getDeclaredMethod("defineClass",
+                                           classOf[String],
+                                           classOf[Array[Byte]],
+                                           classOf[Int],
+                                           classOf[Int])
+        method.setAccessible(true)
+        method.invoke(classLoader, className, classBytes,
+                      new java.lang.Integer(0),
+                      new java.lang.Integer(classBytes.length)).
+        asInstanceOf[Class[_]]
     }
 }

@@ -47,8 +47,6 @@ import org.objectweb.asm.Opcodes._
 
 import java.lang.reflect.{Method, Proxy, InvocationHandler}
 
-import scala.reflect.Manifest
-
 /**
  * Takes a Scala `Map`, with `String` keys and object values, and generates
  * a Java Bean object, with fields for each map value. Field that are,
@@ -66,23 +64,21 @@ import scala.reflect.Manifest
  */
 private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper
 {
-    private val AS_MAP_METHOD_NAME = "asMap"
-
     /* ---------------------------------------------------------------------- *\
                               Public Methods
     \* ---------------------------------------------------------------------- */
 
     /**
-     * Transform a map into an object.
+     * Transform a map into a bean.
      *
      * @param map      the map
      * @param recurse  `true` to recursively map nested maps, `false` otherwise
      *
      * @return an instantiated object representing the map
      */
-    def makeObject(map: Map[String, Any],
-                   className: String,
-                   recurse: Boolean = true): AnyRef =
+    def makeBean(map: Map[String, Any],
+                 className: String,
+                 recurse: Boolean = true): AnyRef =
     {
         // Strategy: Create an interface, load it, and generate a proxy that
         // implements the interface dynamically. The proxy handler resolves
@@ -92,9 +88,9 @@ private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper
 
         def transformValueIfMap(value: Any) =
         {
-            if (recurse && isOfType[Map[String,Any]](value))
+            if (recurse && ClassUtil.isOfType[Map[String,Any]](value))
                 makeObject(value.asInstanceOf[Map[String,Any]],
-                           MapToBean.generatedClassName,
+                           MapToBean.newGeneratedClassName,
                            recurse)
             else
                 value
@@ -119,65 +115,29 @@ private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper
         // map.
         val tuples2 = newMap.keys.map(k => (keyToMethodName(k) -> newMap(k)))
         val methodNameMap = Map(tuples2.toList: _*)
-        val classLoader = map.getClass.getClassLoader
-        val interface = loadClass(
-            classLoader,
-            className,
-            makeInterface(methodNameMap, map, className, recurse)
+
+        // Create the interface bytes. We need a map of names to return types
+        // here.
+        val interfaceBytes = InterfaceMaker.makeInterface(
+            methodNameMap.map(kv => (kv._1, 
+                                     kv._2.asInstanceOf[AnyRef].getClass)).
+                          toSeq,
+            className
         )
+
+        // Load the class we just generated.
+
+        val classLoader = map.getClass.getClassLoader
+        val interface = ClassUtil.loadClass(classLoader,
+                                            className,
+                                            interfaceBytes)
 
         makeProxy(methodNameMap, map, interface, classLoader)
     }
 
     /* ---------------------------------------------------------------------- *\
-                             * Private Methods
+                              Private Methods
     \* ---------------------------------------------------------------------- */
-
-    private def makeInterface(methodNameMap: Map[String, Any],
-                              originalMap: Map[String, Any],
-                              className: String,
-                              recurse: Boolean): Array[Byte] =
-    {
-        val cw = new ClassWriter(0)
-        cw.visit(V1_6,
-                 ACC_PUBLIC + ACC_ABSTRACT + ACC_INTERFACE,
-                 binaryClassName(className),
-                 null,
-                 "java/lang/Object",
-                 null)
-
-        for (methodName <- methodNameMap.keys)
-        {
-            val value = methodNameMap(methodName)
-            val valueClass = value.asInstanceOf[AnyRef].getClass
-            val asmType = Type.getType(valueClass)
-            val returnType = asmType.getDescriptor
-
-            cw.visitMethod(ACC_PUBLIC + ACC_ABSTRACT,
-                           methodName,
-                           "()" + returnType,
-                           null,
-                           null).
-            visitEnd
-        }
-
-        val asMapClass = originalMap.getClass
-        val asMapAsmType = Type.getType(asMapClass)
-        val asMapReturnType = asMapAsmType.getDescriptor
-
-        cw.visitMethod(ACC_PUBLIC + ACC_ABSTRACT,
-                       AS_MAP_METHOD_NAME,
-                       "()" + asMapReturnType,
-                       null,
-                       null).
-        visitEnd
-
-        cw.visitEnd
-        cw.toByteArray
-    }
-
-    private def isOfType[T](v: Any)(implicit man: Manifest[T]): Boolean =
-        man >:> Manifest.classType(v.asInstanceOf[AnyRef].getClass)
 
     private def makeProxy(methodNameMap: Map[String, Any],
                           originalMap: Map[String, Any],
@@ -194,16 +154,10 @@ private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper
                 // ones we created from the map. In that case, just delegate
                 // the method call to the original map.
                 val methodName = method.getName
-                if (methodName == AS_MAP_METHOD_NAME)
-                    originalMap
-
-                else
+                methodNameMap.get(methodName) match
                 {
-                    methodNameMap.get(methodName) match
-                    {
-                        case None => method.invoke(methodNameMap, args: _*)
-                        case Some(v) => v.asInstanceOf[AnyRef]
-                    }
+                    case None => method.invoke(methodNameMap, args: _*)
+                    case Some(v) => v.asInstanceOf[AnyRef]
                 }
             }
         }
@@ -213,21 +167,4 @@ private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper
 
     private def binaryClassName(className: String): String =
         className.replaceAll("""\.""", "/")
-
-    private def loadClass(classLoader: ClassLoader,
-                          className: String,
-                          classBytes: Array[Byte]): Class[_] =
-    {
-        val cls = Class.forName("java.lang.ClassLoader")
-        val method = cls.getDeclaredMethod("defineClass",
-                                           classOf[String],
-                                           classOf[Array[Byte]],
-                                           classOf[Int],
-                                           classOf[Int])
-        method.setAccessible(true)
-        method.invoke(classLoader, className, classBytes,
-                      new java.lang.Integer(0),
-                      new java.lang.Integer(classBytes.length)).
-        asInstanceOf[Class[_]]
-    }
 }

@@ -48,7 +48,25 @@ package org.clapper.classutil
 trait MapToBeanMapper
 {
     /**
-     * Transform a map into an object.
+     * Transform a map into a bean.
+     *
+     * @param map       the map
+     * @param className the name to give the class
+     * @param recurse   `true` to recursively map nested maps, `false` otherwise
+     *
+     * @return an instantiated object representing the map
+     *
+     * @deprecated Use makeBean() instead.
+     */
+    def makeObject(map: Map[String, Any],
+                   className: String,
+                   recurse: Boolean = true): AnyRef =
+    {
+        makeBean(map, className, recurse)
+    }
+
+    /**
+     * Transform a map into a bean.
      *
      * @param map       the map
      * @param className the name to give the class
@@ -56,9 +74,9 @@ trait MapToBeanMapper
      *
      * @return an instantiated object representing the map
      */
-    def makeObject(map: Map[String, Any],
-                   className: String,
-                   recurse: Boolean = true): AnyRef
+    def makeBean(map: Map[String, Any],
+                 className: String,
+                 recurse: Boolean = true): AnyRef
 }
 
 /**
@@ -80,9 +98,6 @@ trait MapToBeanMapper
  *   <li> The string keys must be valid Java identifiers.
  * </ul>
  *
- * In addition, the generated class will also have an `asMap()` method that
- * returns the original map.
- *
  * Here's a simple example:
  *
  * {{{
@@ -99,7 +114,7 @@ trait MapToBeanMapper
  *              "sixList" -> charList)
  * val obj = MapToBean(m)
  *
- * def showName(name: String) = (name startsWith "get") || (name == "asMap")
+ * def showName(name: String) = (name startsWith "get")
  *
  * obj.getClass.getMethods.filter(m => showName(m.getName)).foreach(println _)
  *
@@ -111,14 +126,11 @@ trait MapToBeanMapper
  *
  * println
  * println("getFiveMap returns " + call("getFiveMap"))
- * val fiveMap = call("asMap").asInstanceOf[Map[String,Any]]
- * println("keys=" + fiveMap.keys)
  * }}}
  *
  * That Scala script will produce output like the following:
  *
  * {{{
- * public final scala.collection.immutable.HashMap$HashTrieMap $Proxy1.asMap()
  * public final $Proxy0 $Proxy1.getFiveMap()
  * public final java.lang.Integer $Proxy1.getOneInt()
  * public final java.lang.Class $Proxy1.getFourIntClass()
@@ -130,18 +142,18 @@ trait MapToBeanMapper
  * public final native java.lang.Class java.lang.Object.getClass()
  *
  * getFiveMap returns Map(getSub1 -> 1, getSub2 -> 2)
- * keys=Set(fiveMap, sixList, fourIntClass, twoFloat, threeString, oneInt)
  * }}}
  */
-object MapToBean
+object MapToBean extends ClassNameGenerator
 {
+    val ClassNamePrefix = "org.clapper.classutil.MapBean"
+
     private val mapper = new org.clapper.classutil.asm.MapToBeanMapperImpl
-    private val rng = new java.security.SecureRandom
 
     /**
      * Transform a map into an object. The class name will be generated,
      * will be in the `org.clapper.classutil` package, and will have
-     * a class name prefix of `MapToBean_`.
+     * a class name prefix of `MapBean_`.
      *
      * @param map       the map
      * @param recurse   `true` to recursively map nested maps, `false` otherwise
@@ -149,13 +161,21 @@ object MapToBean
      * @return an instantiated object representing the map
      */
     def apply(map: Map[String, Any], recurse: Boolean = true): AnyRef =
-        mapper.makeObject(map, generatedClassName, recurse)
+        mapper.makeBean(map, newGeneratedClassName, recurse)
 
     /**
-     * Generate a class name.
+     * Transform a map into an object.
      *
-     * @return the class name
+     * @param map       the map
+     * @param className the desired class name
+     * @param recurse   `true` to recursively map nested maps, `false`
+     *                  otherwise. Recursively mapped maps will have generated
+     *                  class names.
+     *
+     * @return an instantiated object representing the map
      */
-    private[classutil] def generatedClassName =
-        "org.clapper.classutil.MapToBean$" + rng.nextInt(100000)
+    def apply(map: Map[String, Any],
+              className: String,
+              recurse: Boolean): AnyRef =
+        mapper.makeBean(map, className, recurse)
 }
