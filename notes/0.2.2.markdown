@@ -1,3 +1,8 @@
-* Updated to released 1.2 version of [ScalaTest][].
+* Added `org.clapper.classutil.ClassUtil` utility module, with
+  `isPrimitive()` methods that test objects and classes to see if they
+  represent primitives.
+* Updated to released 1.2 version of [ScalaTest][] and converted its
+  dependency in [SBT][] to a test-time, not run-time, dependency.
 
 [ScalaTest]: http://scalatest.org/
+[SBT]: http://code.google.com/p/simple-build-tool/
