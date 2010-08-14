@@ -1,6 +1,9 @@
-* Added `org.clapper.classutil.ClassUtil` utility module, with
-  `isPrimitive()` methods that test objects and classes to see if they
-  represent primitives.
+* Added `ClassUtil` utility module, with `isPrimitive()` methods that test
+  objects and classes to see if they represent primitives.
+* Added `ScalaObjectToBean`, which takes a Scala object and creates a Java
+  bean that wraps it.
+* Added `ClassNameGenerator`, which generates classes automatically.
+* Refactored various internal implementation details, for ease of re-use.
 * Updated to released 1.2 version of [ScalaTest][] and converted its
   dependency in [SBT][] to a test-time, not run-time, dependency.
 
