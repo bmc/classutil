@@ -69,8 +69,8 @@ Here's a sample Maven POM "dependency" snippet:
 
     <dependency>
       <groupId>org.clapper</groupId>
-      <artifactId>classutil_2.8.0.RC5</artifactId>
-      <version>0.2.2</version>
+      <artifactId>classutil_2.8.0</artifactId>
+      <version>0.2.1</version>
     </dependency>
 
 ## Using with SBT
