@@ -60,8 +60,8 @@ If you're using [Maven][], you can get ClassUtil from the
 [*clapper.org* Maven Repository][]. The relevant pieces of information are:
 
 * Group ID: `org.clapper`
-* Artifact ID: `classutil_2.8.0.RC3`
-* Version: `0.1.2`
+* Artifact ID: `classutil_2.8.0`
+* Version: `0.2.2`
 * Type: `jar`
 * Repository: `http://maven.clapper.org/`
 
@@ -70,7 +70,7 @@ Here's a sample Maven POM "dependency" snippet:
     <dependency>
       <groupId>org.clapper</groupId>
       <artifactId>classutil_2.8.0.RC5</artifactId>
-      <version>0.2</version>
+      <version>0.2.2</version>
     </dependency>
 
 ## Using with SBT
@@ -81,12 +81,12 @@ your `project/build/` directory):
 
     val orgClapperRepo = "clapper.org Maven Repository" at
         "http://maven.clapper.org"
-    val classutil = "org.clapper" %% "classutil" % "0.2"
+    val classutil = "org.clapper" %% "classutil" % "0.2.2"
 
 **NOTE:** The first doubled percent is *not* a typo. It tells SBT to treat
 ClassUtil as a cross-built library and automatically inserts the Scala
 version you're using into the artifact ID. Currently, it will *only* work
-if you are building with Scala 2.8.0.RC5 or RC3. See the [SBT cross-building][]
+if you are building with Scala 2.8.0. See the [SBT cross-building][]
 page for details.
 
 # Building from Source
@@ -223,17 +223,34 @@ API to be ported to other bytecode libraries, if necessary.
 
 Please see the [API documentation][] for additional information.
 
-## Generating Java Beans from Scala maps
+## Generating Java Beans from Scala objects
 
 ### Overview
 
-ClassUtil also supports a `MapToBean` capability, which generates Java
-Beans on the fly, from Scala maps. It traverses a map, converting each
-name/value pair into a Java Beans `get` method. This capability is useful
-if you need to generate data on the fly, for use with an API, but the API
-only accepts Java Beans.
+ClassUtil also supports two ways to generate beans, on the fly, from Scala
+objects; these capabilities are useful when you have to interact with APIs
+that require Java Beans, but you don't have the option or desire to mark
+all the bean fields with Scala's `@BeanProperty` annotation.
+([Case classes][] and final classes are two good examples.)
 
-`MapToBean` will recursively convert values that are, themselves, maps.
+To this end, ClassUtil provides two solutions:
+
+- `MapToBean`, which traverses a map and convert each name/value pair into a
+  Java Beans `get` method.
+- `ScalaObjectToBean`, which takes a Scala object, looks for methods that
+  take no parameters and return a value, and generates an object with
+  `get` methods for those methods.
+
+Both approaches will, by default, recursively convert objects. (See below
+for more details.)
+
+### `MapToBean`
+
+`MapToBean` takes, as input, a `Map` object and generates a Java Bean with
+`get` methods for each key/value pair in the map. By default, `MapToBean`
+recursively converts values that are, themselves, maps. That is, if the
+value for a map key is, itself, a map, `MapToBean` will convert that map to
+a bean, too. Recursive generation can be disabled, if desired.
 
 The `MapToBean` Scala object contains the method that performs the
 transformation.
@@ -242,7 +259,15 @@ transformation.
     
 The first parameter is the map that is to be converted to a Java Bean. The
 second parameter (`recurse`) indicates whether or not nested maps should be
-automatically converted; it defaults to `true`.
+automatically converted; it defaults to `true`. The bean's class name is
+automatically generated, though there's a version of the `apply` method
+that allows you to specify your own class name. The method returns an
+instance of the newly generated bean class.
+
+There are a few restrictions imposed on any map that is to be converted.
+
+* Only maps with string keys can be converted.
+* The string keys must be valid Java identifiers.
 
 ### An example
 
@@ -261,7 +286,7 @@ An example will help clarify this part of the API:
                    "list" -> charList)
     val obj = MapToBean(map)
 
-    obj.getClass.getMethods.foreach(println _)
+    obj.getClass.getMethods.filter(_.getName startsWith "get").foreach(println _)
 
     def call(methodName: String) =
     {
@@ -271,8 +296,6 @@ An example will help clarify this part of the API:
 
     println()
     println("getSubMap returns " + call("getSubMap"))
-    val origMap = call("asMap").asInstanceOf[Map[String,Any]]
-    println("keys=" + origMap.keys)
 
 This example takes a map:
 
@@ -311,66 +334,172 @@ and produces a Java Bean that behaves like an instance of the following class:
         { 
             return charList;
         }
-        
-        public scala.collection.immutable.HashMap$HashTrieMap asMap()
-        {
-            return originalMap;
-        }
     }
 
 The above Scala script produces the following output:
 
-    public final boolean $Proxy1.equals(java.lang.Object)
-    public final java.lang.String $Proxy1.toString()
-    public final int $Proxy1.hashCode()
     public final java.lang.Integer $Proxy1.getInt()
     public final java.lang.Float $Proxy1.getFloat()
-    public final scala.collection.immutable.HashMap$HashTrieMap $Proxy1.asMap()
     public final $Proxy0 $Proxy1.getSubMap()
     public final java.lang.Class $Proxy1.getIntClass()
     public final java.lang.String $Proxy1.getSomeString()
     public final scala.collection.immutable.$colon$colon $Proxy1.getList()
-    public static boolean java.lang.reflect.Proxy.isProxyClass(java.lang.Class)
-    public static java.lang.Object java.lang.reflect.Proxy.newProxyInstance(java.lang.ClassLoader,java.lang.Class[],java.lang.reflect.InvocationHandler) throws java.lang.IllegalArgumentException
     public static java.lang.Class java.lang.reflect.Proxy.getProxyClass(java.lang.ClassLoader,java.lang.Class[]) throws java.lang.IllegalArgumentException
     public static java.lang.reflect.InvocationHandler java.lang.reflect.Proxy.getInvocationHandler(java.lang.Object) throws java.lang.IllegalArgumentException
-    public final void java.lang.Object.wait() throws java.lang.InterruptedException
-    public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException
-    public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
     public final native java.lang.Class java.lang.Object.getClass()
-    public final native void java.lang.Object.notify()
-    public final native void java.lang.Object.notifyAll()
 
     getSubMap returns Map(getSub1 -> 1, getSub2 -> 2)
     keys=Set(intClass, float, someString, int, subMap, list)
 
-Note the inclusion of an `asMap()` method that returns the original map that
-was used to create the bean.
-
 Nested maps are automatically converted via `MapToBean`, unless `recurse` is
 `false`.
 
+### `ScalaObjectToBean`
+
+`ScalaObjectToBean` takes, as input, a Scala object and generates a Java
+Bean with `get` methods for each Scala accessor. `ScalaObjectToBean` is an
+alternative to using the `@BeanProperty` annotation on classes, so it is
+useful for mapping case classes into Java Beans, or for mapping classes
+from other APIs into Java Beans without having to extend them.
+
+`ScalaObjectToBean` uses the following heuristics to determine which fields
+to map.
+
+First, it recognizes that any Scala `val` or `var` is really a getter method
+returning some type. That is, it knows that Scala compiles the following
+
+    val x: Int = 0
+    var y: Int = 10
+
+down to the equivalent of the this Java code:
+
+    private int _x = 0;
+    private int _y = 10;
+
+    public int x() { return _x; }
+    public int y() { return _y; }
+    public void y_$eq(int newY) { _y = newY; }
+
+So, the mapper looks for methods that take no parameters and return some
+non-void (i.e., non-`Unit`) value. Then, from that set of methods, the
+mapper discards:
+
+* Methods starting with `get`.
+* Methods that have a corresponding `get` method. In the above example,
+  if there's a `getX()` method that returns an `int`, the mapper will
+  assume that it's the bean version of `x()`, and it will ignore `x()`.
+* Any method in `java.lang.Object`.
+* Any method in `scala.Product`.
+* Methods that aren't public.
+
+If there are any methods in the remaining set, then the mapper returns a
+new wrapper object that contains Java Bean versions of those methods;
+otherwise, the mapper returns the original Scala object. The resulting bean
+delegates its calls to the original object, instead of capturing the
+object's method values at the time the bean is called. That way, if the
+underlying Scala object's methods return different values for each call,
+the bean will reflect those changes. Also, the mapped class delegates
+any methods it didn't convert back to the original object. For instance,
+calling `toString` on the newly generated bean results in a call to the
+original object's `toString` method.
+
+By default, `ScalaObjectToBean` recursively converts methods that return
+non-primitive, non-String values that. That is, if the value for a getter
+method is a non-primitive, non-String object, `ScalaObjectToBean` will
+generate a bean for that object, too. Recursive generation can be disabled,
+if desired.
+
+The `ScalaObjectToBean` Scala object contains the method that performs the
+transformation.
+
+    def apply(obj: Any, recurse: Boolean = true): AnyRef
+
+The first parameter is the map that is to be converted to a Java Bean. The
+second parameter (`recurse`) indicates whether or not nested objects should
+be automatically converted; it defaults to `true`. The bean's class name is
+automatically generated, though there's a version of the `apply` method
+that allows you to specify your own class name. The method returns an
+instance of the newly generated bean class.
+
+### An example
+
+An example will help clarify this part of the API:
+
+    import org.clapper.classutil.ScalaObjectToBean
+
+    case class Foo(name: String, value: Int)
+    case class Bar(name: String, foo: Foo)
+
+    val foo = Foo("foo100", 100)
+    val bar = Bar("bar1", foo)
+    val beanFoo = ScalaObjectToBean(foo)
+    val beanBar = ScalaObjectToBean(bar)
+
+    println("beanFoo:")
+    println("-" * 30)
+    beanFoo.getClass.getMethods.filter(_.getName startsWith "get").foreach(println _)
+
+    println("beanBar:")
+    println("-" * 30)
+    beanBar.getClass.getMethods.filter(_.getName startsWith "get").foreach(println _)
+
+    def call(obj: AnyRef, methodName: String) =
+    {
+        val method = obj.getClass.getMethod(methodName)
+        method.invoke(obj)
+    }
+
+    println()
+    println("beanFoo.getName returns " + call(beanFoo, "getName"))
+    println("beanFoo.getValue returns " + call(beanFoo, "getValue"))
+    println("beanBar.getName returns " + call(beanBar, "getName"))
+    val beanFoo2 = call(beanBar, "getFoo")
+    println("beanBar.getFoo returns " + beanFoo2)
+    println("beanBar.getFoo.getValue returns " + call(beanFoo2, "getValue"))
+    
+
+This example takes instances of two cases classes and maps them to beans.
+Running it produces the following output:
+
+    beanFoo:
+    ------------------------------
+    public final java.lang.String $Proxy3.getName()
+    public final int $Proxy3.getValue()
+    public final java.lang.String $Proxy3.getCopy$default$1()
+    public final int $Proxy3.getCopy$default$2()
+    public static java.lang.Class java.lang.reflect.Proxy.getProxyClass(java.lang.ClassLoader,java.lang.Class[]) throws java.lang.IllegalArgumentException
+    public static java.lang.reflect.InvocationHandler java.lang.reflect.Proxy.getInvocationHandler(java.lang.Object) throws java.lang.IllegalArgumentException
+    public final native java.lang.Class java.lang.Object.getClass()
+
+    beanBar:
+    ------------------------------
+    public final java.lang.String $Proxy4.getName()
+    public final java.lang.String $Proxy4.getCopy$default$1()
+    public final java.lang.Object $Proxy4.getCopy$default$2()
+    public final java.lang.Object $Proxy4.getFoo()
+    public static java.lang.Class java.lang.reflect.Proxy.getProxyClass(java.lang.ClassLoader,java.lang.Class[]) throws java.lang.IllegalArgumentException
+    public static java.lang.reflect.InvocationHandler java.lang.reflect.Proxy.getInvocationHandler(java.lang.Object) throws java.lang.IllegalArgumentException
+    public final native java.lang.Class java.lang.Object.getClass()
+
+
 ### Caveats
 
-The resulting bean can really only be used via reflection. Its type (class)
-is created on the fly, so it cannot be imported ahead of time. However, a
-reflected bean works well with APIs that expect such things.
-
-There are a few restrictions imposed on any map that is to be converted.
-
-* Only maps with string keys can be converted.
-* The string keys must be valid Java identifiers.
+The beans generated by `MapToBean` and `ScalaObjectToBean` can really only
+be used via reflection. Their types (classes) are created on the fly, so
+they cannot be imported ahead of time. However, a reflected bean works well
+with APIs that expect such things.
 
 ### Under the covers
 
-Internally, `MapToBean` uses [ASM][] to create a Java interface from the map.
-It then uses [`java.lang.reflect.Proxy`](http://java.sun.com/javase/6/docs/api/java/lang/reflect/Proxy.html) to create a dynamic implementation of that
-interface that satisfies the `get` method calls directly from the original map.
+Internally, `MapToBean` and `ScalaObjectToBean` use [ASM][] to create a
+Java interface from the map or object. They then use
+[`java.lang.reflect.Proxy`](http://java.sun.com/javase/6/docs/api/java/lang/reflect/Proxy.html)
+to create a dynamic implementation of the interface that satisfies the
+`get` method calls directly from the original object.
 
 This approach turns out to be simpler to implement (and, therefore, simpler
 to reason about) than directly generating a class that serves up the map's
 values.
-
 
 ## API Docs
 
@@ -412,3 +541,4 @@ request. Along with any patch you send:
 [Logback]: http://logback.qos.ch/
 [AVSL]: http://bmc.github.com/avsl/
 [API documentation]: api/index.html
+[Case classes]: http://www.scala-lang.org/node/107
