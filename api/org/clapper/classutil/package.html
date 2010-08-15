@@ -98,11 +98,19 @@ an object, with fields for each map value.</p>
       </a></h4>
       <p class="comment cmt">The entrance to the factory floor, providing methods for finding and
 filtering classes.</p>
+    </li><li visbl="pub" name="org.clapper.classutil.ClassUtil">
+      <h4 class="signature"><a href="ClassUtil$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">ClassUtil</span><span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Some general-purpose class-related utility functions.</p>
     </li><li visbl="pub" name="org.clapper.classutil.MapToBean">
       <h4 class="signature"><a href="MapToBean$.html">
       <span class="kind">object</span>
       <span class="symbol">
-        <span class="name">MapToBean</span><span class="result"> extends AnyRef</span>
+        <span class="name">MapToBean</span><span class="result"> extends ClassNameGenerator</span>
       </span>
       </a></h4>
       <p class="comment cmt">Takes a Scala <code>Map</code>, with <code>String</code> keys and object values, and generates
@@ -116,6 +124,16 @@ a Java Bean object, with fields for each map value.</p>
       </a></h4>
       <p class="comment cmt">An enumerated high-level view of the modifiers that can be attached
 to a method, class or field.</p>
+    </li><li visbl="pub" name="org.clapper.classutil.ScalaObjectToBean">
+      <h4 class="signature"><a href="ScalaObjectToBean$.html">
+      <span class="kind">object</span>
+      <span class="symbol">
+        <span class="name">ScalaObjectToBean</span><span class="result"> extends AnyRef</span>
+      </span>
+      </a></h4>
+      <p class="comment cmt">Takes a Scala object, locates the Scala accessors (using simple heuristics),
+and generates a new object with additional Java Bean <code>get</code> methods for the
+accessors.</p>
     </li></ol>
             </div>
                 

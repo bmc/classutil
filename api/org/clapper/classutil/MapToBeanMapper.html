@@ -373,21 +373,43 @@ possible to check whether the contents of the list are of the requested typed.
             
           </div>
           
-    </li><li visbl="pub" name="org.clapper.classutil.MapToBeanMapper#makeObject">
+    </li><li visbl="pub" name="org.clapper.classutil.MapToBeanMapper#makeBean">
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">makeObject</span><span class="params">(<span name="map">map: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="java.lang.String">String</span>, <span class="extype" name="scala.Any">Any</span>]</span>, <span name="className">className: <span class="extype" name="java.lang.String">String</span></span>, <span name="recurse">recurse: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="default">true</span></span>)</span><span class="result">: AnyRef</span>
+        <span class="name">makeBean</span><span class="params">(<span name="map">map: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="java.lang.String">String</span>, <span class="extype" name="scala.Any">Any</span>]</span>, <span name="className">className: <span class="extype" name="java.lang.String">String</span></span>, <span name="recurse">recurse: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="default">true</span></span>)</span><span class="result">: AnyRef</span>
       </span>
       </h4>
       
-            <p class="shortcomment cmt">Transform a map into an object.</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Transform a map into an object.
+            <p class="shortcomment cmt">Transform a map into a bean.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Transform a map into a bean.
 </p></div><dl class="paramcmts block"><dt class="param">map</dt><dd class="cmt"><p>the map</p></dd><dt class="param">className</dt><dd class="cmt"><p>the name to give the class</p></dd><dt class="param">recurse</dt><dd class="cmt"><p><code>true</code> to recursively map nested maps, <code>false</code> otherwise
 </p></dd><dt>returns</dt><dd class="cmt"><p>an instantiated object representing the map
 </p></dd></dl><div class="block">
           attributes: abstract 
         </div>
+            
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" name="org.clapper.classutil.MapToBeanMapper#makeObject">
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name deprecated">makeObject</span><span class="params">(<span name="map">map: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="java.lang.String">String</span>, <span class="extype" name="scala.Any">Any</span>]</span>, <span name="className">className: <span class="extype" name="java.lang.String">String</span></span>, <span name="recurse">recurse: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="default">true</span></span>)</span><span class="result">: AnyRef</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Transform a map into a bean.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Transform a map into a bean.
+</p></div><dl class="paramcmts block"><dt class="param">map</dt><dd class="cmt"><p>the map</p></dd><dt class="param">className</dt><dd class="cmt"><p>the name to give the class</p></dd><dt class="param">recurse</dt><dd class="cmt"><p><code>true</code> to recursively map nested maps, <code>false</code> otherwise
+</p></dd><dt>returns</dt><dd class="cmt"><p>an instantiated object representing the map
+</p></dd></dl><div class="block"><ol>deprecated:
+          <li><p>Use makeBean() instead.
+</p></li>
+        </ol></div>
             
             
             

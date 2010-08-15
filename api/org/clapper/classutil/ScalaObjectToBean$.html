@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>Scaladoc for org.clapper.classutil.MapToBean</title>
+          <title>Scaladoc for org.clapper.classutil.ScalaObjectToBean</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 		      <script type="text/javascript" src="../../../lib/jquery.js"></script>
           
@@ -17,63 +17,29 @@
 
       <div id="definition">
         <img src="../../../lib/object_big.png" />
-        <h1>MapToBean</h1>
+        <h1>ScalaObjectToBean</h1>
       </div>
 
       <h4 class="signature" id="signature">
       <span class="kind">object</span>
       <span class="symbol">
-        <span class="name">MapToBean</span><span class="result"> extends <span class="extype" name="org.clapper.classutil.ClassNameGenerator">ClassNameGenerator</span></span>
+        <span class="name">ScalaObjectToBean</span><span class="result"> extends AnyRef</span>
       </span>
       </h4>
-      <div class="fullcomment" id="comment"><div class="comment cmt"><p>Takes a Scala <code>Map</code>, with <code>String</code> keys and object values, and generates
-a Java Bean object, with fields for each map value. Field that are,
-themselves, <code>Map[String,Any]</code> objects can be recursively mapped, as
-well. The map's keys are mapped to Java Bean <code>get</code> accessors. For
-instance, a key name &quot;foo&quot; is mapped to a method called <code>getFoo()</code>.</p><p>The transformation results in an object that can only really be used
-via reflection; however, that fits fine with some APIs that want to receive
-Java Beans as parameters.</p><p>There are some restrictions imposed on any map that is to be converted.</p><ul><li> Only maps with string keys can be converted.</li><li> The string keys must be valid Java identifiers.</li></ul><p>Here's a simple example:</p><pre>
-import org.clapper.classutil._
-
-val charList = List('1', '2', '3')
-
-val subMap = Map(&quot;sub1&quot; -&gt; 1, &quot;sub2&quot; -&gt; 2)
-val m =  Map(&quot;oneInt&quot; -&gt; 1,
-             &quot;twoFloat&quot; -&gt; 2f,
-             &quot;threeString&quot; -&gt; &quot;three&quot;,
-             &quot;fourIntClass&quot; -&gt; classOf[Int],
-             &quot;fiveMap&quot; -&gt; subMap,
-             &quot;sixList&quot; -&gt; charList)
-val obj = MapToBean(m)
-
-def showName(name: String) = (name startsWith &quot;get&quot;)
-
-obj.getClass.getMethods.filter(m =&gt; showName(m.getName)).foreach(println _)
-
-def call(methodName: String) =
-{
-    val method = obj.getClass.getMethod(methodName)
-    method.invoke(obj)
-}
-
-println
-println(&quot;getFiveMap returns &quot; + call(&quot;getFiveMap&quot;))
-</pre><p>That Scala script will produce output like the following:</p><pre>
-public final $Proxy0 $Proxy1.getFiveMap()
-public final java.lang.Integer $Proxy1.getOneInt()
-public final java.lang.Class $Proxy1.getFourIntClass()
-public final scala.collection.immutable.$colon$colon $Proxy1.getSixList()
-public final java.lang.Float $Proxy1.getTwoFloat()
-public final java.lang.String $Proxy1.getThreeString()
-public static java.lang.Class java.lang.reflect.Proxy.getProxyClass(java.lang.ClassLoader,java.lang.Class[]) throws java.lang.IllegalArgumentException
-public static java.lang.reflect.InvocationHandler java.lang.reflect.Proxy.getInvocationHandler(java.lang.Object) throws java.lang.IllegalArgumentException
-public final native java.lang.Class java.lang.Object.getClass()
-
-getFiveMap returns Map(getSub1 -&gt; 1, getSub2 -&gt; 2)
-</pre></div>
+      <div class="fullcomment" id="comment"><div class="comment cmt"><p>Takes a Scala object, locates the Scala accessors (using simple heuristics),
+and generates a new object with additional Java Bean <code>get</code> methods for the
+accessors. A <code>ScalaObjectToBeanMapper</code> is an alternative to using
+the <code>@BeanProperty</code> annotation on classes, so it is useful for mapping
+case classes into Java Beans, or for mapping classes from other APIs into
+Java Beans without having to extend them.</p><p>See the documentation for the <code>ScalaObjectToBeanMapper</code> trait for full
+details.
+</p></div>
             
             
-            
+            <div class="block"><ol>see also:
+                  <li><p>ScalaObjectToBeanMapper
+</p></li>
+                </ol></div>
             
           </div>
       
@@ -83,7 +49,7 @@ getFiveMap returns Map(getSub1 -&gt; 1, getSub2 -&gt; 2)
           <div id="ancestors">
                 <span class="filtertype">Inherited</span>
                 <ol><li class="hideall">Hide All</li><li class="showall">Show all</li></ol>
-                <ol id="linearization"><li class="in" name="org.clapper.classutil.ClassNameGenerator">ClassNameGenerator</li><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
+                <ol id="linearization"><li class="in" name="scala.AnyRef">AnyRef</li><li class="in" name="scala.Any">Any</li></ol>
               </div>
           <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -220,30 +186,19 @@ getFiveMap returns Map(getSub1 -&gt; 1, getSub2 -&gt; 2)
             
           </div>
           
-    </li><li visbl="pub" name="org.clapper.classutil.MapToBean#ClassNamePrefix">
-      <h4 class="signature">
-      <span class="kind">val</span>
-      <span class="symbol">
-        <span class="name">ClassNamePrefix</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4>
-      
-            
-            <div class="fullcomment"><div class="block">
-          definition classes: <a href="" class="extype" name="org.clapper.classutil.MapToBean">MapToBean</a> → ClassNameGenerator
-        </div></div>
-          
-    </li><li visbl="pub" name="org.clapper.classutil.MapToBean#apply">
+    </li><li visbl="pub" name="org.clapper.classutil.ScalaObjectToBean#apply">
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="map">map: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="java.lang.String">String</span>, <span class="extype" name="scala.Any">Any</span>]</span>, <span name="className">className: <span class="extype" name="java.lang.String">String</span></span>, <span name="recurse">recurse: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: AnyRef</span>
+        <span class="name">apply</span><span class="params">(<span name="obj">obj: <span class="extype" name="scala.Any">Any</span></span>, <span name="className">className: <span class="extype" name="java.lang.String">String</span></span>, <span name="recurse">recurse: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: AnyRef</span>
       </span>
       </h4>
       
             <p class="shortcomment cmt">Transform a map into an object.</p>
-            <div class="fullcomment"><div class="comment cmt"><p>Transform a map into an object.
-</p></div><dl class="paramcmts block"><dt class="param">map</dt><dd class="cmt"><p>the map</p></dd><dt class="param">className</dt><dd class="cmt"><p>the desired class name</p></dd><dt class="param">recurse</dt><dd class="cmt"><p><code>true</code> to recursively map nested maps, <code>false</code>                 otherwise. Recursively mapped maps will have generated
+            <div class="fullcomment"><div class="comment cmt"><p>Transform a map into an object. The class name will be generated,
+will be in the <code>org.clapper.classutil</code> package, and will have
+a class name prefix of <code>ScalaObjectToBean_</code>.
+</p></div><dl class="paramcmts block"><dt class="param">obj</dt><dd class="cmt"><p>the Scala object</p></dd><dt class="param">className</dt><dd class="cmt"><p>the desired class name</p></dd><dt class="param">recurse</dt><dd class="cmt"><p><code>true</code> to recursively map nested maps, <code>false</code>                 otherwise. Recursively mapped maps will have generated
                  class names.
 </p></dd><dt>returns</dt><dd class="cmt"><p>an instantiated object representing the map
 </p></dd></dl>
@@ -253,19 +208,19 @@ getFiveMap returns Map(getSub1 -&gt; 1, getSub2 -&gt; 2)
             
           </div>
           
-    </li><li visbl="pub" name="org.clapper.classutil.MapToBean#apply">
+    </li><li visbl="pub" name="org.clapper.classutil.ScalaObjectToBean#apply">
       <h4 class="signature">
       <span class="kind">def</span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="map">map: <span class="extype" name="scala.collection.immutable.Map">Map</span>[<span class="extype" name="java.lang.String">String</span>, <span class="extype" name="scala.Any">Any</span>]</span>, <span name="recurse">recurse: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="default">true</span></span>)</span><span class="result">: AnyRef</span>
+        <span class="name">apply</span><span class="params">(<span name="obj">obj: <span class="extype" name="scala.Any">Any</span></span>, <span name="recurse">recurse: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="default">true</span></span>)</span><span class="result">: AnyRef</span>
       </span>
       </h4>
       
             <p class="shortcomment cmt">Transform a map into an object.</p>
             <div class="fullcomment"><div class="comment cmt"><p>Transform a map into an object. The class name will be generated,
 will be in the <code>org.clapper.classutil</code> package, and will have
-a class name prefix of <code>MapBean_</code>.
-</p></div><dl class="paramcmts block"><dt class="param">map</dt><dd class="cmt"><p>the map</p></dd><dt class="param">recurse</dt><dd class="cmt"><p><code>true</code> to recursively map nested maps, <code>false</code> otherwise
+a class name prefix of <code>ScalaObjectBean_</code>.
+</p></div><dl class="paramcmts block"><dt class="param">obj</dt><dd class="cmt"><p>the Scala object</p></dd><dt class="param">recurse</dt><dd class="cmt"><p><code>true</code> to recursively map nested maps, <code>false</code> otherwise
 </p></dd><dt>returns</dt><dd class="cmt"><p>an instantiated object representing the map
 </p></dd></dl>
             
