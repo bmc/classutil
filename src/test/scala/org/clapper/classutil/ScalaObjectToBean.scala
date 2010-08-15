@@ -38,7 +38,7 @@
 import org.scalatest.{FunSuite, Assertions}
 import org.clapper.classutil.ScalaObjectToBean
 
-class ScalaObjectToBean extends FunSuite
+class ScalaObjectToBeanTest extends FunSuite
 {
     test("ScalaObjectToBean, non-recursive")
     {
@@ -69,15 +69,105 @@ class ScalaObjectToBean extends FunSuite
                 cls.isAssignableFrom(method.getReturnType)
             }
 
-            expect(value, "Method " + name + "() returns " + value)
+            expect(value, "Method " + name + "() returns " + value.toString)
             {
                 method.invoke(bean)
+            }
+
+            expect(false, "Method should not return a proxy")
+            {
+                import java.lang.reflect.Proxy
+
+                Proxy.isProxyClass(method.invoke(bean).getClass)
             }
         }
     }
 
     test("ScalaObjectToBean, recursive")
     {
-        println("*** NEED TO ADD RECURSIVE TEST")
+        case class Foo(name: String, value: Int)
+        case class Bar(name: String, myFoo: Foo)
+
+        val foo = Foo("foo", 100)
+        val bar = Bar("bar", foo)
+
+        val beanFoo = ScalaObjectToBean(foo)
+        val beanBar = ScalaObjectToBean(bar)
+
+        def hasMethod(obj: AnyRef, methodName: String) =
+        {
+            try
+            {
+                obj.getClass.getMethod(methodName)
+                true
+            }
+
+            catch
+            {
+                case _: NoSuchMethodException => false
+            }
+        }
+
+        // Ensure that all the methods are present.
+
+        val hasMethods = List(
+            ("getName", "foo", foo, false),
+            ("getValue", "foo", foo, false),
+            ("getName", "beanFoo", beanFoo, true),
+            ("getValue", "beanFoo", beanFoo, true),
+
+            ("getName", "bar", bar, false),
+            ("getValue", "bar", bar, false),
+            ("getMyFoo", "bar", bar, false),
+            ("getName", "beanBar", beanBar, true),
+            ("getValue", "beanBar", beanBar, false),
+            ("getMyFoo", "beanBar", beanBar, true)
+        )
+
+        for ((methodName, label, obj, expected) <- hasMethods)
+        {
+            expect(expected, label + " has " + methodName + " method")
+            {
+                hasMethod(obj, methodName)
+            }
+        }
+
+        // Ensure that nest methods are proxies.
+
+        val isProxy = List(
+            ("getName", "beanFoo", beanFoo, false),
+            ("getName", "beanBar", beanBar, false),
+            ("getValue", "beanFoo", beanFoo, false),
+            ("getMyFoo", "beanBar", beanBar, true)
+        )
+
+        for ((methodName, label, obj, expected) <- isProxy)
+        {
+            expect(expected, label + "." + methodName + " returns Proxy")
+            {
+                import java.lang.reflect.Proxy
+                val value = obj.getClass.getMethod(methodName).invoke(obj)
+                Proxy.isProxyClass(value.getClass)
+            }
+        }
+
+        // Ensure that the nest proxies return the right values.
+
+        val beanBarFoo = beanBar.getClass.getMethod("getMyFoo").invoke(beanBar)
+
+        val values = List(
+            ("beanFoo", beanFoo, "getValue", foo.value),
+            ("beanFoo", beanFoo, "getName", foo.name),
+            ("beanBar.getMyFoo.getValue", beanBarFoo, "getValue", foo.value),
+            ("beanBar.getMyFoo.getName", beanBarFoo, "getName", foo.name)
+        )
+
+        for ((label, obj, methodName, expected) <- values)
+        {
+            expect(expected, label + "." + methodName + "=" + expected)
+            {
+                obj.getClass.getMethod(methodName).invoke(obj)
+            }
+        }
     }
 }

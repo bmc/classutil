@@ -44,6 +44,27 @@ import scala.reflect.Manifest
  */
 object ClassUtil
 {
+    private lazy val JavaPrimitives = Set(
+        classOf[java.lang.Boolean].   asInstanceOf[Any],
+        java.lang.Boolean.TYPE.       asInstanceOf[Any],
+        classOf[java.lang.Byte].      asInstanceOf[Any],
+        java.lang.Byte.TYPE.          asInstanceOf[Any],
+        classOf[java.lang.Character]. asInstanceOf[Any],
+        java.lang.Character.TYPE.     asInstanceOf[Any],
+        classOf[java.lang.Double].    asInstanceOf[Any],
+        java.lang.Double.TYPE.        asInstanceOf[Any],
+        classOf[java.lang.Float].     asInstanceOf[Any],
+        java.lang.Float.TYPE.         asInstanceOf[Any],
+        classOf[java.lang.Integer].   asInstanceOf[Any],
+        java.lang.Integer.TYPE.       asInstanceOf[Any],
+        classOf[java.lang.Long].      asInstanceOf[Any],
+        java.lang.Long.TYPE.          asInstanceOf[Any],
+        classOf[java.lang.Short].     asInstanceOf[Any],
+        java.lang.Short.TYPE.         asInstanceOf[Any],
+        classOf[java.lang.Void].      asInstanceOf[Any],
+        java.lang.Void.TYPE.          asInstanceOf[Any]
+    )
+
     /**
      * Determine whether an object is a primitive or not.
      *
@@ -52,25 +73,13 @@ object ClassUtil
      * @return `true` if its class is a primitive, `false` if not.
      */
     def isPrimitive(obj: Any): Boolean =
-    {
-        obj match
-        {
-            case _: Byte    => true
-            case _: Short   => true
-            case _: Int     => true
-            case _: Long    => true
-            case _: Float   => true
-            case _: Double  => true
-            case _: Char    => true
-            case _: Boolean => true
-            case _: Unit    => true
-            case _          => false
-        }
-    }
+        isPrimitive(obj.asInstanceOf[AnyRef].getClass)
 
     /**
      * Determine whether a class represents an underlying primitive or not.
      * For instance, `Int`, `Float` and `Unit` all represent underlying
+     * primitives. Note that Java classes are considered primitives if they
+     * *are*, in fact, primitives, or if they represent boxed forms of
      * primitives.
      *
      * @param cls  the class
@@ -95,21 +104,7 @@ object ClassUtil
             case _ => false
         }
 
-        def javaPrimitive = cls.getName match
-        {
-            // I'm sure there's a less obnoxious way to do this...
-
-            case "java.lang.Boolean"   => true
-            case "java.lang.Byte"      => true
-            case "java.lang.Character" => true
-            case "java.lang.Double"    => true
-            case "java.lang.Float"     => true
-            case "java.lang.Integer"   => true
-            case "java.lang.Long"      => true
-            case "java.lang.Short"     => true
-            case "java.lang.Void"      => true
-            case _                     => false
-        }
+        def javaPrimitive = JavaPrimitives contains cls
 
         scalaPrimitive || javaPrimitive
     }

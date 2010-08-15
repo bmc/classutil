@@ -107,11 +107,24 @@ private[classutil] class ScalaObjectToBeanMapper
                                    """^readResolve$""".r)
     private val NameGenerator = new ClassNameGenerator
     {
-        val ClassNamePrefix = "ScalaBean"
+        val ClassNamePrefix = "org.clapper.classutil.ScalaObjectBean"
     }
 
     /**
-     * Transform a Scala object into a bean.
+     * Wrap a Scala object in a bean.
+     *
+     * @param obj       the Scala object
+     * @param recurse   `true` to recursively map nested Scala objects,
+     *                  `false` otherwise
+     *
+     * @return an instantiated bean representing the augmented Scala object,
+     *         subject to the restrictions listed in the class documentation.
+     */
+    def wrapInBean(obj: Any, recurse: Boolean): AnyRef =
+        wrapInBean(obj, NameGenerator.newGeneratedClassName, recurse)
+
+    /**
+     * Wrap a Scala object in a bean.
      *
      * @param obj       the Scala object
      * @param className the name to give the class
@@ -121,10 +134,8 @@ private[classutil] class ScalaObjectToBeanMapper
      * @return an instantiated bean representing the augmented Scala object,
      *         subject to the restrictions listed in the class documentation.
      */
-    def makeBean(obj: Any, className: String, recurse: Boolean = true): AnyRef =
+    def wrapInBean(obj: Any, className: String, recurse: Boolean): AnyRef =
     {
-        import asm.InterfaceMaker
-
         def skip(name: String) = SkipMethods.exists(_.findFirstIn(name) != None)
 
         def isBeanable(m: Method) =
@@ -163,25 +174,8 @@ private[classutil] class ScalaObjectToBeanMapper
             // objects. Convert it to a sequence of (bean-name,
             // return-value) tuples, to generate the interface.
 
-            val className = NameGenerator.newGeneratedClassName
-
-            // NEED to handle recursion.
-
-            val interfaceBytes = InterfaceMaker.makeInterface(
-                methodMap.map(kv => (kv._1, kv._2.getReturnType)).toSeq,
-                className
-            ).toArray
-
-            // Load the class we just generated.
-            val classLoader = obj.asInstanceOf[AnyRef].getClass.getClassLoader
-            val interface = ClassUtil.loadClass(classLoader,
-                                                className,
-                                                interfaceBytes)
-
-            // Create a proxy that satisfies its calls from the original
-            // object's set of methods.
-
-            makeProxy(methodMap, obj, interface, classLoader)
+            val classLoader = this.getClass.getClassLoader
+            generateBean(obj, methodMap, className, classLoader, recurse)
         }
     }
 
@@ -189,7 +183,57 @@ private[classutil] class ScalaObjectToBeanMapper
                              * Private Methods
     \* ---------------------------------------------------------------------- */
 
-    private def makeProxy(methodMap: Map[String, Method],
+    private def generateBean(obj: Any,
+                             methodMap: Map[String, Method],
+                             className: String,
+                             classLoader: ClassLoader,
+                             recurse: Boolean): AnyRef =
+    {
+        import asm.InterfaceMaker
+
+        def beanWrappableClass(returnType: Class[_]): Boolean =
+        {
+            (!ClassUtil.isPrimitive(returnType)) &&
+            (returnType ne classOf[String])
+        }
+
+        def functionFor(method: Method) =
+        {
+            if (recurse && beanWrappableClass(method.getReturnType))
+                () => wrapInBean(method.invoke(obj), true)
+            else
+                () => method.invoke(obj)
+        }
+
+        def returnTypeFor(method: Method) =
+        {
+            if (recurse && beanWrappableClass(method.getReturnType))
+                classOf[Any]
+            else
+                method.getReturnType
+        }
+
+        val interfaceBytes = InterfaceMaker.makeInterface(
+            methodMap.map(kv => (kv._1 -> returnTypeFor(kv._2))).toSeq,
+            className
+        ).toArray
+
+        // Load the class we just generated.
+
+        val interface = ClassUtil.loadClass(classLoader,
+                                            className,
+                                            interfaceBytes)
+
+        // Create a proxy that satisfies its calls from the original
+        // object's set of methods.
+
+        makeProxy(methodMap.map(kv => (kv._1 -> functionFor(kv._2))).toMap,
+                                obj,
+                                interface,
+                                classLoader)
+    }
+
+    private def makeProxy(methodMap: Map[String, () => AnyRef],
                           obj: Any,
                           interface: Class[_],
                           classLoader: ClassLoader): AnyRef =
@@ -204,8 +248,10 @@ private[classutil] class ScalaObjectToBeanMapper
                 // generated. In that case, just delegate the call to the
                 // original object.
 
-                methodMap.getOrElse(method.getName, method).
-                          invoke(obj, args: _*)
+                def delegate(): AnyRef = method.invoke(obj, args: _*)
+
+                val func = methodMap.getOrElse(method.getName, delegate _)
+                func()
             }
         }
 
@@ -227,10 +273,8 @@ private[classutil] class ScalaObjectToBeanMapper
  *
  * @see ScalaObjectToBeanMapper
  */
-object ScalaObjectToBean extends ClassNameGenerator
+object ScalaObjectToBean
 {
-    val ClassNamePrefix = "org.clapper.classutil.ScalaObjectBean"
-
     private val mapper = new ScalaObjectToBeanMapper
 
     /**
@@ -244,7 +288,7 @@ object ScalaObjectToBean extends ClassNameGenerator
      * @return an instantiated object representing the map
      */
     def apply(obj: Any, recurse: Boolean = true): AnyRef =
-        mapper.makeBean(obj, newGeneratedClassName, recurse)
+        mapper.wrapInBean(obj, recurse)
 
     /**
      * Transform a map into an object. The class name will be generated,
@@ -260,5 +304,5 @@ object ScalaObjectToBean extends ClassNameGenerator
      * @return an instantiated object representing the map
      */
     def apply(obj: Any, className: String, recurse: Boolean): AnyRef =
-        mapper.makeBean(obj, className, recurse)
+        mapper.wrapInBean(obj, className, recurse)
 }
