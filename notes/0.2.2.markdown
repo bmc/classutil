@@ -1,8 +1,11 @@
-* Added `ClassUtil` utility module, with `isPrimitive()` methods that test
-  objects and classes to see if they represent primitives.
+* Added `ClassUtil` utility module, with some useful utility methods,
+  including: `isPrimitive()` methods that test objects and classes to see
+  if they represent primitives; an `isOfType` method that uses a Scala
+  `Manifest` to allow runtime tests against generic types; and a
+  `loadClass` method that simplifies loading a class from its bytes.
 * Added `ScalaObjectToBean`, which takes a Scala object and creates a Java
-  bean that wraps it.
-* Added `ClassNameGenerator`, which generates classes automatically.
+  bean that wraps it, at runtime.
+* Added `ClassNameGenerator`, which generates class names automatically.
 * Refactored various internal implementation details, for ease of re-use.
 * Updated to released 1.2 version of [ScalaTest][] and converted its
   dependency in [SBT][] to a test-time, not run-time, dependency.
