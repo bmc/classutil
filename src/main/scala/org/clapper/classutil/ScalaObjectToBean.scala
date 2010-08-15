@@ -38,15 +38,15 @@
 package org.clapper.classutil
 
 /**
- * Takes a Scala object, locates the Scala accessors (using simple heuristics),
- * and generates a new object with additional Java Bean `get` methods for the
- * accessors. A `ScalaObjectToBeanMapper` is an alternative to using
+ * Takes a Scala object, locates the Scala accessors (using simple
+ * heuristics), and generates a new object with additional Java Bean `get`
+ * methods for the accessors. `ScalaObjectToBean` is an alternative to using
  * the `@BeanProperty` annotation on classes, so it is useful for mapping
- * case classes into Java Beans, or for mapping classes from other APIs into
- * Java Beans without having to extend them.
+ * case classes into Java Beans, or for mapping classes from other APIs
+ * into Java Beans without having to extend them.
  *
- * The mapper uses the following heuristics to determine which fields to
- * map.
+ * `ScalaObjectToBean` uses the following heuristics to determine which fields
+ * to map.
  *
  * First, it recognizes that any Scala `val` or `var` is really a getter method
  * returning some type. That is:
@@ -73,13 +73,12 @@ package org.clapper.classutil
  *
  * <ul>
  *   <li> Methods starting with `get`.
- *   <li> Methods that have a corresponsing `get` method. In the above example,
+ *   <li> Methods that have a corresponding `get` method. In the above example,
  *        if there's a `getX()` method that returns an `int`, the mapper will
  *        assume that it's the bean version of `x()`, and it will ignore `x()`.
+ *   <li> Methods that aren't public.
  *   <li> Any method in `java.lang.Object`.
  *   <li> Any method in `scala.Product`.
- *   <li> Optionally, any method whose name matches regular expressions
- *        specified by the caller.
  * </ul>
  *
  * If there are any methods in the remaining set, then the mapper returns a
