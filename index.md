@@ -269,7 +269,7 @@ There are a few restrictions imposed on any map that is to be converted.
 * Only maps with string keys can be converted.
 * The string keys must be valid Java identifiers.
 
-### An example
+#### An example
 
 An example will help clarify this part of the API:
 
@@ -421,7 +421,7 @@ automatically generated, though there's a version of the `apply` method
 that allows you to specify your own class name. The method returns an
 instance of the newly generated bean class.
 
-### An example
+#### An example
 
 An example will help clarify this part of the API:
 
