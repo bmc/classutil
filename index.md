@@ -51,27 +51,40 @@ classpath at runtime:
 # Installation
 
 The easiest way to install the ClassUtil library is to download a
-pre-compiled jar from the [*clapper.org* Maven repository][]. However, you
-can also get certain build tools to download it for you.
+pre-compiled jar from the [Scala Tools Maven repository][]. However, you
+can also get certain build tools to download it for you automatically.
 
 ## Installing with Maven
 
-If you're using [Maven][], you can get ClassUtil from the
-[*clapper.org* Maven Repository][]. The relevant pieces of information are:
+If you're using [Maven][], you can simply tell Maven to get ClassUtil
+from the [Scala Tools Maven repository][]. The relevant pieces of
+information are:
 
 * Group ID: `org.clapper`
 * Artifact ID: `classutil_2.8.0`
-* Version: `0.2.2`
+* Version: `0.3`
 * Type: `jar`
-* Repository: `http://maven.clapper.org/`
+* Repository: `http://www.scala-tools.org/repo-releases/`
 
 Here's a sample Maven POM "dependency" snippet:
+
+
+    <repositories>
+      <repository>
+        <id>scala-tools.org</id>
+          <name>Scala-tools Maven2 Repository</name>
+          <url>http://scala-tools.org/repo-releases</url>
+      </repository>
+    </repositories>
 
     <dependency>
       <groupId>org.clapper</groupId>
       <artifactId>classutil_2.8.0</artifactId>
-      <version>0.2.1</version>
+      <version>0.3</version>
     </dependency>
+
+For more information on using Maven and Scala, see Josh Suereth's
+[Scala Maven Guide][].
 
 ## Using with SBT
 
@@ -79,15 +92,20 @@ If you're using [SBT][] (the Simple Build Tool) to compile your code, you
 can place the following lines in your project file (i.e., the Scala file in
 your `project/build/` directory):
 
-    val orgClapperRepo = "clapper.org Maven Repository" at
-        "http://maven.clapper.org"
-    val classutil = "org.clapper" %% "classutil" % "0.2.2"
+    val classutil = "org.clapper" %% "classutil" % "0.3"
 
-**NOTE:** The first doubled percent is *not* a typo. It tells SBT to treat
-ClassUtil as a cross-built library and automatically inserts the Scala
-version you're using into the artifact ID. Currently, it will *only* work
-if you are building with Scala 2.8.0. See the [SBT cross-building][]
-page for details.
+**NOTE:**
+
+1. The first doubled percent is *not* a typo. It tells SBT to treat
+   ClassUtil as a cross-built library and automatically inserts the Scala
+   version you're using into the artifact ID. Currently, it will *only*
+   work if you are building with Scala 2.8.0. See the
+   [SBT cross-building][] page for details.
+2. Prior to version 0.3, you also had to specify the location of the
+   *clapper.org* custom Maven repository. With version 0.3, however,
+   ClassUtil is now being published to the
+   [Scala Tools Maven repository][], which SBT automatically searches.
+
 
 # Building from Source
 
@@ -505,6 +523,10 @@ values.
 
 The full Scaladoc API documentation is available [here][API documentation].
 
+# Change log
+
+The change log for all releases is [here][changelog].
+
 # Author
 
 Brian M. Clapper, [bmc@clapper.org][]
@@ -528,7 +550,8 @@ request. Along with any patch you send:
 [GitHub repository]: http://github.com/bmc/classutil
 [GitHub]: http://github.com/bmc/
 [downloads page]: http://github.com/bmc/classutil/downloads
-[*clapper.org* Maven repository]: http://maven.clapper.org/org/clapper/
+[Scala Tools Maven repository]: http://www.scala-tools.org/repo-releases/
+[Scala Maven Guide]: http://www.scala-lang.org/node/345
 [Maven]: http://maven.apache.org/
 [ASM]: http://asm.ow2.org/
 [SBT]: http://code.google.com/p/simple-build-tool
@@ -542,3 +565,4 @@ request. Along with any patch you send:
 [AVSL]: http://bmc.github.com/avsl/
 [API documentation]: api/index.html
 [Case classes]: http://www.scala-lang.org/node/107
+[changelog]: CHANGELOG.html
