@@ -47,7 +47,6 @@ classpath at runtime:
 * An SLF4J implementation, such as [Logback][] or [AVSL][], if you want
   logging.
 
-
 # Installation
 
 The easiest way to install the ClassUtil library is to download a

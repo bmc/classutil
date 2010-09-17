@@ -58,7 +58,7 @@ Version 0.2:
 Version 0.1.2:
 
 * Updated to version 0.7 of [Grizzled Scala][].
-* Updated to version 0.2.2 of [Grizzled-SLF4J][].
+* Updated to version 0.2.2 of [Grizzled SLF4J][].
 * Bumped to [SBT][] version 0.7.4.
 * Tightened access restrictions on some ASM-specific internal classes.
 * Now compiles under Scala 2.8.0.RC3 and RC2. Dropped support for RC1.
