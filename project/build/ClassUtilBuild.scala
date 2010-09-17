@@ -44,7 +44,7 @@ import java.io.File
 /**
  * To build Novus via SBT.
  */
-class Project(info: ProjectInfo)
+class ClassUtilBuild(info: ProjectInfo)
     extends DefaultProject(info)
     with AutoCompilerPlugins
     with posterous.Publish
@@ -74,20 +74,16 @@ class Project(info: ProjectInfo)
 
     // "publish" will prompt (via a Swing pop-up) for the username and
     // password.
-    lazy val home = Path.fileProperty("user.home")
-    lazy val publishTo = Resolver.sftp("clapper.org Maven Repo",
-                                       "maven.clapper.org",
-                                       "/var/www/maven.clapper.org/html") as
-                         ("bmc", (home / ".ssh" / "id_dsa").asFile)
+    lazy val publishTo = "Scala Tools Nexus" at
+        "http://nexus.scala-tools.org/content/repositories/releases/"
+    Credentials(Path.userHome / "src" / "mystuff" / "scala" /
+                "nexus.scala-tools.org.properties", log)
 
     override def managedStyle = ManagedStyle.Maven
 
     /* ---------------------------------------------------------------------- *\
                        Managed External Dependencies
     \* ---------------------------------------------------------------------- */
-
-    val scalaToolsRepo = "Scala-Tools Maven Repository" at 
-        "http://scala-tools.org/repo-releases/"
 
     val newReleaseToolsRepository = "Scala Tools Repository" at
         "http://nexus.scala-tools.org/content/repositories/snapshots/"
@@ -97,10 +93,8 @@ class Project(info: ProjectInfo)
     val asmCommons = "asm" % "asm-commons" % "3.2"
     val asmUtil = "asm" % "asm-util" % "3.2"
 
-    val orgClapperRepo = "clapper.org Maven Repository" at
-        "http://maven.clapper.org"
-    val grizzled = "org.clapper" %% "grizzled-scala" % "0.7.4"
-    val grizzledSlf4j = "org.clapper" %% "grizzled-slf4j" % "0.2.4"
+    val grizzled = "org.clapper" %% "grizzled-scala" % "1.0"
+    val grizzledSlf4j = "org.clapper" %% "grizzled-slf4j" % "0.3"
 
     /* ---------------------------------------------------------------------- *\
                          Custom tasks and actions
