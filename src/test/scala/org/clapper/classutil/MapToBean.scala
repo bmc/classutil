@@ -95,4 +95,14 @@ class MapToBeanTest extends FunSuite
             }
         }
     }
+
+    test("MapToBean, lots of beans")
+    {
+        // Test a large number of generated beans, to ensure that none of the
+        // generated class names clash. Added in response to Issue #1.
+
+        val m = Map("a" -> "1", "b" -> "2")
+        for (i <- 1 to 10000) MapToBean(m)
+        ()
+    }
 }

@@ -71,8 +71,9 @@ private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper
     /**
      * Transform a map into a bean.
      *
-     * @param map      the map
-     * @param recurse  `true` to recursively map nested maps, `false` otherwise
+     * @param map       the map
+     * @param className name of generated class
+     * @param recurse   `true` to recursively map nested maps, `false` otherwise
      *
      * @return an instantiated object representing the map
      */

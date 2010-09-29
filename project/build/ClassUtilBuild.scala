@@ -93,8 +93,8 @@ class ClassUtilBuild(info: ProjectInfo)
     val asmCommons = "asm" % "asm-commons" % "3.2"
     val asmUtil = "asm" % "asm-util" % "3.2"
 
-    val grizzled = "org.clapper" %% "grizzled-scala" % "1.0"
-    val grizzledSlf4j = "org.clapper" %% "grizzled-slf4j" % "0.3"
+    val grizzled = "org.clapper" %% "grizzled-scala" % "1.0.1"
+    val grizzledSlf4j = "org.clapper" %% "grizzled-slf4j" % "0.3.1"
 
     /* ---------------------------------------------------------------------- *\
                          Custom tasks and actions

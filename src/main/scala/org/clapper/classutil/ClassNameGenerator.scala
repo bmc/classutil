@@ -45,10 +45,11 @@ package org.clapper.classutil
  */
 private[classutil] trait ClassNameGenerator
 {
-    private val rng = new java.security.SecureRandom
-
     val ClassNamePrefix: String
 
     private[classutil] def newGeneratedClassName =
-        ClassNamePrefix + "$" + rng.nextInt(100000)
+        ClassNamePrefix + "$" + uniqueSuffix
+
+    private def uniqueSuffix =
+        java.util.UUID.randomUUID.toString.replace('-', '_')
 }
