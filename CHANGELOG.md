@@ -1,3 +1,7 @@
+---
+title: Change Log for ClassUtil
+layout: default
+---
 
 Version 0.3.1:
 
