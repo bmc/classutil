@@ -60,6 +60,11 @@ class ClassUtilBuild(info: ProjectInfo)
         (super.compileOptions ++ compileOptions("-P:continuations:enable"))
 
     //override def compileOptions = Unchecked :: super.compileOptions.toList
+
+    override def documentOptions =
+        documentTitle(projectName + " " + projectVersion) ::
+        super.documentOptions.toList
+
     override def parallelExecution = true // why not?
 
     /* ---------------------------------------------------------------------- *\
