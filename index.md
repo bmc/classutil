@@ -13,17 +13,21 @@ provides various class location and class generation capabilities, including:
 * Methods for converting Scala maps into Java Beans, on the fly—which can be
   useful when generating data for use with APIs (e.g., template APIs) that
   accept Java Beans, but not maps.
+* Methods that convert Scala objects into Java beans, without requiring
+  the use of the `@JavaBean` annotation—especially useful when passing
+  `case class` objects into Java Bean-aware APIs.
 
 Under the covers, ClassUtil uses the [ASM][] bytecode library, though it
 can easily be extended to use a different byte code library.
 
 ClassUtil is fast for several reasons:
 
-* A bytecode library like [ASM][] loads compiled bytecode without using
+* A bytecode library, like [ASM][], loads compiled bytecode without using
   a JVM class loader. So, it avoids all the class loader's overhead.
 * ClassUtil's class-finder methods load and return information about
   classes using an efficient lazy iterator, which offers minimal startup
-  penalty and the ability to cut the traversal short.
+  penalty and the ability to terminate the traversal before reading
+  and loading all the elements.
 
 # Requirements
 
