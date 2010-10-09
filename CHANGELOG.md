@@ -1,7 +1,14 @@
----
-title: Change Log for ClassUtil
-layout: default
----
+
+Version 0.3.1:
+
+* Fixed [Issue #1][]: `MapToBean` can generate class names that conflict
+  with previously generated class names.
+* Now compiles against [Scala][] 2.8.1 RC1, as well as 2.8.0
+* Now depends on version 1.0.1 of [Grizzled Scala][].
+
+[Scala]: http://www.scala-lang.org/
+[Issue #1]: http://github.com/bmc/classutil/issues/issue/1
+[Grizzled Scala]: http://bmc.github.com/grizzled-scala/
 
 Version 0.3:
 
