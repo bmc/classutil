@@ -64,8 +64,8 @@ from the [Scala Tools Maven repository][]. The relevant pieces of
 information are:
 
 * Group ID: `org.clapper`
-* Artifact ID: `classutil_2.8.0`
-* Version: `0.3.1`
+* Artifact ID: `classutil_2.8.1`
+* Version: `0.3.2`
 * Type: `jar`
 * Repository: `http://www.scala-tools.org/repo-releases/`
 
@@ -82,11 +82,11 @@ Here's a sample Maven POM "dependency" snippet:
 
     <dependency>
       <groupId>org.clapper</groupId>
-      <artifactId>classutil_2.8.0</artifactId>
+      <artifactId>classutil_2.8.1</artifactId>
       <version>0.3.1</version>
     </dependency>
 
-Scala 2.8.1.RC1 is also supported in version 0.3.1.
+Version 0.3.2 supports both Scala 2.8.1 and 2.8.0.
 
 For more information on using Maven and Scala, see Josh Suereth's
 [Scala Maven Guide][].
@@ -97,17 +97,17 @@ If you're using [SBT][] (the Simple Build Tool) to compile your code, you
 can place the following lines in your project file (i.e., the Scala file in
 your `project/build/` directory):
 
-    val classutil = "org.clapper" %% "classutil" % "0.3.1"
+    val classutil = "org.clapper" %% "classutil" % "0.3.2"
 
 **NOTE:**
 
 1. The first doubled percent is *not* a typo. It tells SBT to treat
    ClassUtil as a cross-built library and automatically inserts the Scala
    version you're using into the artifact ID. Currently, it will *only*
-   work if you are building with Scala 2.8.0. See the
+   work if you are building with Scala 2.8.1 or 2.8.0. See the
    [SBT cross-building][] page for details.
 2. Prior to version 0.3, you also had to specify the location of the
-   *clapper.org* custom Maven repository. With version 0.3, however,
+   *clapper.org* custom Maven repository. With version 0.3 and later, however,
    ClassUtil is now being published to the
    [Scala Tools Maven repository][], which SBT automatically searches.
 
