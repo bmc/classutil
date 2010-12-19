@@ -12,7 +12,7 @@ Version 0.3.1:
 
 [Scala]: http://www.scala-lang.org/
 [Issue #1]: http://github.com/bmc/classutil/issues/issue/1
-[Grizzled Scala]: http://bmc.github.com/grizzled-scala/
+[Grizzled Scala]: http://software.clapper.org/grizzled-scala/
 
 Version 0.3:
 
@@ -53,7 +53,7 @@ Version 0.2:
   that can only really be used via reflection; however, that fits fine with
   some APIs that want to receive Java Beans as parameters. For a complete
   description, see
-  [the appropriate section on the web site](http://bmc.github.com/classutil/#generating_java_beans_from_scala_maps).
+  [the appropriate section on the web site](http://software.clapper.org/classutil/#generating_java_beans_from_scala_maps).
 * Updated to version 0.7.1 of [Grizzled Scala][].
 * Updated to version 0.2.2 of [Grizzled SLF4J][].
 * Removed unnecessary dependency on old version of [Grizzled Scala][] in
@@ -63,8 +63,8 @@ Version 0.2:
 
 [ASM]: http://asm.ow2.org/
 [SBT]: http://code.google.com/p/simple-build-tool
-[Grizzled Scala]: http://bmc.github.com/grizzled-scala/
-[Grizzled SLF4J]: http://bmc.github.com/grizzled-slf4j/
+[Grizzled Scala]: http://software.clapper.org/grizzled-scala/
+[Grizzled SLF4J]: http://software.clapper.org/grizzled-slf4j/
 
 Version 0.1.2:
 
@@ -75,8 +75,8 @@ Version 0.1.2:
 * Now compiles under Scala 2.8.0.RC3 and RC2. Dropped support for RC1.
 
 [SBT]: http://code.google.com/p/simple-build-tool
-[Grizzled Scala]: http://bmc.github.com/grizzled-scala/
-[Grizzled SLF4J]: http://bmc.github.com/grizzled-slf4j/
+[Grizzled Scala]: http://software.clapper.org/grizzled-scala/
+[Grizzled SLF4J]: http://software.clapper.org/grizzled-slf4j/
 
 Version 0.1.1:
 
