@@ -194,7 +194,10 @@ extends EmptyVisitor with ASMBitmapMapper
         null
     }
 
-    private def mapClassName(name: String): String = name.replaceAll("/", ".")
+    private def mapClassName(name: String): String = {
+      if(name == null) ""
+      else name.replaceAll("/", ".")
+   }
 }
 
 private[classutil] object ClassFile
