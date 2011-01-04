@@ -1,7 +1,19 @@
----
-title: Change Log for ClassUtil
-layout: default
----
+
+Version 0.3.3:
+
+* Folded in a [patch][] from [Aemon Cannon][], to protect against null
+  class names returned from [ASM][].
+
+[patch]: https://github.com/aemoncannon/classutil/commit/37d740dcd7ceb18615bde1715131a4cb81b43567
+[Aemon Cannon]: https://github.com/aemoncannon/
+[ASM]: http://asm.ow2.org/
+
+Version 0.3.2:
+
+* Fixed title in generated Scaladocs.
+* Now builds against [Scala][] 2.8.1, as well as 2.8.0.
+
+[Scala]: http://www.scala-lang.org/
 
 Version 0.3.1:
 

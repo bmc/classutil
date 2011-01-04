@@ -86,7 +86,7 @@ Here's a sample Maven POM "dependency" snippet:
       <version>0.3.3</version>
     </dependency>
 
-Scala 2.8.0 is also supported in version 0.3.3.
+Version 0.3.3 supports both Scala 2.8.1 and 2.8.0.
 
 For more information on using Maven and Scala, see Josh Suereth's
 [Scala Maven Guide][].
@@ -108,9 +108,8 @@ your `project/build/` directory):
    [SBT cross-building][] page for details.
 2. Prior to version 0.3, you also had to specify the location of the
    *clapper.org* custom Maven repository. As of version 0.3, however,
-   ClassUtil is now being published to the
-   [Scala Tools Maven repository][], which SBT automatically searches.
-
+   work if you are building with Scala 2.8.1 or 2.8.0. See the
+   [SBT cross-building][] page for details.
 
 # Building from Source
 
@@ -563,11 +562,11 @@ request. Along with any patch you send:
 [SBT cross-building]: http://code.google.com/p/simple-build-tool/wiki/CrossBuild
 [bmc@clapper.org]: mailto:bmc@clapper.org
 [continuations]: http://www.scala-lang.org/node/2096
-[Grizzled Scala]: http://bmc.github.com/grizzled-scala/
-[Grizzled SLF4J]: http://bmc.github.com/grizzled-slf4j/
+[Grizzled Scala]: http://software.clapper.org/grizzled-scala/
+[Grizzled SLF4J]: http://software.clapper.org/grizzled-slf4j/
 [SLF4J]: http://slf4j.org/
 [Logback]: http://logback.qos.ch/
-[AVSL]: http://bmc.github.com/avsl/
+[AVSL]: http://software.clapper.org/avsl/
 [API documentation]: api/index.html
 [Case classes]: http://www.scala-lang.org/node/107
 [changelog]: CHANGELOG.html
