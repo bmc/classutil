@@ -43,6 +43,7 @@ package org.clapper.classutil.asm
 import org.clapper.classutil._
 
 import scala.collection.mutable.{Set => MutableSet}
+import scala.collection.mutable.{HashMap, HashSet}
 
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -52,26 +53,11 @@ import org.objectweb.asm.Opcodes;
 
 import java.io.{File, InputStream, IOException}
 
-private[classutil] trait ASMBitmapMapper
-{
+
+private[classutil] object ASMBitmapMapper{
     import java.lang.reflect.{Modifier => JModifier}
 
-    val ModifierMap = Map(
-        JModifier.ABSTRACT     -> Modifier.Abstract,
-        JModifier.FINAL        -> Modifier.Final,
-        JModifier.INTERFACE    -> Modifier.Interface,
-        JModifier.NATIVE       -> Modifier.Native,
-        JModifier.PRIVATE      -> Modifier.Private,
-        JModifier.PROTECTED    -> Modifier.Protected,
-        JModifier.PUBLIC       -> Modifier.Public,
-        JModifier.STATIC       -> Modifier.Static,
-        JModifier.STRICT       -> Modifier.Strict,
-        JModifier.SYNCHRONIZED -> Modifier.Synchronized,
-        JModifier.TRANSIENT    -> Modifier.Transient,
-        JModifier.VOLATILE     -> Modifier.Volatile
-    )
-
-    val AccessMap = Map(
+    val AccessMap = HashMap(
         Opcodes.ACC_ABSTRACT     -> Modifier.Abstract,
         Opcodes.ACC_FINAL        -> Modifier.Final,
         Opcodes.ACC_INTERFACE    -> Modifier.Interface,
@@ -86,14 +72,24 @@ private[classutil] trait ASMBitmapMapper
         Opcodes.ACC_VOLATILE     -> Modifier.Volatile
     )
 
-    def mapModifiers(bitmap: Int, map: Map[Int, Modifier.Modifier]):
+}
+
+private[classutil] trait ASMBitmapMapper
+{
+    def mapModifiers(bitmap: Int, map: HashMap[Int, Modifier.Modifier]):
         Set[Modifier.Modifier] =
     {
         // Map the class's modifiers integer bitmap into a set of Modifier
         // enumeration values by filtering and keeping only the ones that
         // match the masks, extracting the corresponding map value, and
         // converting the whole thing to a set.
-        map.filterKeys(k => (k & bitmap) != 0).values.toSet
+	val result = MutableSet[Modifier.Modifier]()
+	for(pair <- map){
+	  if((pair._1 & bitmap) != 0){
+	    result += pair._2
+	  }
+	}
+	result.toSet
     }
 }
 
@@ -114,7 +110,7 @@ extends ClassInfo with ASMBitmapMapper
 
     var methodSet = MutableSet.empty[MethodInfo]
     var fieldSet = MutableSet.empty[FieldInfo]
-    val modifiers = mapModifiers(access, AccessMap)
+    val modifiers = mapModifiers(access, ASMBitmapMapper.AccessMap)
 }
 
 private[classutil] class MethodInfoImpl(val name: String,
@@ -123,7 +119,7 @@ private[classutil] class MethodInfoImpl(val name: String,
                                         val access: Int)
 extends MethodInfo with ASMBitmapMapper
 {
-    val modifiers = mapModifiers(access, AccessMap)
+    val modifiers = mapModifiers(access, ASMBitmapMapper.AccessMap)
 }
 
 private[classutil] class FieldInfoImpl(val name: String,
@@ -140,7 +136,7 @@ extends FieldInfo with ASMBitmapMapper
         case _            => false
     }
 
-    val modifiers = mapModifiers(access, AccessMap)
+    val modifiers = mapModifiers(access, ASMBitmapMapper.AccessMap)
 }
 
 private[classutil] class ClassVisitor(location: File)
