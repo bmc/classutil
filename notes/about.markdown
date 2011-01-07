@@ -6,3 +6,5 @@ provides various class location and class generation capabilities, including:
 * Methods for converting Scala maps and objects into Java Beans, on the
   fly--which can be useful when generating data for use with APIs (e.g.,
   template APIs) that accept Java Beans, but not maps.
+  
+See <http://software.clapper.org/classutil/> for details.
