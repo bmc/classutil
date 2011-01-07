@@ -54,7 +54,8 @@ import org.objectweb.asm.Opcodes;
 import java.io.{File, InputStream, IOException}
 
 
-private[classutil] object ASMBitmapMapper{
+private[classutil] object ASMBitmapMapper
+{
     import java.lang.reflect.{Modifier => JModifier}
 
     val AccessMap = HashMap(
@@ -71,7 +72,6 @@ private[classutil] object ASMBitmapMapper{
         Opcodes.ACC_TRANSIENT    -> Modifier.Transient,
         Opcodes.ACC_VOLATILE     -> Modifier.Volatile
     )
-
 }
 
 private[classutil] trait ASMBitmapMapper
@@ -83,11 +83,13 @@ private[classutil] trait ASMBitmapMapper
         // enumeration values by filtering and keeping only the ones that
         // match the masks, extracting the corresponding map value, and
         // converting the whole thing to a set.
+        //
+        // Mutable collections are used for speed.
 	val result = MutableSet[Modifier.Modifier]()
-	for(pair <- map){
-	  if((pair._1 & bitmap) != 0){
-	    result += pair._2
-	  }
+	for(pair <- map)
+        {
+	    if((pair._1 & bitmap) != 0)
+	        result += pair._2
 	}
 	result.toSet
     }
