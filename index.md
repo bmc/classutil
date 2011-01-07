@@ -537,7 +537,7 @@ Brian M. Clapper, [bmc@clapper.org][]
 
 # Copyright and License
 
-The ClassUtil Library is copyright &copy; 2010 Brian M. Clapper and is
+The ClassUtil Library is copyright &copy; 2010-2011 Brian M. Clapper and is
 released under a [BSD License][].
 
 # Patches
