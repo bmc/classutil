@@ -65,7 +65,7 @@ information are:
 
 * Group ID: `org.clapper`
 * Artifact ID: `classutil_2.8.1`
-* Version: `0.3.3`
+* Version: `0.3.4`
 * Type: `jar`
 * Repository: `http://www.scala-tools.org/repo-releases/`
 
@@ -83,10 +83,10 @@ Here's a sample Maven POM "dependency" snippet:
     <dependency>
       <groupId>org.clapper</groupId>
       <artifactId>classutil_2.8.1</artifactId>
-      <version>0.3.3</version>
+      <version>0.3.4</version>
     </dependency>
 
-Version 0.3.3 supports both Scala 2.8.1 and 2.8.0.
+Version 0.3.4 supports both Scala 2.8.1 and 2.8.0.
 
 For more information on using Maven and Scala, see Josh Suereth's
 [Scala Maven Guide][].
@@ -97,7 +97,7 @@ If you're using [SBT][] (the Simple Build Tool) to compile your code, you
 can place the following lines in your project file (i.e., the Scala file in
 your `project/build/` directory):
 
-    val classutil = "org.clapper" %% "classutil" % "0.3.3"
+    val classutil = "org.clapper" %% "classutil" % "0.3.4"
 
 **NOTE:**
 
