@@ -1,5 +1,5 @@
 ---
-title: ClassUtil—A Scala-friendly, fast class-finder library (with extras)
+title: "ClassUtil: A Scala-friendly, fast class-finder library (with extras)"
 layout: withTOC
 ---
 
@@ -8,13 +8,13 @@ layout: withTOC
 The *org.clapper.classutil* (ClassUtil) library is a Scala package that
 provides various class location and class generation capabilities, including:
 
-* Methods to locate and filter classes quickly, at runtime—more quickly, in
+* Methods to locate and filter classes quickly, at runtime--more quickly, in
   fact, than can be done with the JVM's runtime reflection capabilities.
-* Methods for converting Scala maps into Java Beans, on the fly—which can be
+* Methods for converting Scala maps into Java Beans, on the fly--which can be
   useful when generating data for use with APIs (e.g., template APIs) that
   accept Java Beans, but not maps.
 * Methods that convert Scala objects into Java beans, without requiring
-  the use of the `@JavaBean` annotation—especially useful when passing
+  the use of the `@JavaBean` annotation--especially useful when passing
   `case class` objects into Java Bean-aware APIs.
 
 Under the covers, ClassUtil uses the [ASM][] bytecode library, though it

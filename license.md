@@ -1,3 +1,8 @@
+---
+title: ClassUtil Library License
+layout: default
+---
+
 ClassUtil Library License
 =========================
 
