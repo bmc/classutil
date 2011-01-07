@@ -1,0 +1,5 @@
+* Folded in a [patch][] from [Aemon Cannon][], which tunes `ClassFinder`
+  performance by substituting mutable collections for the immutable ones.
+
+[patch]: https://github.com/aemoncannon/classutil/commit/cdb1ac7987bd7d011e108dc5f63730a93db582de
+[Aemon Cannon]: https://github.com/aemoncannon/
