@@ -155,7 +155,7 @@ library.
 
 ### Getting information on all classes in the current class path
 
-    import org.clapper.classutil
+    import org.clapper.classutil._
 
     val finder = ClassFinder()
     val classes = finder.getClasses // classes is an Iterator[ClassInfo]
