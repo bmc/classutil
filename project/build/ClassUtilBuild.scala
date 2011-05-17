@@ -3,7 +3,7 @@
   This software is released under a BSD license, adapted from
   http://opensource.org/licenses/bsd-license.php
 
-  Copyright (c) 2010, Brian M. Clapper
+  Copyright (c) 2010-2011, Brian M. Clapper
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -93,13 +93,22 @@ class ClassUtilBuild(info: ProjectInfo)
     val newReleaseToolsRepository = "Scala Tools Repository" at
         "http://nexus.scala-tools.org/content/repositories/snapshots/"
 
-    val scalatest = "org.scalatest" % "scalatest" % "1.2" % "test"
-    val asm = "asm" % "asm" % "3.2"
-    val asmCommons = "asm" % "asm-commons" % "3.2"
-    val asmUtil = "asm" % "asm-util" % "3.2"
+    val (scalatestArtifact, scalatestVersion) = buildScalaVersion match
+    {
+        case "2.8.0"           => ("scalatest", "1.3")
+        case "2.8.1"           => ("scalatest", "1.3")
+        case "2.9.0"           => ("scalatest_2.9.0", "1.4.1")
+        case n                 => error("Unsupported Scala version " + n)
+    }
 
-    val grizzled = "org.clapper" %% "grizzled-scala" % "1.0.3"
-    val grizzledSlf4j = "org.clapper" %% "grizzled-slf4j" % "0.3.2"
+    val scalatest = "org.scalatest" % scalatestArtifact % scalatestVersion % "test"
+
+    val asm = "asm" % "asm" % "3.3.1"
+    val asmCommons = "asm" % "asm-commons" % "3.3.1"
+    val asmUtil = "asm" % "asm-util" % "3.3.1"
+
+    val grizzled = "org.clapper" %% "grizzled-scala" % "1.0.6"
+    val grizzledSlf4j = "org.clapper" %% "grizzled-slf4j" % "0.5"
 
     /* ---------------------------------------------------------------------- *\
                          Custom tasks and actions
