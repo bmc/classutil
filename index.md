@@ -33,8 +33,8 @@ ClassUtil is fast for several reasons:
 
 ## Compile-time
 
-* ClassUtil requires a Scala 2.8 environment, because it uses the
-  [continuations][] plug-in available in 2.8.
+* ClassUtil requires a Scala 2.8 environment, or better, because it uses the
+  [continuations][] plug-in, not available in versions before 2.8.
 * Other compile-time requirements are automatically satisfied, if you
   use Maven or SBT. See below.
 
