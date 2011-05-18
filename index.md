@@ -155,7 +155,7 @@ library.
 
 ### Getting information on all classes in the current class path
 
-    import org.clapper.classutil._
+    import org.clapper.classutil.ClassFinder
 
     val finder = ClassFinder()
     val classes = finder.getClasses // classes is an Iterator[ClassInfo]
@@ -163,7 +163,7 @@ library.
 
 ### Getting all concrete classes in a custom class path
 
-    import org.clapper.classutil
+    import org.clapper.classutil.ClassFinder
     import java.io.File
 
     val classpath = List("foo.jar", "bar.jar", "baz.zip").map(new File(_))
@@ -173,7 +173,7 @@ library.
 
 ### Getting all interfaces in a custom class path
 
-    import org.clapper.classutil
+    import org.clapper.classutil.ClassFinder
     import java.io.File
 
     val classpath = List("foo.jar", "bar.jar", "baz.zip").map(new File(_))
@@ -189,7 +189,7 @@ plugin capability, you may need to discover all concrete classes that
 implement your plugin interface. The `ClassFinder` companion object
 provides a special utility function for that:
 
-    import org.clapper.classutil
+    import org.clapper.classutil.ClassFinder
     import java.io.File
 
     val classpath = List("foo.jar", "bar.jar", "baz.zip").map(new File(_))
@@ -206,9 +206,11 @@ certainly recreate the iterator, but at a cost. If you need to make
 multiple calls to `concreteSubclasses` with the same classpath, consider
 converting the iterator to a map first, as shown below:
 
+    import org.clapper.classutil.ClassFinder
+
     val finder = ClassFinder(myPath)
     val classes = finder.getClasses  // classes is an Iterator[ClassInfo]
-    val classMap = ClassFinder.classInfoMap // runs the iterator out, once
+    val classMap = ClassFinder.classInfoMap(classes) // runs iterator out, once
     val foos = ClassFinder.concreteSubclasses("org.example.Foo", classMap)
     val bars = ClassFinder.concreteSubclasses("org.example.Bar", classMap)
 
