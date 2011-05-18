@@ -316,7 +316,7 @@ class ClassFinder(path: Seq[File])
      *
      * @return an iterator over `ClassInfo` objects
      */
-    def getClasses: Iterator[ClassInfo] = find(classpath)
+    def getClasses(): Iterator[ClassInfo] = find(classpath)
 
     /* ---------------------------------------------------------------------- *\
                               Private Methods
