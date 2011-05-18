@@ -69,6 +69,14 @@ class MapToBeanTest extends FunSuite
                 )
             }
         }
+
+        val getFiveMap = bean.getClass.getMethod("getFiveMap");
+        val obj = getFiveMap.invoke(bean);
+        val getOne = obj.getClass.getMethod("getOne");
+        expect(1, "Recursive access")
+        {
+            getOne.invoke(obj);
+        }
     }
 
     test("MapToBean, non-recursive")

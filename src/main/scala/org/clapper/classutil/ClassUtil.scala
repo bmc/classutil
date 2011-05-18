@@ -38,6 +38,7 @@
 package org.clapper.classutil
 
 import scala.reflect.Manifest
+import grizzled.reflect
 
 /**
  * Some general-purpose class-related utility functions.
@@ -124,7 +125,7 @@ object ClassUtil
      * @return whether or not `value` conforms to type `T`
      */
     def isOfType[T](v: Any)(implicit man: Manifest[T]): Boolean =
-        man >:> Manifest.classType(v.asInstanceOf[AnyRef].getClass)
+        reflect.isOfType[T](v)
 
     /**
      * Convenience method to load a class from an array of class bytes.

@@ -93,6 +93,13 @@ class ClassUtilBuild(info: ProjectInfo)
     val newReleaseToolsRepository = "Scala Tools Repository" at
         "http://nexus.scala-tools.org/content/repositories/snapshots/"
 
+    val asm = "asm" % "asm" % "3.2"
+    val asmCommons = "asm" % "asm-commons" % "3.2"
+    val asmUtil = "asm" % "asm-util" % "3.2"
+
+    val grizzled = "org.clapper" %% "grizzled-scala" % "1.0.6"
+    val grizzledSlf4j = "org.clapper" %% "grizzled-slf4j" % "0.5"
+
     val (scalatestArtifact, scalatestVersion) = buildScalaVersion match
     {
         case "2.8.0"           => ("scalatest", "1.3")
@@ -102,13 +109,6 @@ class ClassUtilBuild(info: ProjectInfo)
     }
 
     val scalatest = "org.scalatest" % scalatestArtifact % scalatestVersion % "test"
-
-    val asm = "asm" % "asm" % "3.3.1"
-    val asmCommons = "asm" % "asm-commons" % "3.3.1"
-    val asmUtil = "asm" % "asm-util" % "3.3.1"
-
-    val grizzled = "org.clapper" %% "grizzled-scala" % "1.0.6"
-    val grizzledSlf4j = "org.clapper" %% "grizzled-slf4j" % "0.5"
 
     /* ---------------------------------------------------------------------- *\
                          Custom tasks and actions

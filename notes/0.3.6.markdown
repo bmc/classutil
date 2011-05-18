@@ -1,0 +1,6 @@
+* Some fixes to `ClassUtil.isOfType` so that it works properly with 2.9.0,
+  as well as 2.8.x.
+
+[ScalaTest]: http://www.scalatest.org/
+[SBT]: http://code.google.com/p/simple-build-tool/
+[ASM]: http://asm.ow2.org/
