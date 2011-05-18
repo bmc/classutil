@@ -1,3 +1,36 @@
+---
+title: "ClassUtil: Change Log"
+layout: default
+---
+
+Version 0.3.6:
+
+* Some fixes to `ClassUtil.isOfType` so that it works properly with 2.9.0,
+  as well as 2.8.x.
+
+[ScalaTest]: http://www.scalatest.org/
+[SBT]: http://code.google.com/p/simple-build-tool/
+[ASM]: http://asm.ow2.org/
+
+Version 0.3.5:
+
+* Now builds against Scala 2.9.0, as well as Scala 2.8.0 and 2.8.1.
+* Updated to version 1.4.1 of [ScalaTest][] for Scala 2.9.0. (Still uses
+  ScalaTest 1.3, for Scala 2.8).
+* Updated to use [SBT][] 0.7.7.
+* Updated to version 3.3.1 of the [ASM][] byte code library.
+
+[ScalaTest]: http://www.scalatest.org/
+[SBT]: http://code.google.com/p/simple-build-tool/
+[ASM]: http://asm.ow2.org/
+
+Version 0.3.4:
+
+* Folded in a [patch][] from [Aemon Cannon][], which tunes `ClassFinder`
+  performance by substituting mutable collections for the immutable ones.
+
+[patch]: https://github.com/aemoncannon/classutil/commit/cdb1ac7987bd7d011e108dc5f63730a93db582de
+[Aemon Cannon]: https://github.com/aemoncannon/
 
 Version 0.3.3:
 
