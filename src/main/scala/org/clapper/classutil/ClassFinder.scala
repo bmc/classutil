@@ -419,12 +419,18 @@ class ClassFinder(path: Seq[File])
         import grizzled.file.GrizzledFile._
         import java.io.FileInputStream
 
-        val classInfoIterators =
+        val inputStreams =
             dir.listRecursively().
             filter((f: File) => isClass(f)).
-            map((f: File) => classData(new FileInputStream(f), dir))
+            map((f: File) => new FileInputStream(f))
 
-        generateFromIterators(classInfoIterators)
+        try {
+          val classInfoIterators = inputStreams.map(fis => classData(fis, dir))
+          generateFromIterators(classInfoIterators)
+        } finally {
+          for (fis <- inputStreams) fis.close()
+        }
+
     }
 
     private def classData(is: InputStream, 
