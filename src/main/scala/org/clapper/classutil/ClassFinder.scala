@@ -424,13 +424,16 @@ class ClassFinder(path: Seq[File])
             filter((f: File) => isClass(f)).
             map((f: File) => new FileInputStream(f))
 
-        try {
-          val classInfoIterators = inputStreams.map(fis => classData(fis, dir))
-          generateFromIterators(classInfoIterators)
-        } finally {
-          for (fis <- inputStreams) fis.close()
+        try
+        {
+            val iterators = inputStreams.map(fis => classData(fis, dir))
+            generateFromIterators(iterators)
         }
 
+        finally
+        {
+            for (fis <- inputStreams) fis.close()
+        }
     }
 
     private def classData(is: InputStream, 
