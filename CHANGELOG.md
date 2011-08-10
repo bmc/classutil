@@ -3,12 +3,23 @@ title: "ClassUtil: Change Log"
 layout: default
 ---
 
+Version 0.3.7:
+
+* Merged changes from Alex Cruise to close input streams in `ClassFinder`.
+  Streams were (inadvertently) left open and, therefore, cluttering up memory
+  until the garbage collector ran.
+* Now builds against Scala 2.9.0.1, as well as Scala 2.9.0, 2.8.1 and 2.8.0.
+* Converted to build with [SBT][] 0.10.1
+* Updated dependencies for [Grizzled Scala][] and [Grizzled SLF4J][].
+
+[Grizzled Scala]: http://software.clapper.org/grizzled-scala/
+[Grizzled SLF4J]: http://software.clapper.org/grizzled-slf4j/
+
 Version 0.3.6:
 
 * Some fixes to `ClassUtil.isOfType` so that it works properly with 2.9.0,
   as well as 2.8.x.
 
-[ScalaTest]: http://www.scalatest.org/
 [SBT]: http://code.google.com/p/simple-build-tool/
 [ASM]: http://asm.ow2.org/
 
