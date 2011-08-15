@@ -111,6 +111,7 @@ class MapToBeanTest extends FunSuite
 
         val m = Map("a" -> "1", "b" -> "2")
         for (i <- 1 to 10000) MapToBean(m)
+        System.gc()
         ()
     }
 }

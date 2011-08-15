@@ -52,39 +52,46 @@ import scala.reflect.Manifest
  */
 private[classutil] object InterfaceMaker
 {
+    /**
+     * Convenience constant for "no parameters"
+     */
+    final val NoParams = List[Class[_]]().toArray
+
     /* ---------------------------------------------------------------------- *\
                               Public Methods
     \* ---------------------------------------------------------------------- */
 
     /**
-     * Transform a sequence of (method-name, return-type) pairs into an
-     * interface of getter methods.
+     * Transform a sequence of (method-name, param-types, return-type)
+     * tuples into an interface of methods. An empty param-types array
+     * generates a method without parameters.
      *
-     * @param methods   a sequence of (method-name, return-type) pairs
-     *                  representing the getter methods to generate
+     * @param methods   a sequence of (method-name, param-types, return-type)
+     *                  tuples representing the methods to generate
      * @param className the name to give the interface
      *
      * @return an array of bytes representing the compiled interface
      */
-    def makeInterface(methods: Seq[(String, Class[_])], className: String):
+    def makeInterface(methods: Seq[(String, Array[Class[_]], Class[_])],
+                      className: String):
         Array[Byte] =
     {
         val cw = new ClassWriter(0)
         cw.visit(V1_6,
                  ACC_PUBLIC + ACC_ABSTRACT + ACC_INTERFACE,
-                 binaryClassName(className),
+                 ClassUtil.binaryClassName(className),
                  null,
                  "java/lang/Object",
                  null)
 
-        for ((methodName, valueClass) <- methods)
+        for ((methodName, paramClasses, returnClass) <- methods)
         {
-            val asmType = Type.getType(valueClass)
+            val asmType = Type.getType(returnClass)
             val returnType = asmType.getDescriptor
 
             cw.visitMethod(ACC_PUBLIC + ACC_ABSTRACT,
                            methodName,
-                           "()" + returnType,
+                           ClassUtil.methodSignature(returnClass, paramClasses),
                            null,
                            null).
             visitEnd
@@ -97,7 +104,4 @@ private[classutil] object InterfaceMaker
     /* ---------------------------------------------------------------------- *\
                              * Private Methods
     \* ---------------------------------------------------------------------- */
-
-    private def binaryClassName(className: String): String =
-        className.replaceAll("""\.""", "/")
 }

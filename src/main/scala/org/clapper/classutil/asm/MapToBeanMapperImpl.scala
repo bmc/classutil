@@ -121,6 +121,7 @@ private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper
         // here.
         val interfaceBytes = InterfaceMaker.makeInterface(
             methodNameMap.map(kv => (kv._1, 
+                                     InterfaceMaker.NoParams,
                                      kv._2.asInstanceOf[AnyRef].getClass)).
                           toSeq,
             className

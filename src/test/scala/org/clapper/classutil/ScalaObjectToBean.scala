@@ -40,22 +40,32 @@ import org.clapper.classutil.ScalaObjectToBean
 
 class ScalaObjectToBeanTest extends FunSuite
 {
-    test("ScalaObjectToBean, non-recursive")
+    test("ScalaObjectToBean, non-recursive, getters and setters")
     {
-        case class Foo(name: String, 
-                       iValue: Int,
-                       fValue: Float)
+        class Foo(var name: String, 
+                  var iValue: Int,
+                  var fValue: Float)
+        {
+            var k: Int = 0
+            def setK(i: Int): Unit = {}
+        }
 
-        val foo = Foo("foo", 1009, 199392.0f)
+        val OldName  = "foo"
+        val OldInt   = 1009
+        val OldFloat = 199392.0f
+        val NewName  = "bar"
+        val NewInt   = 234621
+        val NewFloat = 123.3f
+        val foo = new Foo(OldName, OldInt, OldFloat)
         val bean = ScalaObjectToBean(foo)
 
-        val expected = List(
+        val expectedGetters = List(
             ("getName",   classOf[java.lang.String], foo.name),
             ("getIValue", java.lang.Integer.TYPE,    foo.iValue),
             ("getFValue", java.lang.Float.TYPE,      foo.fValue)
         )
 
-        for ((name, cls, value) <- expected)
+        for ((name, cls, value) <- expectedGetters)
         {
             val methods = bean.getClass.getMethods.filter(_.getName == name)
             expect(1, "Should be 1 method named \"" + name + "\"")
@@ -81,9 +91,75 @@ class ScalaObjectToBeanTest extends FunSuite
                 Proxy.isProxyClass(method.invoke(bean).getClass)
             }
         }
+
+        val expectedSetters = List(
+            ("setName", "getName", classOf[java.lang.String], OldName, NewName),
+            ("setIValue", "getIValue", java.lang.Integer.TYPE, OldInt, NewInt),
+            ("setFValue", "getFValue", java.lang.Float.TYPE, OldFloat, NewFloat)
+        )
+
+        val allMethods = bean.getClass.getMethods
+
+        for ((setterName, getterName, cls, oldVal, newVal) <- expectedSetters)
+        {
+            val setterMethods = allMethods.filter(_.getName == setterName)
+            val getterMethods = allMethods.filter(_.getName == getterName)
+
+            expect(1, "Should be 1 method named \"" + setterName + "\"")
+            {
+                setterMethods.length
+            }
+
+            expect(1, "Should be 1 method named \"" + getterName + "\"")
+            {
+                getterMethods.length
+            }
+
+            val setterMethod = setterMethods(0)
+            val getterMethod = getterMethods(0)
+
+            expect(true, getterName + "() has appropriate type.")
+            {
+                cls.isAssignableFrom(getterMethod.getReturnType)
+            }
+
+            expect(oldVal, getterName + "() returns " + oldVal.toString)
+            {
+                getterMethod.invoke(bean)
+            }
+
+            expect(false, getterName + "() should not return a proxy")
+            {
+                import java.lang.reflect.Proxy
+
+                Proxy.isProxyClass(getterMethod.invoke(bean).getClass)
+            }
+
+            expect(1, setterName + "() total parameters")
+            {
+                setterMethod.getParameterTypes.length
+            }
+
+            expect(true, setterName + "()'s parameter type is correct")
+            {
+                val paramTypes = setterMethod.getParameterTypes
+                cls.isAssignableFrom(paramTypes(0))
+            }
+
+            expect(true, setterName + "() returns void")
+            {
+                setterMethod.getReturnType.getName == "void"
+            }
+
+            expect(true, setterName + "() changes the value")
+            {
+                setterMethod.invoke(bean, newVal.asInstanceOf[AnyRef])
+                getterMethod.invoke(bean) == newVal
+            }
+        }
     }
 
-    test("ScalaObjectToBean, recursive")
+    test("ScalaObjectToBean, recursive, getters only")
     {
         case class Foo(name: String, value: Int)
         case class Bar(name: String, myFoo: Foo)

@@ -5,7 +5,7 @@ name := "classutil"
 
 organization := "org.clapper"
 
-version := "0.3.7"
+version := "0.4"
 
 scalaVersion := "2.8.1"
 
@@ -39,6 +39,8 @@ libraryDependencies <<= (scalaVersion, libraryDependencies) { (sv, deps) =>
 
 fork in Test := true
 
+fork in Compile := true
+
 // ---------------------------------------------------------------------------
 // Posterous-SBT
 
@@ -55,9 +57,9 @@ libraryDependencies <<= (sbtVersion, scalaVersion, libraryDependencies) { (sbtv,
 // Other dependendencies
 
 libraryDependencies ++= Seq(
-    "asm" % "asm" % "3.2",
-    "asm" % "asm-commons" % "3.2",
-    "asm" % "asm-util" % "3.2",
+    "asm" % "asm" % "3.3" % "provided",
+    "asm" % "asm-commons" % "3.3" % "provided",
+    "asm" % "asm-util" % "3.3" % "provided",
     "org.clapper" %% "grizzled-scala" % "1.0.7",
     "org.clapper" %% "grizzled-slf4j" % "0.6"
 )

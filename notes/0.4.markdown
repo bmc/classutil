@@ -1,0 +1,20 @@
+* Added the following methods to the `ClassFinder` object:
+  - `classSignature`: Generates the runtime signature for a class name.
+    e.g.: "Array[String]" -> "Ljava/lang/String;"
+  - `methodSignature`: Generates the runtime signature for a method. e.g.:
+    "def foo(s: String): Unit" -> "(Ljava/lang/String;)V"
+* `ScalaObjectToBean` now creates setter methods, as well as getter methods
+  (i.e., it produces true beans). See the documentation for `ScalaObjectToBean`
+  for details.
+* The [ASM][]-specific `InterfaceMaker` class now supports creating methods
+  with parameter types. (Previously, it just created getters.)
+* Upgraded to [ASM][] version 3.3.
+* The generated [POM][] now uses a "scope" of "provided" for the ASM libraries.
+  (The [Grizzled Scala][] and [Grizzled SLF4J][] libraries are still marked
+  with scope "compile", however.)
+
+[ASM]: http://asm.ow2.org/
+[POM]: http://maven.apache.org/guides/introduction/introduction-to-the-pom.html
+[Grizzled Scala]: http://software.clapper.org/grizzled-scala/
+[Grizzled SLF4J]: http://software.clapper.org/grizzled-slf4j/
+

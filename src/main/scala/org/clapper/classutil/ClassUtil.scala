@@ -66,6 +66,20 @@ object ClassUtil
         java.lang.Void.TYPE.          asInstanceOf[Any]
     )
 
+    // For generating type signatures.
+    private[classutil] lazy val PrimitiveSigMap = Map(
+        classOf[Boolean].getName -> "Z",
+        classOf[Byte].getName    -> "B",
+        classOf[Char].getName    -> "C",
+        classOf[Short].getName   -> "S",
+        classOf[Int].getName     -> "I",
+        classOf[Long].getName    -> "J",
+        classOf[Float].getName   -> "F",
+        classOf[Double].getName  -> "D",
+        classOf[Unit].getName    -> "V",
+        "void"                   -> "V"
+    )
+
     /**
      * Determine whether an object is a primitive or not.
      *
@@ -152,4 +166,77 @@ object ClassUtil
                       new java.lang.Integer(classBytes.length)).
         asInstanceOf[Class[_]]
     }
+
+    /**
+     * Generate a runtime signature for a class (type). For instance:
+     *
+     * {{{
+     * java.lang.String  ->  Ljava/lang/String;
+     * int               ->  I
+     * }}}
+     *
+     * @param cls  The class (type)
+     *
+     * @return its string signature
+     */
+    def classSignature(cls: Class[_]): String =
+    {
+        if (cls.isArray)
+            "[" + classSignature(cls.getComponentType)
+
+        else if (cls.isPrimitive)
+        {
+            val s = PrimitiveSigMap.get(cls.getName)
+            if (s == None)
+                throw new Exception("Can't map class \"" + cls.getName + "\" " +
+                                    "to signature.")
+            s.get
+        }
+
+        else
+            "L" + binaryClassName(cls.getName) + ";"
+    }
+
+    /**
+     * Generate a runtime signature for a method. See, for instance:
+     * http://journals.ecs.soton.ac.uk/java/tutorial/native1.1/implementing/method.html
+     *
+     * @param returnType  the method's return type
+     * @param paramTypes  the methods parameter types. An empty array
+     *                    signifies a method that takes no parameters.
+     *
+     * @return its string signature
+     */
+    def methodSignature(returnType: Class[_], paramTypes: Array[Class[_]]) =
+    {
+        val paramSig =
+            if ((paramTypes == null) || (paramTypes.length == 0))
+                ""
+            else
+                paramTypes.map(pt => classSignature(pt)).mkString("")
+
+        "(" + paramSig + ")" + classSignature(returnType)
+    }
+
+    /**
+     * Generate a runtime signature for a method. See, for instance:
+     * http://journals.ecs.soton.ac.uk/java/tutorial/native1.1/implementing/method.html
+     *
+     * @param method  method, from java.lang.reflect
+     *
+     * @return its string signature
+     */
+    def methodSignature(method: java.lang.reflect.Method): String =
+        methodSignature(method.getReturnType, method.getParameterTypes)
+
+    /**
+     * Convert a class name (e.g., "java.lang.String") into its binary
+     * form (e.g., "java/lang/String").
+     *
+     * @param className  the internal class name
+     *
+     * @return the binary form
+     */
+    private[classutil] def binaryClassName(className: String): String =
+        className.replaceAll("""\.""", "/")
 }

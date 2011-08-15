@@ -35,8 +35,9 @@
   ---------------------------------------------------------------------------
 */
 
+package org.clapper.classutil
+
 import org.scalatest.{FunSuite, Assertions}
-import org.clapper.classutil.ClassUtil
 
 class ClassUtilTest extends FunSuite
 {
@@ -82,6 +83,87 @@ class ClassUtilTest extends FunSuite
                    "isPrimitive(" + valueClass + ")=" + expected)
             {
                 ClassUtil.isPrimitive(valueClass)
+            }
+        }
+    }
+
+    test("classSignature")
+    {
+        val Primitives = List[Class[_]](
+            classOf[Boolean],
+            classOf[Byte],
+            classOf[Char],
+            classOf[Short],
+            classOf[Int],
+            classOf[Long],
+            classOf[Float],
+            classOf[Double],
+            classOf[Unit]
+        )
+
+        val PrimitivesToTest = Primitives.map
+        {
+            cls => (cls, ClassUtil.PrimitiveSigMap(cls.getName))
+        }.toSeq
+
+        val ClassesToTest = Seq(
+            (getClass,        "Lorg/clapper/classutil/ClassUtilTest;"),
+            (classOf[String], "Ljava/lang/String;")
+        )
+
+        for ((cls, signature) <- PrimitivesToTest)
+        {
+            expect(signature, cls.getCanonicalName + " -> " + signature)
+            {
+                ClassUtil.classSignature(cls)
+            }
+        }
+
+        for ((cls, signature) <- ClassesToTest)
+        {
+            expect(signature, cls.getCanonicalName + " -> " + signature)
+            {
+                ClassUtil.classSignature(cls)
+            }
+        }
+    }
+
+    test("methodSignature")
+    {
+        class Foo
+        {
+            def a: Unit = {}
+            def b: String = {""}
+            def c(s: String): Unit = {}
+            def d(s: String): String = {""}
+            def e(s: Array[String]): String = {""}
+            def f(s: Array[String], i: Int, f: Float): Double = {0.0d}
+            def g(m: Map[Int, String], s: String): Seq[String] = {Seq("")}
+        }
+
+        val methodMap = classOf[Foo].getMethods.map{m => m.getName -> m}.toMap
+        val data = List(
+            (methodMap("a"), "()V"),
+            (methodMap("b"), "()Ljava/lang/String;"),
+            (methodMap("c"), "(Ljava/lang/String;)V"),
+            (methodMap("d"), "(Ljava/lang/String;)Ljava/lang/String;"),
+            (methodMap("e"), "([Ljava/lang/String;)Ljava/lang/String;"),
+            (methodMap("f"), "([Ljava/lang/String;IF)D"),
+            (methodMap("g"), "(Lscala/collection/immutable/Map;Ljava/lang/String;)Lscala/collection/Seq;")
+        )
+
+        def methodToString(m: java.lang.reflect.Method): String =
+        {
+            m.getName + "(" + 
+            m.getParameterTypes.map(c => c.getCanonicalName).mkString(", ") +
+            ")"
+        }
+
+        for ((method, signature) <- data)
+        {
+            expect(signature, methodToString(method) + " -> " + signature)
+            {
+                ClassUtil.methodSignature(method)
             }
         }
     }
