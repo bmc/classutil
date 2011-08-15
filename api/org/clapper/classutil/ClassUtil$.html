@@ -241,6 +241,30 @@ part of compilation it is not possible to check whether the contents of the list
             
           </div>
           
+    </li><li visbl="pub" data-isabs="false" name="org.clapper.classutil.ClassUtil#classSignature">
+      <a id="classSignature(Class[_]):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">classSignature</span>
+        
+        <span class="params">(<span name="cls">cls: Class[_]</span>)</span>
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Generate a runtime signature for a class (type).</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Generate a runtime signature for a class (type). For instance:</p><pre>
+java.lang.String  -&gt;  Ljava/lang/String;
+int               -&gt;  I
+</pre></div><dl class="paramcmts block"><dt class="param">cls</dt><dd class="cmt"><p>The class (type)
+</p></dd><dt>returns</dt><dd class="cmt"><p>its string signature
+</p></dd></dl>
+            
+            
+            
+          </div>
+          
     </li><li visbl="prt" data-isabs="false" name="scala.AnyRef#clone">
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
@@ -522,6 +546,53 @@ primitives.
             <div class="fullcomment"><div class="comment cmt"><p>Convenience method to load a class from an array of class bytes.
 </p></div><dl class="paramcmts block"><dt class="param">classLoader</dt><dd class="cmt"><p>the class loader to use</p></dd><dt class="param">className</dt><dd class="cmt"><p>the name of the class</p></dd><dt class="param">classBytes</dt><dd class="cmt"><p>the class's byte code
 </p></dd><dt>returns</dt><dd class="cmt"><p>the loaded class
+</p></dd></dl>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.clapper.classutil.ClassUtil#methodSignature">
+      <a id="methodSignature(Method):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">methodSignature</span>
+        
+        <span class="params">(<span name="method">method: <span class="extype" name="java.lang.reflect.Method">Method</span></span>)</span>
+        <span class="result">: String</span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Generate a runtime signature for a method.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Generate a runtime signature for a method. See, for instance:
+http://journals.ecs.soton.ac.uk/java/tutorial/native1.1/implementing/method.html
+</p></div><dl class="paramcmts block"><dt class="param">method</dt><dd class="cmt"><p>method, from java.lang.reflect
+</p></dd><dt>returns</dt><dd class="cmt"><p>its string signature
+</p></dd></dl>
+            
+            
+            
+          </div>
+          
+    </li><li visbl="pub" data-isabs="false" name="org.clapper.classutil.ClassUtil#methodSignature">
+      <a id="methodSignature(Class[_],Array[Class[_]]):String"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol">
+        <span class="name">methodSignature</span>
+        
+        <span class="params">(<span name="returnType">returnType: Class[_]</span>, <span name="paramTypes">paramTypes: <span class="extype" name="scala.Array">Array</span>[Class[_]]</span>)</span>
+        <span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4>
+      
+            <p class="shortcomment cmt">Generate a runtime signature for a method.</p>
+            <div class="fullcomment"><div class="comment cmt"><p>Generate a runtime signature for a method. See, for instance:
+http://journals.ecs.soton.ac.uk/java/tutorial/native1.1/implementing/method.html
+</p></div><dl class="paramcmts block"><dt class="param">returnType</dt><dd class="cmt"><p>the method's return type</p></dd><dt class="param">paramTypes</dt><dd class="cmt"><p>the methods parameter types. An empty array
+                   signifies a method that takes no parameters.
+</p></dd><dt>returns</dt><dd class="cmt"><p>its string signature
 </p></dd></dl>
             
             

@@ -65,7 +65,7 @@ information are:
 
 * Group ID: `org.clapper`
 * Artifact ID: `classutil_2.9.0-1`
-* Version: `0.3.7`
+* Version: `0.4`
 * Type: `jar`
 * Repository: `http://www.scala-tools.org/repo-releases/`
 
@@ -83,10 +83,10 @@ Here's a sample Maven POM "dependency" snippet:
     <dependency>
       <groupId>org.clapper</groupId>
       <artifactId>classutil_2.9.0-1</artifactId>
-      <version>0.3.7</version>
+      <version>0.4</version>
     </dependency>
 
-Version 0.3.7 supports Scala 2.9.0-1, 2.9.0, 2.8.1 and 2.8.0.
+Version 0.4 supports Scala 2.9.0-1, 2.9.0, 2.8.1 and 2.8.0.
 
 For more information on using Maven and Scala, see Josh Suereth's
 [Scala Maven Guide][].
@@ -99,7 +99,7 @@ If you're using [SBT][] 0.7.x to compile your code, you can place the
 following line in your project file (i.e., the Scala file in your
 `project/build/` directory):
 
-    val classutil = "org.clapper" %% "classutil" % "0.3.7"
+    val classutil = "org.clapper" %% "classutil" % "0.4"
 
 #### 0.10.x
 
@@ -108,7 +108,7 @@ following line in your `build.sbt` file (for Quick Configuration). If
 you're using an SBT 0.10.x Full Configuration, you're obviously smart
 enough to figure out what to do, on your own.
 
-    libraryDependencies += "org.clapper" %% "classutil" % "0.3.7"
+    libraryDependencies += "org.clapper" %% "classutil" % "0.4"
 
 # Building from Source
 
@@ -255,9 +255,8 @@ To this end, ClassUtil provides two solutions:
 
 - `MapToBean`, which traverses a map and convert each name/value pair into a
   Java Beans `get` method.
-- `ScalaObjectToBean`, which takes a Scala object, looks for methods that
-  take no parameters and return a value, and generates an object with
-  `get` methods for those methods.
+- `ScalaObjectToBean` looks for Scala getter and setter methods and generates
+  a wrapper bean with traditional Java `get` and `set` methods.
 
 Both approaches will, by default, recursively convert objects. (See below
 for more details.)
@@ -398,28 +397,30 @@ down to the equivalent of the this Java code:
     public int y() { return _y; }
     public void y_$eq(int newY) { _y = newY; }
 
-So, the mapper looks for methods that take no parameters and return some
-non-void (i.e., non-`Unit`) value. Then, from that set of methods, the
-mapper discards:
+So, the mapper looks for Scala getter methods that take no parameters
+and return some non-void (i.e., non-`Unit`) value, and it looks for
+Scala setter methods that take one parameter, return void (`Unit`) and
+have names ending in `_$eq`. Then, from that set of methods, the mapper
+discards:
 
-* Methods starting with `get`.
-* Methods that have a corresponding `get` method. In the above example,
+* Methods starting with "get"
+* Methods that have a corresponding "get" method. In the above example,
   if there's a `getX()` method that returns an `int`, the mapper will
   assume that it's the bean version of `x()`, and it will ignore `x()`.
+* Methods that aren't public.
 * Any method in `java.lang.Object`.
 * Any method in `scala.Product`.
-* Methods that aren't public.
 
 If there are any methods in the remaining set, then the mapper returns a
-new wrapper object that contains Java Bean versions of those methods;
-otherwise, the mapper returns the original Scala object. The resulting bean
-delegates its calls to the original object, instead of capturing the
-object's method values at the time the bean is called. That way, if the
-underlying Scala object's methods return different values for each call,
-the bean will reflect those changes. Also, the mapped class delegates
-any methods it didn't convert back to the original object. For instance,
-calling `toString` on the newly generated bean results in a call to the
-original object's `toString` method.
+new wrapper object that contains Java Bean versions of the setters and
+getters; otherwise, the mapper returns the original Scala object. The
+resulting bean delegates its calls to the original object, instead of
+capturing the object's method values at the time the bean is called. That
+way, if the underlying Scala object's methods return different values for
+each call, the bean will reflect those changes. Also, the mapped class
+delegates any methods it didn't convert back to the original object. For
+instance, calling `toString` on the newly generated bean results in a call
+to the original object's `toString` method.
 
 By default, `ScalaObjectToBean` recursively converts methods that return
 non-primitive, non-String values that. That is, if the value for a getter
@@ -475,7 +476,6 @@ An example will help clarify this part of the API:
     println("beanBar.getFoo returns " + beanFoo2)
     println("beanBar.getFoo.getValue returns " + call(beanFoo2, "getValue"))
     
-
 This example takes instances of two cases classes and maps them to beans.
 Running it produces the following output:
 
@@ -483,6 +483,7 @@ Running it produces the following output:
     ------------------------------
     public final java.lang.String $Proxy3.getName()
     public final int $Proxy3.getValue()
+    public final int $Proxy3.setValue(int)
     public final java.lang.String $Proxy3.getCopy$default$1()
     public final int $Proxy3.getCopy$default$2()
     public static java.lang.Class java.lang.reflect.Proxy.getProxyClass(java.lang.ClassLoader,java.lang.Class[]) throws java.lang.IllegalArgumentException
@@ -492,9 +493,11 @@ Running it produces the following output:
     beanBar:
     ------------------------------
     public final java.lang.String $Proxy4.getName()
+    public final java.lang.String $Proxy4.setName(java.lang.String)
     public final java.lang.String $Proxy4.getCopy$default$1()
     public final java.lang.Object $Proxy4.getCopy$default$2()
     public final java.lang.Object $Proxy4.getFoo()
+    public final java.lang.Object $Proxy4.setFoo(Foo)
     public static java.lang.Class java.lang.reflect.Proxy.getProxyClass(java.lang.ClassLoader,java.lang.Class[]) throws java.lang.IllegalArgumentException
     public static java.lang.reflect.InvocationHandler java.lang.reflect.Proxy.getInvocationHandler(java.lang.Object) throws java.lang.IllegalArgumentException
     public final native java.lang.Class java.lang.Object.getClass()

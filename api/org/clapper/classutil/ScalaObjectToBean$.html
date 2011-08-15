@@ -30,22 +30,42 @@
         <span class="result"> extends AnyRef</span>
       </span>
       </h4>
-      <div class="fullcomment" id="comment"><div class="comment cmt"><p>Takes a Scala object, locates the Scala accessors (using simple heuristics),
-and generates a new object with additional Java Bean <code>get</code> methods for the
-accessors. A <code>ScalaObjectToBeanMapper</code> is an alternative to using
-the <code>@BeanProperty</code> annotation on classes, so it is useful for mapping
-case classes into Java Beans, or for mapping classes from other APIs into
-Java Beans without having to extend them.</p><p>See the documentation for the <code>ScalaObjectToBeanMapper</code> trait for full
-details.
+      <div class="fullcomment" id="comment"><div class="comment cmt"><p><code>ScalaObjectToBean</code> maps a Scala object into a read-only Java bean. It
+takes a Scala object, locates the Scala accessors (using simple
+heuristics), and generates a new object with additional Java Bean <code>get</code>and <code>set</code> methods for the accessors. <code>ScalaObjectToBean</code> is an
+alternative to using the <code>@BeanProperty</code> annotation on classes, so it is
+useful for mapping case classes into Java Beans, or for mapping classes
+from other APIs into Java Beans without having to extend them.</p><p><code>ScalaObjectToBean</code> uses the following heuristics to determine which fields
+to map.</p><p>First, it recognizes that any Scala <code>val</code> or <code>var</code> is really a getter method
+returning some type. That is:</p><pre>
+val x: Int = 0
+var y: Int = 10
+</pre><p>is compiled down to the equivalent of the following Java code:</p><pre>
+private int _x = 0;
+private int _y = 10;
+
+public int x() { return _x; }
+public int y() { return _y; }
+public void y_$eq(int newY) { _y = newY; }
+</pre><p>So, the mapper looks for Scala getter methods that take no parameters
+and return some non-void (i.e., non-<code>Unit</code>) value, and it looks for
+Scala setter methods that take one parameter, return void (<code>Unit</code>) and
+have names ending in &quot;_$eq&quot;. Then, from that set of methods, the mapper
+discards:</p><ul><li> Methods starting with &quot;get&quot;</li><li> Methods that have a corresponding &quot;get&quot; method. In the above example,
+       if there's a <code>getX()</code> method that returns an <code>int</code>, the mapper will
+       assume that it's the bean version of <code>x()</code>, and it will ignore <code>x()</code>.</li><li> Methods that aren't public.</li><li> Any method in <code>java.lang.Object</code>.</li><li> Any method in <code>scala.Product</code>.</li></ul><p>If there are any methods in the remaining set, then the mapper returns a
+new wrapper object that contains Java Bean versions of those methods;
+otherwise, the mapper returns the original Scala object. The resulting
+bean delegates its calls to the original object, instead of capturing the
+object's method values at the time the bean is called. That way, if the
+underlying Scala object's methods return different values for each call,
+the bean will reflect those changes.
 </p></div><div class="block">
             linear super types: AnyRef, <span class="extype" name="scala.Any">Any</span>
           </div>
             
             
-            <div class="block"><ol>see also:
-                  <li><p>ScalaObjectToBeanMapper
-</p></li>
-                </ol></div>
+            
           </div>
 
       <div id="template">
