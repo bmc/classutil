@@ -14,7 +14,7 @@ provides various class location and class generation capabilities, including:
   useful when generating data for use with APIs (e.g., template APIs) that
   accept Java Beans, but not maps.
 * Methods that convert Scala objects into Java beans, without requiring
-  the use of the `@JavaBean` annotation--especially useful when passing
+  the use of the `@BeanProperty` annotation--especially useful when passing
   `case class` objects into Java Bean-aware APIs.
 
 Under the covers, ClassUtil uses the [ASM][] bytecode library, though it
