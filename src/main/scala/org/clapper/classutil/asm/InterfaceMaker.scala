@@ -10,14 +10,14 @@
   modification, are permitted provided that the following conditions are
   met:
 
-  * Redistributions of source code must retain the above copyright notice,
+   * Redistributions of source code must retain the above copyright notice,
     this list of conditions and the following disclaimer.
 
-  * Redistributions in binary form must reproduce the above copyright
+   * Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-  * Neither the names "clapper.org", "ClassUtil", nor the names of its
+   * Neither the names "clapper.org", "ClassUtil", nor the names of its
     contributors may be used to endorse or promote products derived from
     this software without specific prior written permission.
 
@@ -47,61 +47,55 @@ import java.lang.reflect.{Method, Proxy, InvocationHandler}
 import scala.reflect.Manifest
 
 /**
- * Uses ASM to create an interface from a map. The map is keyed by method
- * names, each of which maps to a return type.
- */
-private[classutil] object InterfaceMaker
-{
-    /**
-     * Convenience constant for "no parameters"
-     */
-    final val NoParams = List[Class[_]]().toArray
+  * Uses ASM to create an interface from a map. The map is keyed by method
+  * names, each of which maps to a return type.
+  */
+private[classutil] object InterfaceMaker {
+  /** Convenience constant for "no parameters"
+    */
+  final val NoParams = List[Class[_]]().toArray
 
-    /* ---------------------------------------------------------------------- *\
-                              Public Methods
-    \* ---------------------------------------------------------------------- */
+  // ----------------------------------------------------------------------
+  // Public Methods
+  // ----------------------------------------------------------------------
 
-    /**
-     * Transform a sequence of (method-name, param-types, return-type)
-     * tuples into an interface of methods. An empty param-types array
-     * generates a method without parameters.
-     *
-     * @param methods   a sequence of (method-name, param-types, return-type)
-     *                  tuples representing the methods to generate
-     * @param className the name to give the interface
-     *
-     * @return an array of bytes representing the compiled interface
-     */
-    def makeInterface(methods: Seq[(String, Array[Class[_]], Class[_])],
-                      className: String):
-        Array[Byte] =
-    {
-        val cw = new ClassWriter(0)
-        cw.visit(V1_6,
-                 ACC_PUBLIC + ACC_ABSTRACT + ACC_INTERFACE,
-                 ClassUtil.binaryClassName(className),
-                 null,
-                 "java/lang/Object",
-                 null)
+  /** Transform a sequence of (method-name, param-types, return-type)
+    * tuples into an interface of methods. An empty param-types array
+    * generates a method without parameters.
+    *
+    * @param methods   a sequence of (method-name, param-types, return-type)
+    *                  tuples representing the methods to generate
+    * @param className the name to give the interface
+    *
+    * @return an array of bytes representing the compiled interface
+    */
+  def makeInterface(methods: Seq[(String, Array[Class[_]], Class[_])],
+                    className: String): Array[Byte] = {
+    val cw = new ClassWriter(0)
+    cw.visit(V1_6,
+             ACC_PUBLIC + ACC_ABSTRACT + ACC_INTERFACE,
+             ClassUtil.binaryClassName(className),
+             null,
+             "java/lang/Object",
+             null)
 
-        for ((methodName, paramClasses, returnClass) <- methods)
-        {
-            val asmType = Type.getType(returnClass)
-            val returnType = asmType.getDescriptor
+    for ((methodName, paramClasses, returnClass) <- methods) {
+      val asmType = Type.getType(returnClass)
+      val returnType = asmType.getDescriptor
 
-            cw.visitMethod(ACC_PUBLIC + ACC_ABSTRACT,
-                           methodName,
-                           ClassUtil.methodSignature(returnClass, paramClasses),
-                           null,
-                           null).
-            visitEnd
-        }
-
-        cw.visitEnd
-        cw.toByteArray
+      cw.visitMethod(ACC_PUBLIC + ACC_ABSTRACT,
+                     methodName,
+                     ClassUtil.methodSignature(returnClass, paramClasses),
+                     null,
+                     null).
+      visitEnd
     }
 
-    /* ---------------------------------------------------------------------- *\
-                             * Private Methods
-    \* ---------------------------------------------------------------------- */
+    cw.visitEnd
+    cw.toByteArray
+  }
+
+  // ----------------------------------------------------------------------
+  // Private Methods
+  // ----------------------------------------------------------------------
 }

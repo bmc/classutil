@@ -35,9 +35,6 @@
   ---------------------------------------------------------------------------
 */
 
-/**
- *
- */
 package org.clapper.classutil
 
 /**
@@ -45,38 +42,36 @@ package org.clapper.classutil
  * an object, with fields for each map value. Field that are, themselves,
  * `Map[String,Any]` objects can be recursively mapped, as well.
  */
-trait MapToBeanMapper
-{
-    /**
-     * Transform a map into a bean.
-     *
-     * @param map       the map
-     * @param className the name to give the class
-     * @param recurse   `true` to recursively map nested maps, `false` otherwise
-     *
-     * @return an instantiated object representing the map
-     *
-     * @deprecated Use makeBean() instead.
-     */
-    def makeObject(map: Map[String, Any],
-                   className: String,
-                   recurse: Boolean = true): AnyRef =
-    {
-        makeBean(map, className, recurse)
-    }
-
-    /**
-     * Transform a map into a bean.
-     *
-     * @param map       the map
-     * @param className the name to give the class
-     * @param recurse   `true` to recursively map nested maps, `false` otherwise
-     *
-     * @return an instantiated object representing the map
-     */
-    def makeBean(map: Map[String, Any],
+trait MapToBeanMapper {
+  /**
+   * Transform a map into a bean.
+   *
+   * @param map       the map
+   * @param className the name to give the class
+   * @param recurse   `true` to recursively map nested maps, `false` otherwise
+   *
+   * @return an instantiated object representing the map
+   *
+   * @deprecated Use makeBean() instead.
+   */
+  def makeObject(map: Map[String, Any],
                  className: String,
-                 recurse: Boolean = true): AnyRef
+                 recurse: Boolean = true): AnyRef = {
+    makeBean(map, className, recurse)
+  }
+
+  /**
+   * Transform a map into a bean.
+   *
+   * @param map       the map
+   * @param className the name to give the class
+   * @param recurse   `true` to recursively map nested maps, `false` otherwise
+   *
+   * @return an instantiated object representing the map
+   */
+  def makeBean(map: Map[String, Any],
+               className: String,
+               recurse: Boolean = true): AnyRef
 }
 
 /**
@@ -93,10 +88,8 @@ trait MapToBeanMapper
  *
  * There are some restrictions imposed on any map that is to be converted.
  *
- * <ul>
- *   <li> Only maps with string keys can be converted.
- *   <li> The string keys must be valid Java identifiers.
- * </ul>
+ * - Only maps with string keys can be converted.
+ * - The string keys must be valid Java identifiers.
  *
  * Here's a simple example:
  *
@@ -118,10 +111,9 @@ trait MapToBeanMapper
  *
  * obj.getClass.getMethods.filter(m => showName(m.getName)).foreach(println _)
  *
- * def call(methodName: String) =
- * {
- *     val method = obj.getClass.getMethod(methodName)
- *     method.invoke(obj)
+ * def call(methodName: String) = {
+ *   val method = obj.getClass.getMethod(methodName)
+ *   method.invoke(obj)
  * }
  *
  * println
@@ -144,38 +136,37 @@ trait MapToBeanMapper
  * getFiveMap returns Map(getSub1 -> 1, getSub2 -> 2)
  * }}}
  */
-object MapToBean extends ClassNameGenerator
-{
-    val ClassNamePrefix = "org.clapper.classutil.MapBean"
+object MapToBean extends ClassNameGenerator {
+  val ClassNamePrefix = "org.clapper.classutil.MapBean"
 
-    private val mapper = new org.clapper.classutil.asm.MapToBeanMapperImpl
+  private val mapper = new org.clapper.classutil.asm.MapToBeanMapperImpl
 
-    /**
-     * Transform a map into an object. The class name will be generated,
-     * will be in the `org.clapper.classutil` package, and will have
-     * a class name prefix of `MapBean_`.
-     *
-     * @param map       the map
-     * @param recurse   `true` to recursively map nested maps, `false` otherwise
-     *
-     * @return an instantiated object representing the map
-     */
-    def apply(map: Map[String, Any], recurse: Boolean = true): AnyRef =
-        mapper.makeBean(map, newGeneratedClassName, recurse)
+  /**
+   * Transform a map into an object. The class name will be generated,
+   * will be in the `org.clapper.classutil` package, and will have
+   * a class name prefix of `MapBean_`.
+   *
+   * @param map       the map
+   * @param recurse   `true` to recursively map nested maps, `false` otherwise
+   *
+   * @return an instantiated object representing the map
+   */
+  def apply(map: Map[String, Any], recurse: Boolean = true): AnyRef =
+    mapper.makeBean(map, newGeneratedClassName, recurse)
 
-    /**
-     * Transform a map into an object.
-     *
-     * @param map       the map
-     * @param className the desired class name
-     * @param recurse   `true` to recursively map nested maps, `false`
-     *                  otherwise. Recursively mapped maps will have generated
-     *                  class names.
-     *
-     * @return an instantiated object representing the map
-     */
-    def apply(map: Map[String, Any],
-              className: String,
-              recurse: Boolean): AnyRef =
-        mapper.makeBean(map, className, recurse)
+  /**
+   * Transform a map into an object.
+   *
+   * @param map       the map
+   * @param className the desired class name
+   * @param recurse   `true` to recursively map nested maps, `false`
+   *                  otherwise. Recursively mapped maps will have generated
+   *                  class names.
+   *
+   * @return an instantiated object representing the map
+   */
+  def apply(map: Map[String, Any],
+            className: String,
+            recurse: Boolean): AnyRef =
+    mapper.makeBean(map, className, recurse)
 }

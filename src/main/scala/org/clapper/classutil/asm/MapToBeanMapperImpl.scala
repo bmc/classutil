@@ -35,9 +35,6 @@
   ---------------------------------------------------------------------------
 */
 
-/**
- *
- */
 package org.clapper.classutil.asm
 
 import org.clapper.classutil._
@@ -62,111 +59,102 @@ import java.lang.reflect.{Method, Proxy, InvocationHandler}
  * `get` accessors. For instance, a key name "foo" is mapped to a method
  * called `getFoo()`.
  */
-private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper
-{
-    /* ---------------------------------------------------------------------- *\
-                              Public Methods
-    \* ---------------------------------------------------------------------- */
+private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper {
+  // ----------------------------------------------------------------------
+  // Public Methods
+  // ----------------------------------------------------------------------
 
-    /**
-     * Transform a map into a bean.
-     *
-     * @param map       the map
-     * @param className name of generated class
-     * @param recurse   `true` to recursively map nested maps, `false` otherwise
-     *
-     * @return an instantiated object representing the map
-     */
-    def makeBean(map: Map[String, Any],
-                 className: String,
-                 recurse: Boolean = true): AnyRef =
-    {
-        // Strategy: Create an interface, load it, and generate a proxy that
-        // implements the interface dynamically. The proxy handler resolves
-        // references from the map.
+  /**
+   * Transform a map into a bean.
+   *
+   * @param map       the map
+   * @param className name of generated class
+   * @param recurse   `true` to recursively map nested maps, `false` otherwise
+   *
+   * @return an instantiated object representing the map
+   */
+  def makeBean(map: Map[String, Any],
+               className: String,
+               recurse: Boolean = true): AnyRef = {
+    // Strategy: Create an interface, load it, and generate a proxy that
+    // implements the interface dynamically. The proxy handler resolves
+    // references from the map.
 
-        // Methods for each field, including bean methods.
+    // Methods for each field, including bean methods.
 
-        def transformValueIfMap(value: Any) =
-        {
-            if (recurse && ClassUtil.isOfType[Map[String,Any]](value))
-                makeObject(value.asInstanceOf[Map[String,Any]],
-                           MapToBean.newGeneratedClassName,
-                           recurse)
-            else
-                value
-        }
-
-        def keyToMethodName(key: String) =
-        {
-            if (! key.forall(Character.isJavaIdentifierPart(_)))
-                throw new IllegalArgumentException("Map key \"" + key + 
-                                                   "\" is not a valid " +
-                                                   "Java identifier.")
-            "get" + key.take(1).toUpperCase + key.drop(1)
-        }
-
-        // If we're recursing, then first map any value that is, itself, a
-        // Map[String,Any].
-
-        val tuples1 = map.map(kv => (kv._1 -> transformValueIfMap(kv._2)))
-        val newMap = Map(tuples1.toList: _*)
-
-        // Map the keys to method names, with the same values as the existing
-        // map.
-        val tuples2 = newMap.keys.map(k => (keyToMethodName(k) -> newMap(k)))
-        val methodNameMap = Map(tuples2.toList: _*)
-
-        // Create the interface bytes. We need a map of names to return types
-        // here.
-        val interfaceBytes = InterfaceMaker.makeInterface(
-            methodNameMap.map(kv => (kv._1, 
-                                     InterfaceMaker.NoParams,
-                                     kv._2.asInstanceOf[AnyRef].getClass)).
-                          toSeq,
-            className
-        )
-
-        // Load the class we just generated.
-
-        val classLoader = map.getClass.getClassLoader
-        val interface = ClassUtil.loadClass(classLoader,
-                                            className,
-                                            interfaceBytes)
-
-        makeProxy(methodNameMap, map, interface, classLoader)
+    def transformValueIfMap(value: Any) = {
+      if (recurse && ClassUtil.isOfType[Map[String,Any]](value))
+        makeObject(value.asInstanceOf[Map[String,Any]],
+                   MapToBean.newGeneratedClassName,
+                   recurse)
+      else
+        value
     }
 
-    /* ---------------------------------------------------------------------- *\
-                              Private Methods
-    \* ---------------------------------------------------------------------- */
+    def keyToMethodName(key: String) = {
+      if (! key.forall(Character.isJavaIdentifierPart(_)))
+        throw new IllegalArgumentException(
+          "Map key \"" + key + "\" is not a valid Java identifier.")
 
-    private def makeProxy(methodNameMap: Map[String, Any],
-                          originalMap: Map[String, Any],
-                          interface: Class[_],
-                          classLoader: ClassLoader): AnyRef =
-    {
-        val handler = new InvocationHandler
-        {
-            def invoke(proxy: Object,
-                       method: Method,
-                       args: Array[Object]): Object =
-            {
-                // It could be an invocation of a method that isn't one of the
-                // ones we created from the map. In that case, just delegate
-                // the method call to the original map.
-                val methodName = method.getName
-                methodNameMap.get(methodName) match
-                {
-                    case None => method.invoke(methodNameMap, args: _*)
-                    case Some(v) => v.asInstanceOf[AnyRef]
-                }
-            }
-        }
-
-        Proxy.newProxyInstance(classLoader, List(interface).toArray, handler)
+      "get" + key.take(1).toUpperCase + key.drop(1)
     }
 
-    private def binaryClassName(className: String): String =
-        className.replaceAll("""\.""", "/")
+    // If we're recursing, then first map any value that is, itself, a
+    // Map[String,Any].
+
+    val tuples1 = map.map(kv => (kv._1 -> transformValueIfMap(kv._2)))
+    val newMap = Map(tuples1.toList: _*)
+
+    // Map the keys to method names, with the same values as the existing
+    // map.
+    val tuples2 = newMap.keys.map(k => (keyToMethodName(k) -> newMap(k)))
+    val methodNameMap = Map(tuples2.toList: _*)
+
+    // Create the interface bytes. We need a map of names to return types
+    // here.
+    val interfaceBytes = InterfaceMaker.makeInterface(
+      methodNameMap.map(kv => (kv._1, 
+                               InterfaceMaker.NoParams,
+                               kv._2.asInstanceOf[AnyRef].getClass)).toSeq,
+      className
+    )
+
+    // Load the class we just generated.
+
+    val classLoader = map.getClass.getClassLoader
+    val interface = ClassUtil.loadClass(classLoader,
+                                        className,
+                                        interfaceBytes)
+
+    makeProxy(methodNameMap, map, interface, classLoader)
+  }
+
+  // ----------------------------------------------------------------------
+  // Private Methods
+  // ----------------------------------------------------------------------
+
+  private def makeProxy(methodNameMap: Map[String, Any],
+                        originalMap: Map[String, Any],
+                        interface: Class[_],
+                        classLoader: ClassLoader): AnyRef = {
+    val handler = new InvocationHandler {
+      def invoke(proxy: Object,
+                 method: Method,
+                 args: Array[Object]): Object = {
+        // It could be an invocation of a method that isn't one of the
+        // ones we created from the map. In that case, just delegate
+        // the method call to the original map.
+
+        methodNameMap.get(method.getName) match {
+          case None    => method.invoke(methodNameMap, args: _*)
+          case Some(v) => v.asInstanceOf[AnyRef]
+        }
+      }
+    }
+
+    Proxy.newProxyInstance(classLoader, List(interface).toArray, handler)
+  }
+
+  private def binaryClassName(className: String): String =
+    className.replaceAll("""\.""", "/")
 }

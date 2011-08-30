@@ -10,14 +10,14 @@
   modification, are permitted provided that the following conditions are
   met:
 
-  * Redistributions of source code must retain the above copyright notice,
+   * Redistributions of source code must retain the above copyright notice,
     this list of conditions and the following disclaimer.
 
-  * Redistributions in binary form must reproduce the above copyright
+   * Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-  * Neither the names "clapper.org", "ClassUtil", nor the names of its
+   * Neither the names "clapper.org", "ClassUtil", nor the names of its
     contributors may be used to endorse or promote products derived from
     this software without specific prior written permission.
 
@@ -38,80 +38,67 @@
 import org.scalatest.{FunSuite, Assertions}
 import org.clapper.classutil.MapToBean
 
-class MapToBeanTest extends FunSuite
-{
-    val map =  Map("oneInt" -> 1,
-                   "twoFloat" -> 2f,
-                   "threeString" -> "three",
-                   "fourIntClass" -> classOf[Int],
-                   "fiveMap" -> Map("one" -> 1, "two" -> 2))
+class MapToBeanTest extends FunSuite {
+  val map =  Map("oneInt" -> 1,
+                 "twoFloat" -> 2f,
+                 "threeString" -> "three",
+                 "fourIntClass" -> classOf[Int],
+                 "fiveMap" -> Map("one" -> 1, "two" -> 2))
 
-    test("MapToBean, recursive")
-    {
-        val bean = MapToBean(map)
-        val methodNames = bean.getClass.getMethods.map(_.getName).toSet
-        val expectedNames = List(("getOneInt", classOf[java.lang.Integer]),
-                                 ("getTwoFloat", classOf[java.lang.Float]),
-                                 ("getThreeString", classOf[String]),
-                                 ("getFourIntClass", classOf[Class[Int]]),
-                                 ("getFiveMap", classOf[Object]))
-        for ((name, cls) <- expectedNames)
-        {
-            expect(true, "Looking for method name " + name + "()")
-            {
-                methodNames.contains(name)
-            }
+  test("MapToBean, recursive") {
+    val bean = MapToBean(map)
+    val methodNames = bean.getClass.getMethods.map(_.getName).toSet
+    val expectedNames = List(("getOneInt", classOf[java.lang.Integer]),
+                             ("getTwoFloat", classOf[java.lang.Float]),
+                             ("getThreeString", classOf[String]),
+                             ("getFourIntClass", classOf[Class[Int]]),
+                             ("getFiveMap", classOf[Object]))
+    for ((name, cls) <- expectedNames) {
+      expect(true, "Looking for method name " + name + "()") {
+        methodNames.contains(name)
+      }
 
-            expect(true, "Method " + name + " has appropriate type.")
-            {
-                cls.isAssignableFrom(
-                    bean.getClass.getMethod(name).getReturnType
-                )
-            }
-        }
-
-        val getFiveMap = bean.getClass.getMethod("getFiveMap");
-        val obj = getFiveMap.invoke(bean);
-        val getOne = obj.getClass.getMethod("getOne");
-        expect(1, "Recursive access")
-        {
-            getOne.invoke(obj);
-        }
+      expect(true, "Method " + name + " has appropriate type.") {
+        cls.isAssignableFrom(
+          bean.getClass.getMethod(name).getReturnType
+        )
+      }
     }
 
-    test("MapToBean, non-recursive")
-    {
-        val bean = MapToBean(map, false)
-        val methodNames = bean.getClass.getMethods.map(_.getName).toSet
-        val expectedNames = List(("getOneInt", classOf[java.lang.Integer]),
-                                 ("getTwoFloat", classOf[java.lang.Float]),
-                                 ("getThreeString", classOf[String]),
-                                 ("getFourIntClass", classOf[Class[Int]]),
-                                 ("getFiveMap", classOf[Map[String, Any]]))
-        for ((name, cls) <- expectedNames)
-        {
-            expect(true, "Looking for method name " + name + "()")
-            {
-                methodNames.contains(name)
-            }
-
-            expect(true, "Method " + name + " has appropriate type.")
-            {
-                cls.isAssignableFrom(
-                    bean.getClass.getMethod(name).getReturnType
-                )
-            }
-        }
+    val getFiveMap = bean.getClass.getMethod("getFiveMap");
+    val obj = getFiveMap.invoke(bean);
+    val getOne = obj.getClass.getMethod("getOne");
+    expect(1, "Recursive access") {
+      getOne.invoke(obj);
     }
+  }
 
-    test("MapToBean, lots of beans")
-    {
-        // Test a large number of generated beans, to ensure that none of the
-        // generated class names clash. Added in response to Issue #1.
+  test("MapToBean, non-recursive") {
+    val bean = MapToBean(map, false)
+    val methodNames = bean.getClass.getMethods.map(_.getName).toSet
+    val expectedNames = List(("getOneInt", classOf[java.lang.Integer]),
+                             ("getTwoFloat", classOf[java.lang.Float]),
+                             ("getThreeString", classOf[String]),
+                             ("getFourIntClass", classOf[Class[Int]]),
+                             ("getFiveMap", classOf[Map[String, Any]]))
+    for ((name, cls) <- expectedNames) {
+      expect(true, "Looking for method name " + name + "()") {
+        methodNames.contains(name)
+      }
 
-        val m = Map("a" -> "1", "b" -> "2")
-        for (i <- 1 to 10000) MapToBean(m)
-        System.gc()
-        ()
+      expect(true, "Method " + name + " has appropriate type.") {
+        cls.isAssignableFrom(bean.getClass.getMethod(name).getReturnType)
+      }
     }
+  }
+
+  test("MapToBean, lots of beans") {
+    // Test a large number of generated beans, to ensure that none of the
+    // generated class names clash. Added in response to Issue #1.
+
+    val m = Map("a" -> "1", "b" -> "2")
+    for (i <- 1 to 10000) MapToBean(m)
+    System.gc()
+    ()
+  }
 }

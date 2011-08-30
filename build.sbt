@@ -5,7 +5,7 @@ name := "classutil"
 
 organization := "org.clapper"
 
-version := "0.4"
+version := "0.4.1"
 
 scalaVersion := "2.8.1"
 
