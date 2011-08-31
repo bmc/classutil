@@ -20,7 +20,7 @@ libraryDependencies <<= (scalaVersion, libraryDependencies) { (ver, deps) =>
     deps :+ compilerPlugin("org.scala-lang.plugins" % "continuations" % ver)
 }
 
-crossScalaVersions := Seq("2.9.0-1", "2.9.0", "2.8.1", "2.8.0")
+crossScalaVersions := Seq("2.9.1", "2.9.0-1", "2.9.0", "2.8.1", "2.8.0")
 
 // ---------------------------------------------------------------------------
 // ScalaTest dependendency
