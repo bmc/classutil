@@ -5,32 +5,32 @@
           <title>org.clapper.classutil</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
-      <link href="../../../lib/template.css" rel="stylesheet" type="text/css" media="screen" />
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
       <script type="text/javascript" src="../../../lib/jquery.js"></script>
       <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
       <script type="text/javascript" src="../../../lib/template.js"></script>
       <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body class="value" onload="windowTitle();">
-
-      <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.clapper">clapper</a></p>
-
+        <body class="value">
       <div id="definition">
         <img src="../../../lib/package_big.png" />
+        <p id="owner"><a name="org" class="extype" href="../../package.html">org</a>.<a name="org.clapper" class="extype" href="../package.html">clapper</a></p>
         <h1>classutil</h1>
       </div>
 
       <h4 class="signature" id="signature">
       <span class="kind">package</span>
-      <span class="symbol">
+      <span class="symbol"> 
         <span class="name">classutil</span>
-        
         
         
       </span>
       </h4>
-      <div class="fullcomment" id="comment"></div>
+      
+          <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>Classes and utilities for operating on JVM classes, at runtime.
+</p></div></div>
+        
 
       <div id="template">
 
@@ -40,11 +40,7 @@
           
           <div id="visbl">
               <span class="filtertype">Visibility</span>
-              <ol><li class="public in">Public</li><li class="all out">All</li></ol>
-            </div>
-          <div id="impl">
-              <span class="filtertype">Impl.</span>
-              <ol><li class="concrete in">Concrete</li><li class="abstract in">Abstract</li></ol>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
             </div>
         </div>
 
@@ -52,138 +48,132 @@
 
         <div class="types members" id="types">
               <h3>Type Members</h3>
-              <ol><li visbl="pub" data-isabs="false" name="org.clapper.classutil.ClassFinder">
+              <ol><li visbl="pub" name="org.clapper.classutil.ClassFinder" data-isabs="false">
       <a id="ClassFinder:ClassFinder"></a>
-      <h4 class="signature"><a href="ClassFinder.html">
+      <h4 class="signature">
       <span class="kind">class</span>
-      <span class="symbol">
-        <span class="name">ClassFinder</span>
-        
+      <span class="symbol"> 
+        <a href="ClassFinder.html"><span class="name">ClassFinder</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">A <code>ClassFinder</code> finds classes in a class path, returning the result in a
 lazy iterator.</p>
-    </li><li visbl="pub" data-isabs="true" name="org.clapper.classutil.ClassInfo">
+    </li><li visbl="pub" name="org.clapper.classutil.ClassInfo" data-isabs="true">
       <a id="ClassInfo:ClassInfo"></a>
-      <h4 class="signature"><a href="ClassInfo.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">ClassInfo</span>
-        
+      <span class="symbol"> 
+        <a href="ClassInfo.html"><span class="name">ClassInfo</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">Information about a class, as read from a class file.</p>
-    </li><li visbl="pub" data-isabs="true" name="org.clapper.classutil.FieldInfo">
+    </li><li visbl="pub" name="org.clapper.classutil.FieldInfo" data-isabs="true">
       <a id="FieldInfo:FieldInfo"></a>
-      <h4 class="signature"><a href="FieldInfo.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">FieldInfo</span>
-        
+      <span class="symbol"> 
+        <a href="FieldInfo.html"><span class="name">FieldInfo</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">Information about a field, as read from a class file.</p>
-    </li><li visbl="pub" data-isabs="true" name="org.clapper.classutil.MapToBeanMapper">
+    </li><li visbl="pub" name="org.clapper.classutil.MapToBeanMapper" data-isabs="true">
       <a id="MapToBeanMapper:MapToBeanMapper"></a>
-      <h4 class="signature"><a href="MapToBeanMapper.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">MapToBeanMapper</span>
-        
+      <span class="symbol"> 
+        <a href="MapToBeanMapper.html"><span class="name">MapToBeanMapper</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">Takes a Scala <code>Map</code>, with <code>String</code> keys and object values, and generates
 an object, with fields for each map value.</p>
-    </li><li visbl="pub" data-isabs="true" name="org.clapper.classutil.MethodInfo">
+    </li><li visbl="pub" name="org.clapper.classutil.MethodInfo" data-isabs="true">
       <a id="MethodInfo:MethodInfo"></a>
-      <h4 class="signature"><a href="MethodInfo.html">
+      <h4 class="signature">
       <span class="kind">trait</span>
-      <span class="symbol">
-        <span class="name">MethodInfo</span>
-        
+      <span class="symbol"> 
+        <a href="MethodInfo.html"><span class="name">MethodInfo</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">Information about a method, as read from a class file.</p>
     </li></ol>
             </div>
+        
+        
 
         <div class="values members" id="values">
               <h3>Value Members</h3>
-              <ol><li visbl="pub" data-isabs="false" name="org.clapper.classutil.ClassFinder">
+              <ol><li visbl="pub" name="org.clapper.classutil.ClassFinder" data-isabs="false">
       <a id="ClassFinder:ClassFinder"></a>
-      <h4 class="signature"><a href="ClassFinder$.html">
+      <h4 class="signature">
       <span class="kind">object</span>
-      <span class="symbol">
-        <span class="name">ClassFinder</span>
-        
+      <span class="symbol"> 
+        <a href="ClassFinder$.html"><span class="name">ClassFinder</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">The entrance to the factory floor, providing methods for finding and
 filtering classes.</p>
-    </li><li visbl="pub" data-isabs="false" name="org.clapper.classutil.ClassUtil">
+    </li><li visbl="pub" name="org.clapper.classutil.ClassUtil" data-isabs="false">
       <a id="ClassUtil:ClassUtil"></a>
-      <h4 class="signature"><a href="ClassUtil$.html">
+      <h4 class="signature">
       <span class="kind">object</span>
-      <span class="symbol">
-        <span class="name">ClassUtil</span>
-        
+      <span class="symbol"> 
+        <a href="ClassUtil$.html"><span class="name">ClassUtil</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">Some general-purpose class-related utility functions.</p>
-    </li><li visbl="pub" data-isabs="false" name="org.clapper.classutil.MapToBean">
+    </li><li visbl="pub" name="org.clapper.classutil.MapToBean" data-isabs="false">
       <a id="MapToBean:MapToBean"></a>
-      <h4 class="signature"><a href="MapToBean$.html">
+      <h4 class="signature">
       <span class="kind">object</span>
-      <span class="symbol">
-        <span class="name">MapToBean</span>
-        
+      <span class="symbol"> 
+        <a href="MapToBean$.html"><span class="name">MapToBean</span></a>
         
         <span class="result"> extends ClassNameGenerator</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">Takes a Scala <code>Map</code>, with <code>String</code> keys and object values, and generates
 a Java Bean object, with fields for each map value.</p>
-    </li><li visbl="pub" data-isabs="false" name="org.clapper.classutil.Modifier">
+    </li><li visbl="pub" name="org.clapper.classutil.Modifier" data-isabs="false">
       <a id="Modifier:Modifier"></a>
-      <h4 class="signature"><a href="Modifier$.html">
+      <h4 class="signature">
       <span class="kind">object</span>
-      <span class="symbol">
-        <span class="name">Modifier</span>
-        
+      <span class="symbol"> 
+        <a href="Modifier$.html"><span class="name">Modifier</span></a>
         
         <span class="result"> extends Enumeration</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt">An enumerated high-level view of the modifiers that can be attached
 to a method, class or field.</p>
-    </li><li visbl="pub" data-isabs="false" name="org.clapper.classutil.ScalaObjectToBean">
+    </li><li visbl="pub" name="org.clapper.classutil.ScalaObjectToBean" data-isabs="false">
       <a id="ScalaObjectToBean:ScalaObjectToBean"></a>
-      <h4 class="signature"><a href="ScalaObjectToBean$.html">
+      <h4 class="signature">
       <span class="kind">object</span>
-      <span class="symbol">
-        <span class="name">ScalaObjectToBean</span>
-        
+      <span class="symbol"> 
+        <a href="ScalaObjectToBean$.html"><span class="name">ScalaObjectToBean</span></a>
         
         <span class="result"> extends AnyRef</span>
       </span>
-      </a></h4>
+      </h4>
       <p class="comment cmt"><code>ScalaObjectToBean</code> maps a Scala object into a read-only Java bean.</p>
     </li></ol>
             </div>
+
+        
 
         
 
