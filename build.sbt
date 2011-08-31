@@ -46,9 +46,9 @@ fork in Compile := true
 // Other dependendencies
 
 libraryDependencies ++= Seq(
-    "asm" % "asm" % "3.3" % "provided",
-    "asm" % "asm-commons" % "3.3" % "provided",
-    "asm" % "asm-util" % "3.3" % "provided",
+    "asm" % "asm" % "3.3",
+    "asm" % "asm-commons" % "3.3",
+    "asm" % "asm-util" % "3.3",
     "org.clapper" %% "grizzled-scala" % "1.0.8",
     "org.clapper" %% "grizzled-slf4j" % "0.6.5"
 )
