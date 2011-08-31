@@ -5,7 +5,7 @@ name := "classutil"
 
 organization := "org.clapper"
 
-version := "0.4.1"
+version := "0.4.2"
 
 scalaVersion := "2.8.1"
 
@@ -30,7 +30,8 @@ libraryDependencies <<= (scalaVersion, libraryDependencies) { (sv, deps) =>
     val scalatestVersionMap = Map("2.8.0"   -> ("scalatest", "1.3"),
                                   "2.8.1"   -> ("scalatest_2.8.1", "1.5.1"),
                                   "2.9.0"   -> ("scalatest_2.9.0", "1.6.1"),
-                                  "2.9.0-1" -> ("scalatest_2.9.0-1", "1.6.1"))
+                                  "2.9.0-1" -> ("scalatest_2.9.0-1", "1.6.1"),
+                                  "2.9.1"   -> ("scalatest_2.9.0-1", "1.6.1"))
     val (scalatestArtifact, scalatestVersion) = scalatestVersionMap.getOrElse(
         sv, error("Unsupported Scala version: " + scalaVersion)
     )
@@ -42,26 +43,14 @@ fork in Test := true
 fork in Compile := true
 
 // ---------------------------------------------------------------------------
-// Posterous-SBT
-
-libraryDependencies <<= (sbtVersion, scalaVersion, libraryDependencies) { (sbtv, scalav, deps) =>
-    if (scalav == "2.8.1")
-        deps :+ "net.databinder" %% "posterous-sbt" % ("0.3.0_sbt" + sbtv)
-    else
-        deps
-}
-
-(name in Posterous) := "ClassUtil"
-
-// ---------------------------------------------------------------------------
 // Other dependendencies
 
 libraryDependencies ++= Seq(
     "asm" % "asm" % "3.3" % "provided",
     "asm" % "asm-commons" % "3.3" % "provided",
     "asm" % "asm-util" % "3.3" % "provided",
-    "org.clapper" %% "grizzled-scala" % "1.0.7",
-    "org.clapper" %% "grizzled-slf4j" % "0.6"
+    "org.clapper" %% "grizzled-scala" % "1.0.8",
+    "org.clapper" %% "grizzled-slf4j" % "0.6.5"
 )
 
 // ---------------------------------------------------------------------------

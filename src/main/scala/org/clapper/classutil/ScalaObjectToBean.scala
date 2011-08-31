@@ -306,13 +306,13 @@ private[classutil] class ScalaObjectToBeanMapper {
  *
  * public int x() { return _x; }
  * public int y() { return _y; }
- * public void y_$eq(int newY) { _y = newY; }
+ * public void y_\$eq(int newY) { _y = newY; }
  * }}}
  *
  * So, the mapper looks for Scala getter methods that take no parameters
  * and return some non-void (i.e., non-`Unit`) value, and it looks for
  * Scala setter methods that take one parameter, return void (`Unit`) and
- * have names ending in "_$eq". Then, from that set of methods, the mapper
+ * have names ending in "_\$eq". Then, from that set of methods, the mapper
  * discards:
  *
  * <ul>

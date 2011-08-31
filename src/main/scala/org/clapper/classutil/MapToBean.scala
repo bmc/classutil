@@ -123,12 +123,12 @@ trait MapToBeanMapper {
  * That Scala script will produce output like the following:
  *
  * {{{
- * public final $Proxy0 $Proxy1.getFiveMap()
- * public final java.lang.Integer $Proxy1.getOneInt()
- * public final java.lang.Class $Proxy1.getFourIntClass()
- * public final scala.collection.immutable.$colon$colon $Proxy1.getSixList()
- * public final java.lang.Float $Proxy1.getTwoFloat()
- * public final java.lang.String $Proxy1.getThreeString()
+ * public final \$Proxy0 \$Proxy1.getFiveMap()
+ * public final java.lang.Integer \$Proxy1.getOneInt()
+ * public final java.lang.Class \$Proxy1.getFourIntClass()
+ * public final scala.collection.immutable.\$colon\$colon \$Proxy1.getSixList()
+ * public final java.lang.Float \$Proxy1.getTwoFloat()
+ * public final java.lang.String \$Proxy1.getThreeString()
  * public static java.lang.Class java.lang.reflect.Proxy.getProxyClass(java.lang.ClassLoader,java.lang.Class[]) throws java.lang.IllegalArgumentException
  * public static java.lang.reflect.InvocationHandler java.lang.reflect.Proxy.getInvocationHandler(java.lang.Object) throws java.lang.IllegalArgumentException
  * public final native java.lang.Class java.lang.Object.getClass()
