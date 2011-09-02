@@ -263,7 +263,6 @@ trait ClassInfo {
   */
 class ClassFinder(path: Seq[File]) {
   val classpath = path.toList
-
   private val log = Logger(this.getClass)
 
   /** Find all classes in the specified path, which can contain directories,
@@ -368,18 +367,20 @@ class ClassFinder(path: Seq[File]) {
     import grizzled.file.GrizzledFile._
     import java.io.FileInputStream
 
-    val inputStreams = dir.listRecursively().
-                           filter((f: File) => isClass(f)).
-                           map((f: File) => new FileInputStream(f))
+    val inputStreams = dir.listRecursively().filter(isClass _).
+                           map(f => new FileInputStream(f))
 
-    try {
-      val iterators = inputStreams.map(fis => classData(fis, dir))
-      generateFromIterators(iterators)
-    }
+    val iterators =
+      for (fis <- inputStreams) yield {
+        try {
+          classData(fis, dir)
+        }
+        finally {
+          fis.close()
+        }
+      }
 
-    finally {
-      for (fis <- inputStreams) fis.close()
-    }
+    generateFromIterators(iterators)
   }
 
   private def classData(is: InputStream, 
