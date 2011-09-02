@@ -3,6 +3,15 @@ title: "ClassUtil: Change Log"
 layout: default
 ---
 
+Version 0.4.3:
+
+* Fixed [issue #8][]: `ClassFinder` only finding one class. Problem was in
+  the generator/iterator in the private `processDirectory()` method used by
+  `ClassFinder.getClasses()`.
+* Added a specific unit test for `ClassFinder.getClasses()`.
+
+[issue #8]: https://github.com/bmc/classutil/issues/8
+
 Version 0.4.2:
 
 * Now builds for [Scala][] 2.9.1, as well as 2.9.0-1, 2.9.0, 2.8.1, and 2.8.0.

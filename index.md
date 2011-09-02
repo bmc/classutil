@@ -47,7 +47,7 @@ classpath at runtime:
 * The [ASM][] commons library (version 3), e.g., `asm-commons-3.3.1.jar`
 * The [Grizzled Scala][] library
 * The [Grizzled SLF4J][] library, for logging
-* The [SLF4J][] API library, for logging (e.g., `slf4j-api-1.6.1.jar`)
+* The [SLF4J][] API library, for logging (e.g., `slf4j-api-1.6.2.jar`)
 * An SLF4J implementation, such as [Logback][] or [AVSL][], if you want
   logging.
 
@@ -65,7 +65,7 @@ information are:
 
 * Group ID: `org.clapper`
 * Artifact ID: `classutil_2.9.0-1`
-* Version: `0.4.2`
+* Version: `0.4.3`
 * Type: `jar`
 * Repository: `http://www.scala-tools.org/repo-releases/`
 
@@ -83,10 +83,10 @@ Here's a sample Maven POM "dependency" snippet:
     <dependency>
       <groupId>org.clapper</groupId>
       <artifactId>classutil_2.9.0-1</artifactId>
-      <version>0.4.2</version>
+      <version>0.4.3</version>
     </dependency>
 
-Version 0.4.2 supports Scala 2.9.1, 2.9.0-1, 2.9.0, 2.8.1 and 2.8.0.
+Version 0.4.3 supports Scala 2.9.1, 2.9.0-1, 2.9.0, 2.8.1 and 2.8.0.
 
 For more information on using Maven and Scala, see Josh Suereth's
 [Scala Maven Guide][].
@@ -99,7 +99,7 @@ If you're using [SBT][] 0.7.x to compile your code, you can place the
 following line in your project file (i.e., the Scala file in your
 `project/build/` directory):
 
-    val classutil = "org.clapper" %% "classutil" % "0.4.2"
+    val classutil = "org.clapper" %% "classutil" % "0.4.3"
 
 #### 0.10.x
 
@@ -108,7 +108,7 @@ following line in your `build.sbt` file (for Quick Configuration). If
 you're using an SBT 0.10.x Full Configuration, you're obviously smart
 enough to figure out what to do, on your own.
 
-    libraryDependencies += "org.clapper" %% "classutil" % "0.4.2"
+    libraryDependencies += "org.clapper" %% "classutil" % "0.4.3"
 
 # Building from Source
 
