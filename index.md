@@ -34,7 +34,7 @@ ClassUtil is fast for several reasons:
 ## Compile-time
 
 * ClassUtil requires a Scala 2.8 environment, or better, because it uses the
-  [continuations][] plug-in, not available in versions before 2.8.
+  [continuations][] plug-in, which is not available in versions before 2.8.
 * Other compile-time requirements are automatically satisfied, if you
   use Maven or SBT. See below.
 
@@ -47,46 +47,37 @@ classpath at runtime:
 * The [ASM][] commons library (version 3), e.g., `asm-commons-3.3.1.jar`
 * The [Grizzled Scala][] library
 * The [Grizzled SLF4J][] library, for logging
-* The [SLF4J][] API library, for logging (e.g., `slf4j-api-1.6.2.jar`)
+* The [SLF4J][] API library, for logging (e.g., `slf4j-api-1.6.4.jar`)
 * An SLF4J implementation, such as [Logback][] or [AVSL][], if you want
   logging.
 
 # Installation
 
-The easiest way to install the ClassUtil library is to download a
-pre-compiled jar from the [Scala Tools Maven repository][]. However, you
-can also get certain build tools to download it for you automatically.
+ClassUtil is published to the `oss.sonatype.org` repository;  Sonatype
+automatically pushes the artifacts to the  [Maven central repository][]. You
+can get download the ClassUtil library jar directly from the Maven
+repository. However, if you're using [Maven][] or [SBT][], you can just have
+those tools do the job for you.
 
 ## Installing with Maven
 
-If you're using [Maven][], you can simply tell Maven to get ClassUtil
-from the [Scala Tools Maven repository][]. The relevant pieces of
-information are:
+If you're using [Maven][], just specify the artifact, and Maven will do the
+rest for you:
 
 * Group ID: `org.clapper`
-* Artifact ID: `classutil_2.9.0-1`
-* Version: `0.4.3`
+* Artifact ID: `classutil_2.9.1`
+* Version: `0.4.4`
 * Type: `jar`
-* Repository: `http://www.scala-tools.org/repo-releases/`
 
-Here's a sample Maven POM "dependency" snippet:
-
-
-    <repositories>
-      <repository>
-        <id>scala-tools.org</id>
-          <name>Scala-tools Maven2 Repository</name>
-          <url>http://scala-tools.org/repo-releases</url>
-      </repository>
-    </repositories>
+For example:
 
     <dependency>
       <groupId>org.clapper</groupId>
-      <artifactId>classutil_2.9.0-1</artifactId>
-      <version>0.4.3</version>
+      <artifactId>classutil_2.9.1</artifactId>
+      <version>0.4.4</version>
     </dependency>
 
-Version 0.4.3 supports Scala 2.9.1, 2.9.0-1, 2.9.0, 2.8.1 and 2.8.0.
+Version 0.4.4 supports Scala 2.9.1, 2.9.0-1, 2.9.0, 2.8.2, 2.8.1 and 2.8.0.
 
 For more information on using Maven and Scala, see Josh Suereth's
 [Scala Maven Guide][].
@@ -99,16 +90,23 @@ If you're using [SBT][] 0.7.x to compile your code, you can place the
 following line in your project file (i.e., the Scala file in your
 `project/build/` directory):
 
-    val classutil = "org.clapper" %% "classutil" % "0.4.3"
+    val classutil = "org.clapper" %% "classutil" % "0.4.4"
 
-#### 0.10.x
+#### 0.11.x
 
-If you're using [SBT][] 0.10.x to compile your code, you can use the
+If you're using [SBT][] 0.11.x to compile your code, you can use the
 following line in your `build.sbt` file (for Quick Configuration). If
 you're using an SBT 0.10.x Full Configuration, you're obviously smart
 enough to figure out what to do, on your own.
 
-    libraryDependencies += "org.clapper" %% "classutil" % "0.4.3"
+    libraryDependencies += "org.clapper" %% "classutil" % "0.4.4"
+
+ClassUtil is also registered with [Doug Tangren][]'s excellent
+[ls.implicit.ly][] catalog. If you use the `ls` SBT plugin, you can install
+ClassUtil with
+
+    sbt> ls-install classutil
+
 
 # Building from Source
 
@@ -553,7 +551,7 @@ request. Along with any patch you send:
 [GitHub repository]: http://github.com/bmc/classutil
 [GitHub]: http://github.com/bmc/
 [downloads page]: http://github.com/bmc/classutil/downloads
-[Scala Tools Maven repository]: http://www.scala-tools.org/repo-releases/
+[Maven central repository]: http://search.maven.org/
 [Scala Maven Guide]: http://www.scala-lang.org/node/345
 [Maven]: http://maven.apache.org/
 [ASM]: http://asm.ow2.org/
@@ -569,3 +567,4 @@ request. Along with any patch you send:
 [API documentation]: api/index.html
 [Case classes]: http://www.scala-lang.org/node/107
 [changelog]: CHANGELOG.html
+[ls.implicit.ly]: http://ls.implicit.ly

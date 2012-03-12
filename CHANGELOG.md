@@ -3,6 +3,17 @@ title: "ClassUtil: Change Log"
 layout: default
 ---
 
+Version 0.4.4:
+
+* Converted to build with SBT 0.11.2.
+* Added support for `ls.implicit.ly` metadata.
+* Now publishes to `oss.sonatype.org` (and, thence, to the Maven central repo).
+* Bumped [Grizzled Scala][] version.
+* Now builds for Scala 2.8.2, in addition to 2.8.0, 2.8.1, 2.9.0, 2.9.0-1 and
+  2.9.1.
+
+[SLF4J]: http://slf4j.org
+
 Version 0.4.3:
 
 * Fixed [issue #8][]: `ClassFinder` only finding one class. Problem was in
