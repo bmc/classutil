@@ -1,6 +1,0 @@
-* Folded in a [patch][] from [Aemon Cannon][], to protect against null
-  class names returned from [ASM][].
-
-[patch]: https://github.com/aemoncannon/classutil/commit/37d740dcd7ceb18615bde1715131a4cb81b43567
-[Aemon Cannon]: https://github.com/aemoncannon/
-[ASM]: http://asm.ow2.org/

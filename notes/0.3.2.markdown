@@ -1,4 +1,0 @@
-* Fixed title in generated Scaladocs.
-* Now builds against [Scala][] 2.8.1, as well as 2.8.0.
-
-[Scala]: http://www.scala-lang.org/

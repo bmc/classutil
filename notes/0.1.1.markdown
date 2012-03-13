@@ -1,2 +1,0 @@
-* Now compiles against Scala 2.8.0.RC2, as well as 2.8.0.RC1.
-
