@@ -3,6 +3,10 @@ title: "ClassUtil: Change Log"
 layout: default
 ---
 
+Version 0.4.5:
+
+* Added Scala 2.9.1-1 to the set of crossbuilds.
+
 Version 0.4.4:
 
 * Converted to build with SBT 0.11.2.

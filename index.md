@@ -59,6 +59,9 @@ can get download the ClassUtil library jar directly from the Maven
 repository. However, if you're using [Maven][] or [SBT][], you can just have
 those tools do the job for you.
 
+Version 0.4.5 supports Scala 2.9.1-1, 2.9.1, 2.9.0-1, 2.9.0, 2.8.2, 2.8.1 and
+2.8.0.
+
 ## Installing with Maven
 
 If you're using [Maven][], just specify the artifact, and Maven will do the
@@ -66,7 +69,7 @@ rest for you:
 
 * Group ID: `org.clapper`
 * Artifact ID: `classutil_2.9.1`
-* Version: `0.4.4`
+* Version: `0.4.5`
 * Type: `jar`
 
 For example:
@@ -74,10 +77,8 @@ For example:
     <dependency>
       <groupId>org.clapper</groupId>
       <artifactId>classutil_2.9.1</artifactId>
-      <version>0.4.4</version>
+      <version>0.4.5</version>
     </dependency>
-
-Version 0.4.4 supports Scala 2.9.1, 2.9.0-1, 2.9.0, 2.8.2, 2.8.1 and 2.8.0.
 
 For more information on using Maven and Scala, see Josh Suereth's
 [Scala Maven Guide][].
@@ -90,7 +91,7 @@ If you're using [SBT][] 0.7.x to compile your code, you can place the
 following line in your project file (i.e., the Scala file in your
 `project/build/` directory):
 
-    val classutil = "org.clapper" %% "classutil" % "0.4.4"
+    val classutil = "org.clapper" %% "classutil" % "0.4.5"
 
 #### 0.11.x
 
@@ -99,7 +100,7 @@ following line in your `build.sbt` file (for Quick Configuration). If
 you're using an SBT 0.11.x Full Configuration, you're obviously smart
 enough to figure out what to do, on your own.
 
-    libraryDependencies += "org.clapper" %% "classutil" % "0.4.4"
+    libraryDependencies += "org.clapper" %% "classutil" % "0.4.5"
 
 ClassUtil is also registered with [Doug Tangren][]'s excellent
 [ls.implicit.ly][] catalog. If you use the `ls` SBT plugin, you can install
