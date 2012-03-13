@@ -1,0 +1,42 @@
+
+{
+ "organization":"org.clapper",
+ "name":"classutil",
+ "version":"0.4.5",
+ "description":"A library for fast runtime class-querying, and more",
+ "site":"http://software.clapper.org/classutil/",
+ "tags":["classes","byte code"],
+ "docs":"",
+ "licenses": [{
+   "name": "BSD",
+   "url": "http://software.clapper.org/classutil/license.html"
+  }],
+ "resolvers": ["http://scala-tools.org/repo-releases"],
+ "dependencies": [{
+   "organization":"org.scala-lang.plugins",
+   "name": "continuations",
+   "version": "2.9.1-1"
+  },{
+   "organization":"asm",
+   "name": "asm",
+   "version": "3.3"
+  },{
+   "organization":"asm",
+   "name": "asm-commons",
+   "version": "3.3"
+  },{
+   "organization":"asm",
+   "name": "asm-util",
+   "version": "3.3"
+  },{
+   "organization":"org.clapper",
+   "name": "grizzled-scala",
+   "version": "1.0.12"
+  },{
+   "organization":"org.clapper",
+   "name": "grizzled-slf4j",
+   "version": "0.6.8"
+  }],
+ "scalas": ["2.9.1-1","2.9.1","2.9.0-1","2.9.0","2.8.2","2.8.1","2.8.0"],
+ "sbt": false
+}
