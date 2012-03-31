@@ -171,7 +171,7 @@ library.
 
     val classpath = List("foo.jar", "bar.jar", "baz.zip").map(new File(_))
     val finder = ClassFinder(classpath)
-    val classes = finder.getClasses.filter(_.isConcrete)
+    val classes = finder.getClasses.filter(_.isInterface)
     classes.foreach(println(_))
 
 ### Finding all classes that implement an interface, directly or indirectly
@@ -189,7 +189,7 @@ provides a special utility function for that:
     val finder = ClassFinder(classpath)
     val classes = finder.getClasses
     val plugins = ClassFinder.concreteSubclasses("org.example.plugin", classes)
-    classes.foreach(println(_))
+    plugins.foreach(println(_))
 
 Note that the `concreteSubclasses()` method called above takes the iterator
 of `ClassInfo` objects returned by `ClassFinder.getClasses`. This
