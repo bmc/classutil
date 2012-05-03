@@ -3,6 +3,10 @@ title: "ClassUtil: Change Log"
 layout: default
 ---
 
+Version 0.4.6:
+
+* Added Scala 2.9.2 to the set of crossbuilds.
+
 Version 0.4.5:
 
 * Added Scala 2.9.1-1 to the set of crossbuilds.
