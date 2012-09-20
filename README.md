@@ -1,6 +1,9 @@
 classutil: Fast class finder utilities, plus some extras
 ========================================================
 
+**NOTE**: This branch supports Scala 2.9.x and earlier releases. For
+Scala 2.10 and later, you want the "master" branch (i.e., the trunk).
+
 ## Introduction
 
 The *org.clapper.classutil* (ClassUtil) library is a Scala package that
