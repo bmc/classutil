@@ -37,7 +37,7 @@
 
 package org.clapper.classutil
 
-import scala.reflect.Manifest
+import scala.reflect.{ClassTag, classTag}
 import grizzled.reflect
 
 /** Some general-purpose class-related utility functions.
@@ -97,19 +97,17 @@ object ClassUtil {
     *
     * @return `true` if the class represents a primitive, `false` if not
     */
-  def isPrimitive[T](cls: Class[T])(implicit man: Manifest[T]): Boolean = {
-    import scala.reflect.ClassManifest
-
-    def scalaPrimitive = man match {
-      case ClassManifest.Boolean => true
-      case ClassManifest.Byte    => true
-      case ClassManifest.Char    => true
-      case ClassManifest.Double  => true
-      case ClassManifest.Float   => true
-      case ClassManifest.Int     => true
-      case ClassManifest.Long    => true
-      case ClassManifest.Short   => true
-      case ClassManifest.Unit    => true
+  def isPrimitive[T: ClassTag](cls: Class[T]): Boolean = {
+    def scalaPrimitive = classTag[T].runtimeClass.toString match {
+      case "boolean" => true
+      case "byte"    => true
+      case "char"    => true
+      case "double"  => true
+      case "float"   => true
+      case "int"     => true
+      case "long"    => true
+      case "short"   => true
+      case "void"    => true
       case _ => false
     }
 
@@ -131,7 +129,7 @@ object ClassUtil {
     *
     * @return whether or not `value` conforms to type `T`
     */
-  def isOfType[T](v: Any)(implicit man: Manifest[T]): Boolean =
+  def isOfType[T: ClassTag](v: Any): Boolean =
     reflect.isOfType[T](v)
 
   /** Convenience method to load a class from an array of class bytes.

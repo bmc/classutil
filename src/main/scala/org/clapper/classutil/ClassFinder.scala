@@ -48,6 +48,7 @@ package org.clapper.classutil
 import scala.collection.mutable.{Set => MutableSet}
 import scala.util.continuations.cps
 import scala.annotation.tailrec
+import scala.language.reflectiveCalls
 
 import grizzled.slf4j._
 import grizzled.generator._

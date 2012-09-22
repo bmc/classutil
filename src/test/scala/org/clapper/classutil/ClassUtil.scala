@@ -40,7 +40,7 @@ package org.clapper.classutil
 import org.scalatest.{FunSuite, Assertions}
 
 class ClassUtilTest extends FunSuite {
-  test("isPrimitive, Scala classes") {
+  test("isPrimitive, Scala values") {
     val data = List(
       (1,          true),
       (1.0f,       true),
@@ -56,6 +56,29 @@ class ClassUtilTest extends FunSuite {
       val valueClass = value.asInstanceOf[AnyRef].getClass
       expect(expected, "isPrimitive(" + valueClass + ")=" + expected) {
         ClassUtil.isPrimitive(valueClass)
+      }
+    }
+  }
+
+  test("isPrimitive, Scala classes") {
+    import scala.language.existentials
+
+    val data = List[(Class[_], Boolean)](
+      (classOf[Int],    true),
+      (classOf[Byte],   true),
+      (classOf[Char],   true),
+      (classOf[Short],  true),
+      (classOf[Int],    true),
+      (classOf[Long],   true),
+      (classOf[Float],  true),
+      (classOf[Double], true),
+      (classOf[Unit],   true),
+      (this.getClass,   false)
+    )
+
+    for ((cls, expected) <- data) {
+      expect(expected, "isPrimitive(" + cls + ")=" + expected) {
+        ClassUtil.isPrimitive(cls)
       }
     }
   }
@@ -79,6 +102,8 @@ class ClassUtilTest extends FunSuite {
   }
 
   test("classSignature") {
+    import scala.language.existentials
+
     val Primitives = List[Class[_]](
       classOf[Boolean],
       classOf[Byte],
@@ -95,7 +120,7 @@ class ClassUtilTest extends FunSuite {
       cls => (cls, ClassUtil.PrimitiveSigMap(cls.getName))
     }.toSeq
 
-    val ClassesToTest = Seq(
+    val ClassesToTest = Seq[(Class[_], String)](
       (getClass,        "Lorg/clapper/classutil/ClassUtilTest;"),
       (classOf[String], "Ljava/lang/String;")
     )
@@ -106,7 +131,7 @@ class ClassUtilTest extends FunSuite {
       }
     }
 
-    for ((cls, signature) <- ClassesToTest) {
+    for ((cls: Class[_], signature: String) <- ClassesToTest) {
       expect(signature, cls.getCanonicalName + " -> " + signature) {
         ClassUtil.classSignature(cls)
       }
