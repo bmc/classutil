@@ -1,7 +1,18 @@
----
-title: "ClassUtil: Change Log"
-layout: default
----
+Version 1.0.0:
+
+* Converted to build against Scala 2.10.0-M7. (Builds for Scala 2.9.x and
+  earlier are maintained through the 0.x.x releases.)
+* Converted to use the Scala 2.10 reflection API.
+* Fixed Scala 2.10 feature warnings (`-feature`).
+* Updated to use Scala 2.10 versions of [Grizzled Scala][] 
+  and [Grizzled SLF4J][].
+* The project now explicitly specifies the SBT [ls][] plugin, instead of
+  assuming that it's globally specified, to permit others to build the
+  project more easily.
+
+[Grizzled Scala]: http://software.clapper.org/grizzled-scala/
+[Grizzled SLF4J]: http://software.clapper.org/grizzled-slf4j/
+[ls]: https://github.com/softprops/ls
 
 Version 0.4.6:
 
