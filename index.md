@@ -56,6 +56,7 @@ classpath at runtime:
 ClassUtil is published to the `oss.sonatype.org` repository and automatically
 sync'd with the [Maven Central Repository][].
 
+* Version 1.0.1 supports Scala 2.10.0-RC1
 * Version 1.0.0 supports Scala 2.10.0-M7
 * Version 0.4.6 supports Scala 2.9.2, 2.9.1-1, 2.9.1, 2.9.0-1, 2.9.0, 2.8.2,
   2.8.1 and 2.8.0.
@@ -67,7 +68,7 @@ rest for you:
 
 * Group ID: `org.clapper`
 * Artifact ID: `classutil_2.9.2` or `classutil_2.10`
-* Version: `0.4.6` or `1.0.0`
+* Version: `0.4.6`, `1.0.0` or `1.0.1`
 * Type: `jar`
 
 For example:
@@ -102,9 +103,9 @@ For Scala 2.9 and earlier:
 
     libraryDependencies += "org.clapper" %% "classutil" % "0.4.6"
 
-For Scala 2.10.0-M7:
+For Scala 2.10.0-RC1:
 
-    libraryDependencies += "org.clapper" % "classutil_2.10" % "1.0.0"
+    libraryDependencies += "org.clapper" % "classutil_2.10" % "1.0.1"
 
 ClassUtil is also registered with [Doug Tangren][]'s excellent
 [ls.implicit.ly][] catalog. If you use the `ls` SBT plugin, you can install
