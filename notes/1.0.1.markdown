@@ -1,0 +1,2 @@
+* Cross-compiled and published for Scala 2.10.0-RC1.
+* Converted to use ScalaTest 2.0, which changes `expect` to `expectResult`.

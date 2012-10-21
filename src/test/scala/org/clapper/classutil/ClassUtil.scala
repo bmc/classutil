@@ -54,7 +54,7 @@ class ClassUtilTest extends FunSuite {
 
     for ((value, expected) <- data) {
       val valueClass = value.asInstanceOf[AnyRef].getClass
-      expect(expected, "isPrimitive(" + valueClass + ")=" + expected) {
+      expectResult(expected, "isPrimitive(" + valueClass + ")=" + expected) {
         ClassUtil.isPrimitive(valueClass)
       }
     }
@@ -77,7 +77,7 @@ class ClassUtilTest extends FunSuite {
     )
 
     for ((cls, expected) <- data) {
-      expect(expected, "isPrimitive(" + cls + ")=" + expected) {
+      expectResult(expected, "isPrimitive(" + cls + ")=" + expected) {
         ClassUtil.isPrimitive(cls)
       }
     }
@@ -95,7 +95,7 @@ class ClassUtilTest extends FunSuite {
 
     for ((value, expected) <- data) {
       val valueClass = value.asInstanceOf[AnyRef].getClass
-      expect(expected, "isPrimitive(" + valueClass + ")=" + expected) {
+      expectResult(expected, "isPrimitive(" + valueClass + ")=" + expected) {
         ClassUtil.isPrimitive(valueClass)
       }
     }
@@ -126,13 +126,13 @@ class ClassUtilTest extends FunSuite {
     )
 
     for ((cls, signature) <- PrimitivesToTest) {
-      expect(signature, cls.getCanonicalName + " -> " + signature) {
+      expectResult(signature, cls.getCanonicalName + " -> " + signature) {
         ClassUtil.classSignature(cls)
       }
     }
 
     for ((cls: Class[_], signature: String) <- ClassesToTest) {
-      expect(signature, cls.getCanonicalName + " -> " + signature) {
+      expectResult(signature, cls.getCanonicalName + " -> " + signature) {
         ClassUtil.classSignature(cls)
       }
     }
@@ -167,7 +167,7 @@ class ClassUtilTest extends FunSuite {
     }
 
     for ((method, signature) <- data) {
-      expect(signature, methodToString(method) + " -> " + signature) {
+      expectResult(signature, methodToString(method) + " -> " + signature) {
         ClassUtil.methodSignature(method)
       }
     }

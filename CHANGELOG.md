@@ -1,4 +1,11 @@
-Version 1.0.0:
+# Change log for ClassUtil library
+
+Version 1.0.1:
+
+* Cross-compiled and published for Scala 2.10.0-RC1.
+* Converted to use ScalaTest 2.0, which changes `expect` to `expectResult`.
+
+Version 1.0:
 
 * Converted to build against Scala 2.10.0-M7. (Builds for Scala 2.9.x and
   earlier are maintained through the 0.x.x releases.)

@@ -64,20 +64,20 @@ class ScalaObjectToBeanTest extends FunSuite {
 
     for ((name, cls, value) <- expectedGetters) {
       val methods = bean.getClass.getMethods.filter(_.getName == name)
-      expect(1, "Should be 1 method named \"" + name + "\"") {
+      expectResult(1, "Should be 1 method named \"" + name + "\"") {
         methods.length
       }
 
       val method = methods(0)
-      expect(true, "Method " + name + "() has appropriate type.") {
+      expectResult(true, "Method " + name + "() has appropriate type.") {
         cls.isAssignableFrom(method.getReturnType)
       }
 
-      expect(value, "Method " + name + "() returns " + value.toString) {
+      expectResult(value, "Method " + name + "() returns " + value.toString) {
         method.invoke(bean)
       }
 
-      expect(false, "Method should not return a proxy") {
+      expectResult(false, "Method should not return a proxy") {
         import java.lang.reflect.Proxy
 
         Proxy.isProxyClass(method.invoke(bean).getClass)
@@ -96,45 +96,45 @@ class ScalaObjectToBeanTest extends FunSuite {
       val setterMethods = allMethods.filter(_.getName == setterName)
       val getterMethods = allMethods.filter(_.getName == getterName)
 
-      expect(1, "Should be 1 method named \"" + setterName + "\"") {
+      expectResult(1, "Should be 1 method named \"" + setterName + "\"") {
         setterMethods.length
       }
 
-      expect(1, "Should be 1 method named \"" + getterName + "\"") {
+      expectResult(1, "Should be 1 method named \"" + getterName + "\"") {
         getterMethods.length
       }
 
       val setterMethod = setterMethods(0)
       val getterMethod = getterMethods(0)
 
-      expect(true, getterName + "() has appropriate type.") {
+      expectResult(true, getterName + "() has appropriate type.") {
         cls.isAssignableFrom(getterMethod.getReturnType)
       }
 
-      expect(oldVal, getterName + "() returns " + oldVal.toString) {
+      expectResult(oldVal, getterName + "() returns " + oldVal.toString) {
         getterMethod.invoke(bean)
       }
 
-      expect(false, getterName + "() should not return a proxy") {
+      expectResult(false, getterName + "() should not return a proxy") {
         import java.lang.reflect.Proxy
 
         Proxy.isProxyClass(getterMethod.invoke(bean).getClass)
       }
 
-      expect(1, setterName + "() total parameters") {
+      expectResult(1, setterName + "() total parameters") {
         setterMethod.getParameterTypes.length
       }
 
-      expect(true, setterName + "()'s parameter type is correct") {
+      expectResult(true, setterName + "()'s parameter type is correct") {
         val paramTypes = setterMethod.getParameterTypes
         cls.isAssignableFrom(paramTypes(0))
       }
 
-      expect(true, setterName + "() returns void") {
+      expectResult(true, setterName + "() returns void") {
         setterMethod.getReturnType.getName == "void"
       }
 
-      expect(true, setterName + "() changes the value") {
+      expectResult(true, setterName + "() changes the value") {
         setterMethod.invoke(bean, newVal.asInstanceOf[AnyRef])
         getterMethod.invoke(bean) == newVal
       }
@@ -179,7 +179,7 @@ class ScalaObjectToBeanTest extends FunSuite {
     )
 
     for ((methodName, label, obj, expected) <- hasMethods) {
-      expect(expected, label + " has " + methodName + " method") {
+      expectResult(expected, label + " has " + methodName + " method") {
         hasMethod(obj, methodName)
       }
     }
@@ -194,7 +194,7 @@ class ScalaObjectToBeanTest extends FunSuite {
     )
 
     for ((methodName, label, obj, expected) <- isProxy) {
-      expect(expected, label + "." + methodName + " returns Proxy") {
+      expectResult(expected, label + "." + methodName + " returns Proxy") {
         import java.lang.reflect.Proxy
         val value = obj.getClass.getMethod(methodName).invoke(obj)
         Proxy.isProxyClass(value.getClass)
@@ -213,7 +213,7 @@ class ScalaObjectToBeanTest extends FunSuite {
     )
 
     for ((label, obj, methodName, expected) <- values) {
-      expect(expected, label + "." + methodName + "=" + expected) {
+      expectResult(expected, label + "." + methodName + "=" + expected) {
         obj.getClass.getMethod(methodName).invoke(obj)
       }
     }
