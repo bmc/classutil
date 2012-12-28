@@ -15,7 +15,7 @@ homepage := Some(url("http://software.clapper.org/classutil/"))
 
 description := "A library for fast runtime class-querying, and more"
 
-scalaVersion := "2.10.0-RC1"
+scalaVersion := "2.10.0"
 
 // ---------------------------------------------------------------------------
 // Additional compiler options and plugins
@@ -42,7 +42,7 @@ seq(lsSettings :_*)
 libraryDependencies <<= (scalaVersion, libraryDependencies) { (sv, deps) =>
     // Select ScalaTest version based on Scala version
     val scalatestVersionMap = Map(
-      "2.10.0-RC1" -> ("scalatest_2.10.0-RC1", "2.0.M4-2.10.0-RC1-B1")
+      "2.10.0" -> ("scalatest_2.10.0", "2.0.M5")
     )
     val (scalatestArtifact, scalatestVersion) = scalatestVersionMap.getOrElse(
         sv, error("Unsupported Scala version for ScalaTest: " + scalaVersion)
