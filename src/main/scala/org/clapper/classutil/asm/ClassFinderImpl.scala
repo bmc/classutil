@@ -111,6 +111,7 @@ extends ClassInfo with ASMBitmapMapper {
 
 private[classutil] class MethodInfoImpl(val name: String,
                                         val signature: String,
+                                        val descriptor: String,
                                         val exceptions: List[String],
                                         val access: Int)
 extends MethodInfo with ASMBitmapMapper {
@@ -156,13 +157,16 @@ extends EmptyVisitor with ASMBitmapMapper {
 
   override def visitMethod(access: Int,
                            name: String,
-                           description: String,
+                           descriptor: String,
                            signature: String,
                            exceptions: Array[String]): MethodVisitor = {
     assert(currentClass != None)
     val sig = if (signature != null) signature else name
     val excList = if (exceptions == null) Nil else exceptions.toList
-    currentClass.get.methodSet += new MethodInfoImpl(name, sig, excList, 
+    currentClass.get.methodSet += new MethodInfoImpl(name,
+                                                     sig,
+                                                     descriptor,
+                                                     excList,
                                                      access)
     null
   }
