@@ -88,6 +88,11 @@ trait MethodInfo {
     */
   val signature: String
 
+  /** The method's descriptor
+    * Ex: (ILjava/lang/String;)[I
+    */
+  val descriptor: String
+
   /** A list of the checked exceptions (as class names) that the method
     * throws, or an empty list if it throws no known checked exceptions.
     */
