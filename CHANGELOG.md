@@ -1,5 +1,10 @@
 # Change log for ClassUtil library
 
+Version 1.0.2:
+
+`ClassFinder` now records method descriptors, not just method signatures.
+Change is courtesy [John Crussell](http://github.com/jcrussell).
+
 Version 1.0.1:
 
 * Cross-compiled and published for Scala 2.10.0-RC1.
@@ -11,7 +16,7 @@ Version 1.0:
   earlier are maintained through the 0.x.x releases.)
 * Converted to use the Scala 2.10 reflection API.
 * Fixed Scala 2.10 feature warnings (`-feature`).
-* Updated to use Scala 2.10 versions of [Grizzled Scala][] 
+* Updated to use Scala 2.10 versions of [Grizzled Scala][]
   and [Grizzled SLF4J][].
 * The project now explicitly specifies the SBT [ls][] plugin, instead of
   assuming that it's globally specified, to permit others to build the
@@ -192,7 +197,7 @@ Version 0.2:
 * Updated to version 0.2.2 of [Grizzled SLF4J][].
 * Removed unnecessary dependency on old version of [Grizzled Scala][] in
   build file.
-* 
+*
 * Now compiles under Scala 2.8.0.RC5. Now builds against RC3 and RC5 only.
 
 [ASM]: http://asm.ow2.org/

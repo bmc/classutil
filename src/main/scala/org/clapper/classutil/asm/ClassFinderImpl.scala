@@ -84,7 +84,7 @@ private[classutil] trait ASMBitmapMapper {
     val result = MutableSet[Modifier.Modifier]()
     for(pair <- map) {
       if((pair._1 & bitmap) != 0)
-	result += pair._2
+        result += pair._2
     }
     result.toSet
   }
@@ -139,10 +139,10 @@ extends EmptyVisitor with ASMBitmapMapper {
   var classes = MutableSet.empty[ClassInfo]
   var currentClass: Option[ClassInfoImpl] = None
 
-  override def visit(version: Int, 
-                     access: Int, 
+  override def visit(version: Int,
+                     access: Int,
                      name: String,
-                     signature: String, 
+                     signature: String,
                      superName: String,
                      interfaces: Array[String]) {
     val classInfo = new ClassInfoImpl(mapClassName(name),
