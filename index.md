@@ -56,7 +56,7 @@ classpath at runtime:
 ClassUtil is published to the `oss.sonatype.org` repository and automatically
 sync'd with the [Maven Central Repository][].
 
-* Version 1.0.1 supports Scala 2.10.0-RC1
+* Versions 1.0.1 and 1.0.2 supports Scala 2.10.
 * Version 1.0.0 supports Scala 2.10.0-M7
 * Version 0.4.6 supports Scala 2.9.2, 2.9.1-1, 2.9.1, 2.9.0-1, 2.9.0, 2.8.2,
   2.8.1 and 2.8.0.
@@ -68,7 +68,7 @@ rest for you:
 
 * Group ID: `org.clapper`
 * Artifact ID: `classutil_2.9.2` or `classutil_2.10`
-* Version: `0.4.6`, `1.0.0` or `1.0.1`
+* Version: `0.4.6`, `1.0.0` or `1.0.2`
 * Type: `jar`
 
 For example:
@@ -77,6 +77,14 @@ For example:
       <groupId>org.clapper</groupId>
       <artifactId>classutil_2.9.2</artifactId>
       <version>0.4.6</version>
+    </dependency>
+
+or:
+
+    <dependency>
+      <groupId>org.clapper</groupId>
+      <artifactId>classutil_2.10</artifactId>
+      <version>1.0.2</version>
     </dependency>
 
 For more information on using Maven and Scala, see Josh Suereth's
@@ -103,9 +111,9 @@ For Scala 2.9 and earlier:
 
     libraryDependencies += "org.clapper" %% "classutil" % "0.4.6"
 
-For Scala 2.10.0-RC1:
+For Scala 2.10:
 
-    libraryDependencies += "org.clapper" % "classutil_2.10" % "1.0.1"
+    libraryDependencies += "org.clapper" % "classutil_2.10" % "1.0.2"
 
 ClassUtil is also registered with [Doug Tangren][]'s excellent
 [ls.implicit.ly][] catalog. If you use the `ls` SBT plugin, you can install
@@ -277,7 +285,7 @@ The `MapToBean` Scala object contains the method that performs the
 transformation.
 
     def apply(map: Map[String, Any], recurse: Boolean = true): AnyRef
-    
+
 The first parameter is the map that is to be converted to a Java Bean. The
 second parameter (`recurse`) indicates whether or not nested maps should be
 automatically converted; it defaults to `true`. The bean's class name is
@@ -352,7 +360,7 @@ and produces a Java Bean that behaves like an instance of the following class:
         }
 
         public scala.collection.immutable.$colon$colon getList()
-        { 
+        {
             return charList;
         }
     }
@@ -479,7 +487,7 @@ An example will help clarify this part of the API:
     val beanFoo2 = call(beanBar, "getFoo")
     println("beanBar.getFoo returns " + beanFoo2)
     println("beanBar.getFoo.getValue returns " + call(beanFoo2, "getValue"))
-    
+
 This example takes instances of two cases classes and maps them to beans.
 Running it produces the following output:
 

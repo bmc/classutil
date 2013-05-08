@@ -18,7 +18,11 @@
          if(top === self) {
             var url = '../../../index.html';
             var hash = 'org.clapper.classutil.MethodInfo';
-            window.location.href = url + '#' + hash;
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
          }
    	  </script>
     
@@ -85,7 +89,23 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="org.clapper.classutil.MethodInfo#exceptions" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+              <ol><li name="org.clapper.classutil.MethodInfo#descriptor" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="descriptor:String"></a>
+      <a id="descriptor:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">descriptor</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The method's descriptor
+Ex: (ILjava/lang/String;)[I
+</p>
+    </li><li name="org.clapper.classutil.MethodInfo#exceptions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="exceptions:List[String]"></a>
       <a id="exceptions:List[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -98,7 +118,8 @@
       </h4>
       <p class="shortcomment cmt">A list of the checked exceptions (as class names) that the method
 throws, or an empty list if it throws no known checked exceptions.</p>
-    </li><li name="org.clapper.classutil.MethodInfo#modifiers" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.MethodInfo#modifiers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="modifiers:Set[org.clapper.classutil.Modifier.Modifier]"></a>
       <a id="modifiers:Set[Modifier]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -106,11 +127,12 @@ throws, or an empty list if it throws no known checked exceptions.</p>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">modifiers</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="Modifier$.html#Modifier:Modifier" class="extmbr" name="org.clapper.classutil.Modifier.Modifier">Modifier</a>]</span>
+        <span class="name">modifiers</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="Modifier$.html#Modifier=org.clapper.classutil.Modifier.Value" class="extmbr" name="org.clapper.classutil.Modifier.Modifier">Modifier</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">The method's modifiers.</p>
-    </li><li name="org.clapper.classutil.MethodInfo#name" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.MethodInfo#name" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="name:String"></a>
       <a id="name:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -122,7 +144,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <p class="shortcomment cmt">The name of the method.</p>
-    </li><li name="org.clapper.classutil.MethodInfo#signature" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.MethodInfo#signature" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="signature:String"></a>
       <a id="signature:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -139,7 +162,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
 
         <div id="values" class="values members">
               <h3>Concrete Value Members</h3>
-              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -151,7 +175,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -163,7 +188,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
       <a id="##():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -175,7 +201,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:AnyRef):Boolean"></a>
       <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -187,7 +214,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -199,7 +227,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -211,7 +240,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -226,7 +256,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -238,7 +269,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.clapper.classutil.MethodInfo#equals" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="org.clapper.classutil.MethodInfo#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(o:Any):Boolean"></a>
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -250,7 +282,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.clapper.classutil.MethodInfo">MethodInfo</a> → AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -265,7 +298,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -277,7 +311,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="org.clapper.classutil.MethodInfo#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="org.clapper.classutil.MethodInfo#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -289,7 +324,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.clapper.classutil.MethodInfo">MethodInfo</a> → AnyRef → Any</dd></dl></div>
-    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -301,7 +337,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -313,7 +350,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -325,7 +363,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
       <a id="notifyAll():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -337,7 +376,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -349,7 +389,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.clapper.classutil.MethodInfo#toString" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="org.clapper.classutil.MethodInfo#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -363,7 +404,8 @@ throws, or an empty list if it throws no known checked exceptions.</p>
       <p class="shortcomment cmt">A printable version of the method.</p><div class="fullcomment"><div class="comment cmt"><p>A printable version of the method. Currently, the string version is
 the signature.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.clapper.classutil.MethodInfo">MethodInfo</a> → AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -378,7 +420,8 @@ the signature.
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
       <a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -393,7 +436,8 @@ the signature.
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
       <a id="wait(Long):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -426,8 +470,8 @@ the signature.
         </div>
 
         <div id="groupedMembers">
-        <div class="group" name="No Group">
-              <h3>No Group</h3>
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
               
             </div>
         </div>

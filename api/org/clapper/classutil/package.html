@@ -18,7 +18,11 @@
          if(top === self) {
             var url = '../../../index.html';
             var hash = 'org.clapper.classutil.package';
-            window.location.href = url + '#' + hash;
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
          }
    	  </script>
     
@@ -83,7 +87,8 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="org.clapper.classutil.ClassFinder" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+              <ol><li name="org.clapper.classutil.ClassFinder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ClassFinderextendsObject"></a>
       <a id="ClassFinder:ClassFinder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -96,7 +101,8 @@
       </h4>
       <p class="comment cmt">A <code>ClassFinder</code> finds classes in a class path, returning the result in a
 lazy iterator.</p>
-    </li><li name="org.clapper.classutil.ClassInfo" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ClassInfoextendsObject"></a>
       <a id="ClassInfo:ClassInfo"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -108,7 +114,8 @@ lazy iterator.</p>
       </span>
       </h4>
       <p class="comment cmt">Information about a class, as read from a class file.</p>
-    </li><li name="org.clapper.classutil.FieldInfo" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.FieldInfo" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FieldInfoextendsObject"></a>
       <a id="FieldInfo:FieldInfo"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -120,7 +127,8 @@ lazy iterator.</p>
       </span>
       </h4>
       <p class="comment cmt">Information about a field, as read from a class file.</p>
-    </li><li name="org.clapper.classutil.MapToBeanMapper" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.MapToBeanMapper" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="MapToBeanMapperextendsObject"></a>
       <a id="MapToBeanMapper:MapToBeanMapper"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -133,7 +141,8 @@ lazy iterator.</p>
       </h4>
       <p class="comment cmt">Takes a Scala <code>Map</code>, with <code>String</code> keys and object values, and generates
 an object, with fields for each map value.</p>
-    </li><li name="org.clapper.classutil.MethodInfo" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.MethodInfo" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="MethodInfoextendsObject"></a>
       <a id="MethodInfo:MethodInfo"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -152,7 +161,8 @@ an object, with fields for each map value.</p>
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="org.clapper.classutil.ClassFinder" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+              <ol><li name="org.clapper.classutil.ClassFinder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ClassFinder"></a>
       <a id="ClassFinder:ClassFinder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -165,7 +175,8 @@ an object, with fields for each map value.</p>
       </h4>
       <p class="comment cmt">The entrance to the factory floor, providing methods for finding and
 filtering classes.</p>
-    </li><li name="org.clapper.classutil.ClassUtil" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.ClassUtil" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ClassUtil"></a>
       <a id="ClassUtil:ClassUtil"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -177,7 +188,8 @@ filtering classes.</p>
       </span>
       </h4>
       <p class="comment cmt">Some general-purpose class-related utility functions.</p>
-    </li><li name="org.clapper.classutil.MapToBean" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.MapToBean" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MapToBean"></a>
       <a id="MapToBean:MapToBean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -190,7 +202,8 @@ filtering classes.</p>
       </h4>
       <p class="comment cmt">Takes a Scala <code>Map</code>, with <code>String</code> keys and object values, and generates
 a Java Bean object, with fields for each map value.</p>
-    </li><li name="org.clapper.classutil.Modifier" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.Modifier" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Modifier"></a>
       <a id="Modifier:Modifier"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -203,7 +216,8 @@ a Java Bean object, with fields for each map value.</p>
       </h4>
       <p class="comment cmt">An enumerated high-level view of the modifiers that can be attached
 to a method, class or field.</p>
-    </li><li name="org.clapper.classutil.ScalaObjectToBean" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.ScalaObjectToBean" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ScalaObjectToBean"></a>
       <a id="ScalaObjectToBean:ScalaObjectToBean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -233,8 +247,8 @@ to a method, class or field.</p>
         </div>
 
         <div id="groupedMembers">
-        <div class="group" name="No Group">
-              <h3>No Group</h3>
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
               
             </div>
         </div>

@@ -18,7 +18,11 @@
          if(top === self) {
             var url = '../../../index.html';
             var hash = 'org.clapper.classutil.ClassInfo';
-            window.location.href = url + '#' + hash;
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
          }
    	  </script>
     
@@ -85,7 +89,8 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="org.clapper.classutil.ClassInfo#fields" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+              <ol><li name="org.clapper.classutil.ClassInfo#fields" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="fields:Set[org.clapper.classutil.FieldInfo]"></a>
       <a id="fields:Set[FieldInfo]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,7 +102,8 @@
       </span>
       </h4>
       <p class="shortcomment cmt">A set of the fields in the class.</p>
-    </li><li name="org.clapper.classutil.ClassInfo#interfaces" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#interfaces" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="interfaces:List[String]"></a>
       <a id="interfaces:List[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -110,7 +116,8 @@
       </h4>
       <p class="shortcomment cmt">A list of the interfaces, as class names, that the class implements;
 or, an empty list if it implements no interfaces.</p>
-    </li><li name="org.clapper.classutil.ClassInfo#location" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#location" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="location:java.io.File"></a>
       <a id="location:File"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -122,7 +129,8 @@ or, an empty list if it implements no interfaces.</p>
       </span>
       </h4>
       <p class="shortcomment cmt">Where the class was found (directory, jar file, or zip file).</p>
-    </li><li name="org.clapper.classutil.ClassInfo#methods" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#methods" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="methods:Set[org.clapper.classutil.MethodInfo]"></a>
       <a id="methods:Set[MethodInfo]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -134,7 +142,8 @@ or, an empty list if it implements no interfaces.</p>
       </span>
       </h4>
       <p class="shortcomment cmt">A set of the methods in the class.</p>
-    </li><li name="org.clapper.classutil.ClassInfo#modifiers" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#modifiers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="modifiers:Set[org.clapper.classutil.Modifier.Modifier]"></a>
       <a id="modifiers:Set[Modifier]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -142,11 +151,12 @@ or, an empty list if it implements no interfaces.</p>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">modifiers</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="Modifier$.html#Modifier:Modifier" class="extmbr" name="org.clapper.classutil.Modifier.Modifier">Modifier</a>]</span>
+        <span class="name">modifiers</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="Modifier$.html#Modifier=org.clapper.classutil.Modifier.Value" class="extmbr" name="org.clapper.classutil.Modifier.Modifier">Modifier</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">The class's modifiers.</p>
-    </li><li name="org.clapper.classutil.ClassInfo#name" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#name" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="name:String"></a>
       <a id="name:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -158,7 +168,8 @@ or, an empty list if it implements no interfaces.</p>
       </span>
       </h4>
       <p class="shortcomment cmt">The class's fully qualified name.</p>
-    </li><li name="org.clapper.classutil.ClassInfo#signature" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#signature" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="signature:String"></a>
       <a id="signature:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -170,7 +181,8 @@ or, an empty list if it implements no interfaces.</p>
       </span>
       </h4>
       <p class="shortcomment cmt">The class's JVM signature.</p>
-    </li><li name="org.clapper.classutil.ClassInfo#superClassName" visbl="pub" data-isabs="true" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#superClassName" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="superClassName:String"></a>
       <a id="superClassName:String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -187,7 +199,8 @@ or, an empty list if it implements no interfaces.</p>
 
         <div id="values" class="values members">
               <h3>Concrete Value Members</h3>
-              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -199,7 +212,8 @@ or, an empty list if it implements no interfaces.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -211,7 +225,8 @@ or, an empty list if it implements no interfaces.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
       <a id="##():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -223,7 +238,8 @@ or, an empty list if it implements no interfaces.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:AnyRef):Boolean"></a>
       <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -235,7 +251,8 @@ or, an empty list if it implements no interfaces.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -247,7 +264,8 @@ or, an empty list if it implements no interfaces.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -259,7 +277,8 @@ or, an empty list if it implements no interfaces.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -274,7 +293,8 @@ or, an empty list if it implements no interfaces.</p>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -286,7 +306,8 @@ or, an empty list if it implements no interfaces.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -298,7 +319,8 @@ or, an empty list if it implements no interfaces.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -313,7 +335,8 @@ or, an empty list if it implements no interfaces.</p>
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -325,7 +348,8 @@ or, an empty list if it implements no interfaces.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -337,7 +361,8 @@ or, an empty list if it implements no interfaces.</p>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="org.clapper.classutil.ClassInfo#implements" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#implements" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="implements(interface:String):Boolean"></a>
       <a id="implements(String):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -357,7 +382,8 @@ is a higher-order operation.
 </p></div><dl class="paramcmts block"><dt class="param">interface</dt><dd class="cmt"><p>the name of the interface
 </p></dd><dt>returns</dt><dd class="cmt"><p>whether the class implements the interface
 </p></dd></dl></div>
-    </li><li name="org.clapper.classutil.ClassInfo#isAbstract" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#isAbstract" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isAbstract:Boolean"></a>
       <a id="isAbstract:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -371,7 +397,8 @@ is a higher-order operation.
       <p class="shortcomment cmt">Convenience method that determines whether the class is abstract
 This method is just shorthand for:</p><div class="fullcomment"><div class="comment cmt"><p>Convenience method that determines whether the class is abstract
 This method is just shorthand for:</p><pre>modifiers contains Modifier.Abstract</pre></div></div>
-    </li><li name="org.clapper.classutil.ClassInfo#isConcrete" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#isConcrete" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isConcrete:Boolean"></a>
       <a id="isConcrete:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -385,7 +412,8 @@ This method is just shorthand for:</p><pre>modifiers contains Modifier.Abstract<
       <p class="shortcomment cmt">Convenience method to determine whether the class is concrete (i.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience method to determine whether the class is concrete (i.e.,
 isn't abstract and isn't an interface).
 </p></div></div>
-    </li><li name="org.clapper.classutil.ClassInfo#isFinal" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#isFinal" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isFinal:Boolean"></a>
       <a id="isFinal:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -398,7 +426,8 @@ isn't abstract and isn't an interface).
       </h4>
       <p class="shortcomment cmt">Convenience methods that determines whether the class is final.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is final.
 This method is just shorthand for:</p><pre>modifiers contains Modifier.Final</pre></div></div>
-    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -410,7 +439,8 @@ This method is just shorthand for:</p><pre>modifiers contains Modifier.Final</pr
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.clapper.classutil.ClassInfo#isInterface" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#isInterface" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInterface:Boolean"></a>
       <a id="isInterface:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -424,7 +454,8 @@ This method is just shorthand for:</p><pre>modifiers contains Modifier.Final</pr
       <p class="shortcomment cmt">Convenience method that determines whether the class implements an
 interface.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience method that determines whether the class implements an
 interface. This method is just shorthand for:</p><pre>modifiers contains Modifier.Interface</pre></div></div>
-    </li><li name="org.clapper.classutil.ClassInfo#isPrivate" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#isPrivate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isPrivate:Boolean"></a>
       <a id="isPrivate:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -437,7 +468,8 @@ interface. This method is just shorthand for:</p><pre>modifiers contains Modifie
       </h4>
       <p class="shortcomment cmt">Convenience method that determines whether the class is private.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience method that determines whether the class is private.
 This method is just shorthand for:</p><pre>modifiers contains Modifier.Private</pre></div></div>
-    </li><li name="org.clapper.classutil.ClassInfo#isProtected" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#isProtected" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isProtected:Boolean"></a>
       <a id="isProtected:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -450,7 +482,8 @@ This method is just shorthand for:</p><pre>modifiers contains Modifier.Private</
       </h4>
       <p class="shortcomment cmt">Convenience method that determines whether the class is protected.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience method that determines whether the class is protected.
 This method is just shorthand for:</p><pre>modifiers contains Modifier.Protected</pre></div></div>
-    </li><li name="org.clapper.classutil.ClassInfo#isPublic" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#isPublic" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isPublic:Boolean"></a>
       <a id="isPublic:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -463,7 +496,8 @@ This method is just shorthand for:</p><pre>modifiers contains Modifier.Protected
       </h4>
       <p class="shortcomment cmt">Convenience methods that determines whether the class is public.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is public.
 This method is just shorthand for:</p><pre>modifiers contains Modifier.Public</pre></div></div>
-    </li><li name="org.clapper.classutil.ClassInfo#isStatic" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#isStatic" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isStatic:Boolean"></a>
       <a id="isStatic:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -476,7 +510,8 @@ This method is just shorthand for:</p><pre>modifiers contains Modifier.Public</p
       </h4>
       <p class="shortcomment cmt">Convenience methods that determines whether the class is static.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is static.
 This method is just shorthand for:</p><pre>modifiers contains Modifier.Static</pre></div></div>
-    </li><li name="org.clapper.classutil.ClassInfo#isSynchronized" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="org.clapper.classutil.ClassInfo#isSynchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isSynchronized:Boolean"></a>
       <a id="isSynchronized:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -489,7 +524,8 @@ This method is just shorthand for:</p><pre>modifiers contains Modifier.Static</p
       </h4>
       <p class="shortcomment cmt">Convenience methods that determines whether the class is synchronized.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is synchronized.
 This method is just shorthand for:</p><pre>modifiers contains Modifier.Synchronized</pre></div></div>
-    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -501,7 +537,8 @@ This method is just shorthand for:</p><pre>modifiers contains Modifier.Synchroni
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -513,7 +550,8 @@ This method is just shorthand for:</p><pre>modifiers contains Modifier.Synchroni
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
       <a id="notifyAll():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -525,7 +563,8 @@ This method is just shorthand for:</p><pre>modifiers contains Modifier.Synchroni
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -537,7 +576,8 @@ This method is just shorthand for:</p><pre>modifiers contains Modifier.Synchroni
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -549,7 +589,8 @@ This method is just shorthand for:</p><pre>modifiers contains Modifier.Synchroni
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -564,7 +605,8 @@ This method is just shorthand for:</p><pre>modifiers contains Modifier.Synchroni
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
       <a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -579,7 +621,8 @@ This method is just shorthand for:</p><pre>modifiers contains Modifier.Synchroni
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
       <a id="wait(Long):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -612,8 +655,8 @@ This method is just shorthand for:</p><pre>modifiers contains Modifier.Synchroni
         </div>
 
         <div id="groupedMembers">
-        <div class="group" name="No Group">
-              <h3>No Group</h3>
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
               
             </div>
         </div>

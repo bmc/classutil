@@ -18,7 +18,11 @@
          if(top === self) {
             var url = '../../../index.html';
             var hash = 'org.clapper.classutil.Modifier$';
-            window.location.href = url + '#' + hash;
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
          }
    	  </script>
     
@@ -84,7 +88,8 @@ to a method, class or field.
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="org.clapper.classutil.Modifier.Modifier" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+              <ol><li name="org.clapper.classutil.Modifier.Modifier" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Modifier=org.clapper.classutil.Modifier.Value"></a>
       <a id="Modifier:Modifier"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -92,11 +97,12 @@ to a method, class or field.
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Modifier</span><span class="result"> = <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Modifier</span><span class="result"> = <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       
-    </li><li name="scala.Enumeration.Val" visbl="prt" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Enumeration.Val" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ValextendsEnumeration.this.ValuewithSerializable"></a>
       <a id="Val:Val"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -111,7 +117,8 @@ to a method, class or field.
                 <span class="name">@SerialVersionUID</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.Enumeration.Value" visbl="pub" data-isabs="true" fullComment="yes" group="No Group">
+    </li><li name="scala.Enumeration.Value" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ValueextendsOrdered[Enumeration.this.Value]withSerializable"></a>
       <a id="Value:Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -126,7 +133,8 @@ to a method, class or field.
                 <span class="name">@SerialVersionUID</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.Enumeration.ValueSet" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Enumeration.ValueSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ValueSetextendsAbstractSet[Enumeration.this.Value]withSortedSet[Enumeration.this.Value]withSortedSetLike[Enumeration.this.Value,Enumeration.this.ValueSet]withSerializable"></a>
       <a id="ValueSet:ValueSet"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -145,7 +153,8 @@ to a method, class or field.
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -157,7 +166,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -169,7 +179,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
       <a id="##():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -181,7 +192,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:AnyRef):Boolean"></a>
       <a id="==(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -193,7 +205,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -205,7 +218,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.clapper.classutil.Modifier#Abstract" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.Modifier#Abstract" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Abstract:org.clapper.classutil.Modifier.Value"></a>
       <a id="Abstract:Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -213,11 +227,12 @@ to a method, class or field.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Abstract</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Abstract</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       
-    </li><li name="org.clapper.classutil.Modifier#Final" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.Modifier#Final" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Final:org.clapper.classutil.Modifier.Value"></a>
       <a id="Final:Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -225,11 +240,12 @@ to a method, class or field.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Final</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Final</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       
-    </li><li name="org.clapper.classutil.Modifier#Interface" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.Modifier#Interface" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Interface:org.clapper.classutil.Modifier.Value"></a>
       <a id="Interface:Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -237,11 +253,12 @@ to a method, class or field.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Interface</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Interface</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       
-    </li><li name="org.clapper.classutil.Modifier#Native" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.Modifier#Native" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Native:org.clapper.classutil.Modifier.Value"></a>
       <a id="Native:Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -249,11 +266,12 @@ to a method, class or field.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Native</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Native</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       
-    </li><li name="org.clapper.classutil.Modifier#Private" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.Modifier#Private" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Private:org.clapper.classutil.Modifier.Value"></a>
       <a id="Private:Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -261,11 +279,12 @@ to a method, class or field.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Private</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Private</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       
-    </li><li name="org.clapper.classutil.Modifier#Protected" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.Modifier#Protected" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Protected:org.clapper.classutil.Modifier.Value"></a>
       <a id="Protected:Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -273,11 +292,12 @@ to a method, class or field.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Protected</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Protected</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       
-    </li><li name="org.clapper.classutil.Modifier#Public" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.Modifier#Public" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Public:org.clapper.classutil.Modifier.Value"></a>
       <a id="Public:Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -285,11 +305,12 @@ to a method, class or field.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Public</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Public</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       
-    </li><li name="org.clapper.classutil.Modifier#Static" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.Modifier#Static" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Static:org.clapper.classutil.Modifier.Value"></a>
       <a id="Static:Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -297,11 +318,12 @@ to a method, class or field.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Static</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Static</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       
-    </li><li name="org.clapper.classutil.Modifier#Strict" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.Modifier#Strict" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Strict:org.clapper.classutil.Modifier.Value"></a>
       <a id="Strict:Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -309,11 +331,12 @@ to a method, class or field.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Strict</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Strict</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       
-    </li><li name="org.clapper.classutil.Modifier#Synchronized" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.Modifier#Synchronized" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Synchronized:org.clapper.classutil.Modifier.Value"></a>
       <a id="Synchronized:Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -321,11 +344,12 @@ to a method, class or field.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Synchronized</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Synchronized</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       
-    </li><li name="org.clapper.classutil.Modifier#Transient" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.Modifier#Transient" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Transient:org.clapper.classutil.Modifier.Value"></a>
       <a id="Transient:Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -333,11 +357,12 @@ to a method, class or field.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Transient</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Transient</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       
-    </li><li name="scala.Enumeration#Value" visbl="prt" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Enumeration#Value" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Value(i:Int,name:String):Enumeration.this.Value"></a>
       <a id="Value(Int,String):Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -345,11 +370,12 @@ to a method, class or field.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">Value</span><span class="params">(<span name="i">i: <span class="extype" name="scala.Int">Int</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Value</span><span class="params">(<span name="i">i: <span class="extype" name="scala.Int">Int</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Enumeration</dd></dl></div>
-    </li><li name="scala.Enumeration#Value" visbl="prt" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Enumeration#Value" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Value(name:String):Enumeration.this.Value"></a>
       <a id="Value(String):Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -357,11 +383,12 @@ to a method, class or field.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">Value</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Value</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Enumeration</dd></dl></div>
-    </li><li name="scala.Enumeration#Value" visbl="prt" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Enumeration#Value" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Value(i:Int):Enumeration.this.Value"></a>
       <a id="Value(Int):Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -369,11 +396,12 @@ to a method, class or field.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">Value</span><span class="params">(<span name="i">i: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Value</span><span class="params">(<span name="i">i: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Enumeration</dd></dl></div>
-    </li><li name="scala.Enumeration#Value" visbl="prt" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Enumeration#Value" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Value:Enumeration.this.Value"></a>
       <a id="Value:Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -381,11 +409,12 @@ to a method, class or field.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">Value</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Value</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Enumeration</dd></dl></div>
-    </li><li name="org.clapper.classutil.Modifier#Volatile" visbl="pub" data-isabs="false" fullComment="no" group="No Group">
+    </li><li name="org.clapper.classutil.Modifier#Volatile" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Volatile:org.clapper.classutil.Modifier.Value"></a>
       <a id="Volatile:Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -393,11 +422,12 @@ to a method, class or field.
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">Volatile</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">Volatile</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       
-    </li><li name="scala.Enumeration#apply" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Enumeration#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(x:&lt;?&gt;):Enumeration.this.Value"></a>
       <a id="apply(Int):Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -405,11 +435,12 @@ to a method, class or field.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">apply</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Enumeration</dd></dl></div>
-    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -421,7 +452,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -436,7 +468,8 @@ to a method, class or field.
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -448,7 +481,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
       <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -460,7 +494,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -475,7 +510,8 @@ to a method, class or field.
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -487,7 +523,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -499,7 +536,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -511,7 +549,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.Enumeration#maxId" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Enumeration#maxId" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="maxId:Int"></a>
       <a id="maxId:Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -523,7 +562,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Enumeration</dd></dl></div>
-    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -535,7 +575,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Enumeration#nextId" visbl="prt" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Enumeration#nextId" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="nextId:Int"></a>
       <a id="nextId:Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -547,7 +588,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Enumeration</dd></dl></div>
-    </li><li name="scala.Enumeration#nextName" visbl="prt" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Enumeration#nextName" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="nextName:Iterator[String]"></a>
       <a id="nextName:Iterator[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -559,7 +601,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Enumeration</dd></dl></div>
-    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -571,7 +614,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
       <a id="notifyAll():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -583,7 +627,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Enumeration#readResolve" visbl="prt" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Enumeration#readResolve" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="readResolve():AnyRef"></a>
       <a id="readResolve():AnyRef"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -595,7 +640,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Enumeration</dd></dl></div>
-    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -607,7 +653,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Enumeration#toString" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Enumeration#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -619,7 +666,8 @@ to a method, class or field.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Enumeration → AnyRef → Any</dd></dl></div>
-    </li><li name="scala.Enumeration#values" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Enumeration#values" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="values:Enumeration.this.ValueSet"></a>
       <a id="values:ValueSet"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -627,11 +675,12 @@ to a method, class or field.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">values</span><span class="result">: <a href="#ValueSet:ValueSet" class="extmbr" name="org.clapper.classutil.Modifier.ValueSet">ValueSet</a></span>
+        <span class="name">values</span><span class="result">: <a href="#ValueSetextendsAbstractSet[Enumeration.this.Value]withSortedSet[Enumeration.this.Value]withSortedSetLike[Enumeration.this.Value,Enumeration.this.ValueSet]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.ValueSet">ValueSet</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Enumeration</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -646,7 +695,8 @@ to a method, class or field.
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
       <a id="wait(Long,Int):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -661,7 +711,8 @@ to a method, class or field.
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
       <a id="wait(Long):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -676,7 +727,8 @@ to a method, class or field.
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="scala.Enumeration#withName" visbl="pub" data-isabs="false" fullComment="yes" group="No Group">
+    </li><li name="scala.Enumeration#withName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withName(s:&lt;?&gt;):Enumeration.this.Value"></a>
       <a id="withName(String):Value"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -684,7 +736,7 @@ to a method, class or field.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">withName</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#Value:Value" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
+        <span class="name">withName</span><span class="params">(<span name="s">s: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="org.clapper.classutil.Modifier.Value">Value</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Enumeration</dd></dl></div>
@@ -712,8 +764,8 @@ to a method, class or field.
         </div>
 
         <div id="groupedMembers">
-        <div class="group" name="No Group">
-              <h3>No Group</h3>
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
               
             </div>
         </div>
