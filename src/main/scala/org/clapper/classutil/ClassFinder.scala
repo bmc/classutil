@@ -84,7 +84,8 @@ trait MethodInfo {
     */
   val name: String
 
-  /** The method's JVM signature.
+  /** The method's JVM signature (only available with generics).
+   *  Ex: java.util.List.iterator ()Ljava/util/Iterator<TE;>;
     */
   val signature: String
 
@@ -102,15 +103,15 @@ trait MethodInfo {
     */
   val modifiers: Set[Modifier.Modifier]
 
-  /** A printable version of the method. Currently, the string version is
-    * the signature.
+  /** A printable version of the method. Currently, the string is
+    * the method name plus descriptor.
     */
-  override def toString = signature
+  override def toString = name + descriptor
 
-  override def hashCode = signature.hashCode
+  override def hashCode = toString.hashCode
 
   override def equals(o: Any) = o match {
-    case m: MethodInfo => m.signature == signature
+    case m: MethodInfo => m.toString == toString
     case _             => false
   }
 }
@@ -122,7 +123,7 @@ trait FieldInfo {
     */
   val name: String
 
-  /** The field's JVM signature.
+  /** The field's JVM signature (only available with generics).
     */
   val signature: String
 
@@ -133,12 +134,12 @@ trait FieldInfo {
   /** A printable version of the field. Currently, the string version is
     * the signature.
     */
-  override def toString = signature
+  override def toString = name
 
-  override def hashCode = signature.hashCode
+  override def hashCode = name.hashCode
 
   override def equals(o: Any) = o match {
-    case m: FieldInfo => m.signature == signature
+    case m: FieldInfo => m.name == name
     case _            => false
   }
 }
