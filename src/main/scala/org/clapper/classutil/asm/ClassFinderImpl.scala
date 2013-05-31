@@ -161,7 +161,7 @@ extends EmptyVisitor with ASMBitmapMapper {
                            signature: String,
                            exceptions: Array[String]): MethodVisitor = {
     assert(currentClass != None)
-    val sig = if (signature != null) signature else name
+    val sig = if (signature != null) signature else ""
     val excList = if (exceptions == null) Nil else exceptions.toList
     currentClass.get.methodSet += new MethodInfoImpl(name,
                                                      sig,
@@ -177,7 +177,7 @@ extends EmptyVisitor with ASMBitmapMapper {
                           signature: String,
                           value: java.lang.Object): FieldVisitor = {
     assert(currentClass != None)
-    val sig = if (signature != null) signature else name
+    val sig = if (signature != null) signature else ""
     currentClass.get.fieldSet += new FieldInfoImpl(name, sig, access)
     null
   }

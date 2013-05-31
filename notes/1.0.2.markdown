@@ -1,2 +1,2 @@
 `ClassFinder` now records method descriptors, not just method signatures.
-Change is courtesy [John Crussell](http://github.com/jcrussell).
+Change is courtesy [Jon Crussell](http://github.com/jcrussell).
