@@ -73,6 +73,7 @@ object Modifier extends Enumeration {
   val Static       = Value("static")
   val Strict       = Value("strict")
   val Synchronized = Value("synchronized")
+  val Synthetic    = Value("synthetic")
   val Transient    = Value("transient")
   val Volatile     = Value("volatile")
 }

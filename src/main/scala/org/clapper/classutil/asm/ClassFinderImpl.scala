@@ -67,6 +67,7 @@ private[classutil] object ASMBitmapMapper {
     Opcodes.ACC_STATIC       -> Modifier.Static,
     Opcodes.ACC_STRICT       -> Modifier.Strict,
     Opcodes.ACC_SYNCHRONIZED -> Modifier.Synchronized,
+    Opcodes.ACC_SYNTHETIC    -> Modifier.Synthetic,
     Opcodes.ACC_TRANSIENT    -> Modifier.Transient,
     Opcodes.ACC_VOLATILE     -> Modifier.Volatile
   )
