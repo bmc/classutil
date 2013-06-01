@@ -158,6 +158,14 @@ private[classutil] trait BaseInfoTrait {
     */
   def isSynchronized = modifiers contains Modifier.Synchronized
 
+  /** Convenience methods that determines whether the class is synthetic.
+    * This method is just shorthand for:
+    * {{{
+    * modifiers contains Modifier.Synthetic
+    * }}}
+    */
+  def isSynthetic = modifiers contains Modifier.Synthetic
+
   /** Convenience method to determine whether the class is concrete (i.e.,
     * isn't abstract and isn't an interface).
     */
