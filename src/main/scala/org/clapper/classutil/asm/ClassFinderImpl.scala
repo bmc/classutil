@@ -97,10 +97,6 @@ private[classutil] class ClassInfoImpl(val name: String,
                                        val access: Int,
                                        val location: File)
 extends ClassInfo with ASMBitmapMapper {
-  import java.lang.reflect.{Modifier => JModifier}
-
-  override def toString = name
-
   def methods = Set.empty[MethodInfo] ++ methodSet
   def fields  = Set.empty[FieldInfo] ++ fieldSet
 
@@ -120,16 +116,10 @@ extends MethodInfo with ASMBitmapMapper {
 
 private[classutil] class FieldInfoImpl(val name: String,
                                        val signature: String,
+                                       val descriptor: String,
+                                       val value: Option[java.lang.Object],
                                        val access: Int)
 extends FieldInfo with ASMBitmapMapper {
-  override def toString = signature
-  override def hashCode = signature.hashCode
-
-  override def equals(o: Any) = o match {
-    case m: FieldInfo => m.signature == signature
-    case _            => false
-  }
-
   val modifiers = mapModifiers(access, ASMBitmapMapper.AccessMap)
 }
 
@@ -173,12 +163,17 @@ extends EmptyVisitor with ASMBitmapMapper {
 
   override def visitField(access: Int,
                           name: String,
-                          description: String,
+                          descriptor: String,
                           signature: String,
                           value: java.lang.Object): FieldVisitor = {
     assert(currentClass != None)
     val sig = if (signature != null) signature else ""
-    currentClass.get.fieldSet += new FieldInfoImpl(name, sig, access)
+    val initialVal = Option(value)
+    currentClass.get.fieldSet += new FieldInfoImpl(name,
+                                                   sig,
+                                                   descriptor,
+                                                   initialVal,
+                                                   access)
     null
   }
 
