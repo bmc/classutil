@@ -67,6 +67,7 @@ private[classutil] object ASMBitmapMapper {
     Opcodes.ACC_STATIC       -> Modifier.Static,
     Opcodes.ACC_STRICT       -> Modifier.Strict,
     Opcodes.ACC_SYNCHRONIZED -> Modifier.Synchronized,
+    Opcodes.ACC_SYNTHETIC    -> Modifier.Synthetic,
     Opcodes.ACC_TRANSIENT    -> Modifier.Transient,
     Opcodes.ACC_VOLATILE     -> Modifier.Volatile
   )
@@ -97,10 +98,6 @@ private[classutil] class ClassInfoImpl(val name: String,
                                        val access: Int,
                                        val location: File)
 extends ClassInfo with ASMBitmapMapper {
-  import java.lang.reflect.{Modifier => JModifier}
-
-  override def toString = name
-
   def methods = Set.empty[MethodInfo] ++ methodSet
   def fields  = Set.empty[FieldInfo] ++ fieldSet
 
@@ -120,16 +117,10 @@ extends MethodInfo with ASMBitmapMapper {
 
 private[classutil] class FieldInfoImpl(val name: String,
                                        val signature: String,
+                                       val descriptor: String,
+                                       val value: Option[java.lang.Object],
                                        val access: Int)
 extends FieldInfo with ASMBitmapMapper {
-  override def toString = signature
-  override def hashCode = signature.hashCode
-
-  override def equals(o: Any) = o match {
-    case m: FieldInfo => m.signature == signature
-    case _            => false
-  }
-
   val modifiers = mapModifiers(access, ASMBitmapMapper.AccessMap)
 }
 
@@ -145,10 +136,11 @@ extends EmptyVisitor with ASMBitmapMapper {
                      signature: String,
                      superName: String,
                      interfaces: Array[String]) {
+    val sig = if (signature != null) signature else ""
     val classInfo = new ClassInfoImpl(mapClassName(name),
                                       mapClassName(superName),
                                       interfaces.toList.map(mapClassName(_)),
-                                      signature,
+                                      sig,
                                       access,
                                       location)
     classes += classInfo
@@ -173,12 +165,17 @@ extends EmptyVisitor with ASMBitmapMapper {
 
   override def visitField(access: Int,
                           name: String,
-                          description: String,
+                          descriptor: String,
                           signature: String,
                           value: java.lang.Object): FieldVisitor = {
     assert(currentClass != None)
     val sig = if (signature != null) signature else ""
-    currentClass.get.fieldSet += new FieldInfoImpl(name, sig, access)
+    val initialVal = Option(value)
+    currentClass.get.fieldSet += new FieldInfoImpl(name,
+                                                   sig,
+                                                   descriptor,
+                                                   initialVal,
+                                                   access)
     null
   }
 

@@ -73,112 +73,26 @@ object Modifier extends Enumeration {
   val Static       = Value("static")
   val Strict       = Value("strict")
   val Synchronized = Value("synchronized")
+  val Synthetic    = Value("synthetic")
   val Transient    = Value("transient")
   val Volatile     = Value("volatile")
 }
 
-/** Information about a method, as read from a class file.
-  */
-trait MethodInfo {
-  /** The name of the method.
+/** Base trait for method, field and class info.
+ */
+private[classutil] trait BaseInfoTrait {
+  /** The name of the entity.
     */
   val name: String
 
-  /** The method's JVM signature (only available with generics).
-   *  Ex: java.util.List.iterator ()Ljava/util/Iterator<TE;>;
-    */
-  val signature: String
-
-  /** The method's descriptor
-    * Ex: (ILjava/lang/String;)[I
-    */
-  val descriptor: String
-
-  /** A list of the checked exceptions (as class names) that the method
-    * throws, or an empty list if it throws no known checked exceptions.
-    */
-  val exceptions: List[String]
-
-  /** The method's modifiers.
-    */
-  val modifiers: Set[Modifier.Modifier]
-
-  /** A printable version of the method. Currently, the string is
-    * the method name plus descriptor.
-    */
-  override def toString = name + descriptor
-
-  override def hashCode = toString.hashCode
-
-  override def equals(o: Any) = o match {
-    case m: MethodInfo => m.toString == toString
-    case _             => false
-  }
-}
-
-/** Information about a field, as read from a class file.
-  */
-trait FieldInfo {
-  /** The field's name.
-    */
-  val name: String
-
-  /** The field's JVM signature (only available with generics).
-    */
-  val signature: String
-
-  /** The field's modifiers.
+  /** The entity's modifiers.
     */
   val modifiers: Set[Modifier.Modifier]
 
   /** A printable version of the field. Currently, the string version is
-    * the signature.
+    * the entity name.
     */
   override def toString = name
-
-  override def hashCode = name.hashCode
-
-  override def equals(o: Any) = o match {
-    case m: FieldInfo => m.name == name
-    case _            => false
-  }
-}
-
-/** Information about a class, as read from a class file.
-  */
-trait ClassInfo {
-  /** The class's fully qualified name.
-    */
-  def name: String
-
-  /** The parent class's fully qualified name.
-    */
-  def superClassName: String
-
-  /** A list of the interfaces, as class names, that the class implements;
-    * or, an empty list if it implements no interfaces.
-    */
-  def interfaces: List[String]
-
-  /** The class's JVM signature.
-    */
-  def signature: String
-
-  /** The class's modifiers.
-    */
-  def modifiers: Set[Modifier.Modifier]
-
-  /** Where the class was found (directory, jar file, or zip file).
-    */
-  def location: File
-
-  /** A set of the methods in the class.
-    */
-  def methods: Set[MethodInfo]
-
-  /** A set of the fields in the class.
-    */
-  def fields: Set[FieldInfo]
 
   /** Convenience method that determines whether the class implements an
     * interface. This method is just shorthand for:
@@ -244,11 +158,107 @@ trait ClassInfo {
     */
   def isSynchronized = modifiers contains Modifier.Synchronized
 
+  /** Convenience methods that determines whether the class is synthetic.
+    * This method is just shorthand for:
+    * {{{
+    * modifiers contains Modifier.Synthetic
+    * }}}
+    */
+  def isSynthetic = modifiers contains Modifier.Synthetic
+
   /** Convenience method to determine whether the class is concrete (i.e.,
     * isn't abstract and isn't an interface).
     */
   def isConcrete = ! ((modifiers contains Modifier.Abstract) ||
                       (modifiers contains Modifier.Interface))
+
+}
+
+/** Information about a method, as read from a class file.
+  */
+trait MethodInfo extends BaseInfoTrait {
+  /** The method's JVM signature (only available with generics).
+   *  Ex: java.util.List.iterator ()Ljava/util/Iterator<TE;>;
+    */
+  val signature: String
+
+  /** The method's descriptor which describes it's arg types
+   *  and return type.
+    * Ex: (ILjava/lang/String;)[I
+    */
+  val descriptor: String
+
+  /** A list of the checked exceptions (as class names) that the method
+    * throws, or an empty list if it throws no known checked exceptions.
+    */
+  val exceptions: List[String]
+
+  /** A printable version of the method. Currently, the string is
+    * the method name plus descriptor.
+    */
+  override def toString = name + descriptor
+
+  override def hashCode = toString.hashCode
+
+  override def equals(o: Any) = o match {
+    case m: MethodInfo => m.toString == toString
+    case _             => false
+  }
+}
+
+/** Information about a field, as read from a class file.
+  */
+trait FieldInfo extends BaseInfoTrait {
+  /** The field's JVM signature (only available with generics).
+    */
+  val signature: String
+
+  /** The field's descriptor which describes it's type
+    * Ex: Ljava/lang/String;
+    */
+  val descriptor: String
+
+  /** The field's default value, only available when the field
+    * is a static field that is a primitive or a String type.
+    */
+  val value: Option[java.lang.Object]
+
+  override def hashCode = name.hashCode
+
+  override def equals(o: Any) = o match {
+    case m: FieldInfo => m.name == name
+    case _            => false
+  }
+}
+
+/** Information about a class, as read from a class file.
+  */
+trait ClassInfo extends BaseInfoTrait {
+  /** The parent class's fully qualified name.
+    */
+  def superClassName: String
+
+  /** A list of the interfaces, as class names, that the class implements;
+    * or, an empty list if it implements no interfaces.
+    */
+  def interfaces: List[String]
+
+  /** The class's JVM signature.
+    */
+  def signature: String
+
+  /** Where the class was found (directory, jar file, or zip file).
+    */
+  def location: File
+
+  /** A set of the methods in the class.
+    */
+  def methods: Set[MethodInfo]
+
+  /** A set of the fields in the class.
+    */
+  def fields: Set[FieldInfo]
+
   /** Convenience method to determine whether this class directly
     * implements a specific interface. Since a `ClassInfo` object contains
     * information about a single class, this method cannot determine
@@ -353,7 +363,7 @@ class ClassFinder(path: Seq[File]) {
     import scala.collection.JavaConversions._
 
     val zipFileName = file.getPath
-    val classInfoIterators = 
+    val classInfoIterators =
       zipFile.entries.
               filter((e: ZipEntry) => isClass(e)).
               map((e: ZipEntry) => classData(zipFile.getInputStream(e), file))
@@ -390,7 +400,7 @@ class ClassFinder(path: Seq[File]) {
     generateFromIterators(iterators)
   }
 
-  private def classData(is: InputStream, 
+  private def classData(is: InputStream,
                         location: File): Iterator[ClassInfo] = {
     import org.clapper.classutil.asm.ClassFile
 
@@ -485,7 +495,7 @@ object ClassFinder {
     * @param ancestor the name of the class for which to find descendent
     *                 concrete subclasses
     * @param classes  the iterator of `ClassInfo` objects to search
-    * 
+    *
     * @return an iterator of `ClassInfo` objects that are concrete subclasses
     *         of `ancestor`. The iterator will be empty if no matching classes
     *         could be found.
@@ -509,7 +519,7 @@ object ClassFinder {
     * @param ancestor the name of the class for which to find descendent
     *                 concrete subclasses
     * @param classes  the iterator of `ClassInfo` objects to search
-    * 
+    *
     * @return an iterator of `ClassInfo` objects that are concrete subclasses
     *         of `ancestor`. The iterator will be empty if no matching classes
     *         could be found.
@@ -519,7 +529,7 @@ object ClassFinder {
     // Convert the set of classes to search into a map of ClassInfo objects
     // indexed by class name.
 
-    @tailrec def classMatches(ancestorClassInfo: ClassInfo, 
+    @tailrec def classMatches(ancestorClassInfo: ClassInfo,
                               classToCheck: ClassInfo): Boolean = {
       if (classToCheck.name == ancestorClassInfo.name)
         true
@@ -532,14 +542,14 @@ object ClassFinder {
           case Some(classInfo) => classMatches(ancestorClassInfo,
                                                classInfo)
         }
-      }            
+      }
     }
 
     // Find the ancestor class
     classes.get(ancestor) match {
       case None     =>
         Iterator.empty
-      case Some(ci) => 
+      case Some(ci) =>
         classes.values.toIterator.
         filter(_.isConcrete).
         filter(classMatches(ci, _))
