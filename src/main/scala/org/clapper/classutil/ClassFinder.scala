@@ -363,7 +363,7 @@ class ClassFinder(path: Seq[File]) {
     import scala.collection.JavaConversions._
 
     val zipFileName = file.getPath
-    val classInfoIterators = 
+    val classInfoIterators =
       zipFile.entries.
               filter((e: ZipEntry) => isClass(e)).
               map((e: ZipEntry) => classData(zipFile.getInputStream(e), file))
@@ -400,7 +400,7 @@ class ClassFinder(path: Seq[File]) {
     generateFromIterators(iterators)
   }
 
-  private def classData(is: InputStream, 
+  private def classData(is: InputStream,
                         location: File): Iterator[ClassInfo] = {
     import org.clapper.classutil.asm.ClassFile
 
@@ -495,7 +495,7 @@ object ClassFinder {
     * @param ancestor the name of the class for which to find descendent
     *                 concrete subclasses
     * @param classes  the iterator of `ClassInfo` objects to search
-    * 
+    *
     * @return an iterator of `ClassInfo` objects that are concrete subclasses
     *         of `ancestor`. The iterator will be empty if no matching classes
     *         could be found.
@@ -519,7 +519,7 @@ object ClassFinder {
     * @param ancestor the name of the class for which to find descendent
     *                 concrete subclasses
     * @param classes  the iterator of `ClassInfo` objects to search
-    * 
+    *
     * @return an iterator of `ClassInfo` objects that are concrete subclasses
     *         of `ancestor`. The iterator will be empty if no matching classes
     *         could be found.
@@ -529,7 +529,7 @@ object ClassFinder {
     // Convert the set of classes to search into a map of ClassInfo objects
     // indexed by class name.
 
-    @tailrec def classMatches(ancestorClassInfo: ClassInfo, 
+    @tailrec def classMatches(ancestorClassInfo: ClassInfo,
                               classToCheck: ClassInfo): Boolean = {
       if (classToCheck.name == ancestorClassInfo.name)
         true
@@ -542,14 +542,14 @@ object ClassFinder {
           case Some(classInfo) => classMatches(ancestorClassInfo,
                                                classInfo)
         }
-      }            
+      }
     }
 
     // Find the ancestor class
     classes.get(ancestor) match {
       case None     =>
         Iterator.empty
-      case Some(ci) => 
+      case Some(ci) =>
         classes.values.toIterator.
         filter(_.isConcrete).
         filter(classMatches(ci, _))
