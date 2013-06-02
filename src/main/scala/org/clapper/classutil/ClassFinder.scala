@@ -80,7 +80,7 @@ object Modifier extends Enumeration {
 
 /** Base trait for method, field and class info.
  */
-private[classutil] trait BaseInfoTrait {
+private[classutil] trait BaseInfo {
   /** The name of the entity.
     */
   val name: String
@@ -176,7 +176,7 @@ private[classutil] trait BaseInfoTrait {
 
 /** Information about a method, as read from a class file.
   */
-trait MethodInfo extends BaseInfoTrait {
+trait MethodInfo extends BaseInfo {
   /** The method's JVM signature (only available with generics).
    *  Ex: java.util.List.iterator ()Ljava/util/Iterator<TE;>;
     */
@@ -208,7 +208,7 @@ trait MethodInfo extends BaseInfoTrait {
 
 /** Information about a field, as read from a class file.
   */
-trait FieldInfo extends BaseInfoTrait {
+trait FieldInfo extends BaseInfo {
   /** The field's JVM signature (only available with generics).
     */
   val signature: String
@@ -233,7 +233,7 @@ trait FieldInfo extends BaseInfoTrait {
 
 /** Information about a class, as read from a class file.
   */
-trait ClassInfo extends BaseInfoTrait {
+trait ClassInfo extends BaseInfo {
   /** The parent class's fully qualified name.
     */
   def superClassName: String
