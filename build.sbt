@@ -59,9 +59,9 @@ libraryDependencies <<= (scalaVersion, libraryDependencies) { (sv, deps) =>
 // Other dependendencies
 
 libraryDependencies ++= Seq(
-    "asm" % "asm" % "3.3",
-    "asm" % "asm-commons" % "3.3",
-    "asm" % "asm-util" % "3.3",
+    "org.ow2.asm" % "asm" % "4.2",
+    "org.ow2.asm" % "asm-commons" % "4.2",
+    "org.ow2.asm" % "asm-util" % "4.2",
     "org.clapper" % "grizzled-scala_2.10" % "1.1.2",
     "org.clapper" % "grizzled-slf4j_2.10" % "1.0.1"
 )

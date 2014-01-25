@@ -44,13 +44,10 @@ import org.clapper.classutil._
 import scala.collection.mutable.{Set => MutableSet}
 import scala.collection.mutable.{HashMap, HashSet}
 
-import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.commons.EmptyVisitor;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.Opcodes;
+import org.objectweb.asm._
 
 import java.io.{File, InputStream, IOException}
+import scala.Some
 
 
 private[classutil] object ASMBitmapMapper {
@@ -194,4 +191,95 @@ private[classutil] object ClassFile {
     cr.accept(visitor, ASMAcceptCriteria)
     visitor.classes.toIterator
   }
+}
+
+private[classutil] class EmptyVisitor(apiVersion: Int) extends org.objectweb.asm.ClassVisitor(apiVersion) {
+
+  def this() = this(Opcodes.ASM4)
+
+  val annotationVisitor = new AnnotationVisitor(apiVersion) {
+    override def visitAnnotation(name: String, desc: String) = this
+
+    override def visitArray(name: String) = this
+
+    override def visit(name: String, value: scala.Any): Unit = {}
+
+    override def visitEnum(name: String, desc: String, value: String): Unit = {}
+
+    override def visitEnd(): Unit = {}
+  }
+
+  override def visit(version: Int, access: Int, name: String, signature: String, superName: String, interfaces: Array[String]): Unit = {}
+
+  override def visitSource(source: String, debug: String): Unit = {}
+
+  override def visitOuterClass(owner: String, name: String, desc: String): Unit = {}
+
+  override def visitAnnotation(desc: String, visible: Boolean): AnnotationVisitor = annotationVisitor
+
+  override def visitAttribute(attr: Attribute): Unit = {}
+
+  override def visitInnerClass(name: String, outerName: String, innerName: String, accesss: Int): Unit = {}
+
+  override def visitField(access: Int, name: String, desc: String, signature: String, value: Object): FieldVisitor =
+    new FieldVisitor(apiVersion) {
+      override def visitAnnotation(p1: String, p2: Boolean): AnnotationVisitor = annotationVisitor
+
+      override def visitAttribute(p1: Attribute): Unit = {}
+
+      override def visitEnd(): Unit = {}
+    }
+
+  override def visitMethod(access: Int, name: String, desc: String, signature: String, exceptions: Array[String]): MethodVisitor =
+    new MethodVisitor(apiVersion) {
+      override def visitAnnotationDefault(): AnnotationVisitor = annotationVisitor
+
+      override def visitAnnotation(p1: String, p2: Boolean): AnnotationVisitor = annotationVisitor
+
+      override def visitParameterAnnotation(p1: Int, p2: String, p3: Boolean): AnnotationVisitor = annotationVisitor
+
+      override def visitAttribute(p1: Attribute): Unit = {}
+
+      override def visitCode(): Unit = {}
+
+      override def visitFrame(p1: Int, p2: Int, p3: Array[AnyRef], p4: Int, p5: Array[AnyRef]): Unit = {}
+
+      override def visitInsn(p1: Int): Unit = {}
+
+      override def visitIntInsn(p1: Int, p2: Int): Unit = {}
+
+      override def visitVarInsn(p1: Int, p2: Int): Unit = {}
+
+      override def visitTypeInsn(p1: Int, p2: String): Unit = {}
+
+      override def visitFieldInsn(p1: Int, p2: String, p3: String, p4: String): Unit = {}
+
+      override def visitMethodInsn(p1: Int, p2: String, p3: String, p4: String): Unit = {}
+
+      override def visitJumpInsn(p1: Int, p2: Label): Unit = {}
+
+      override def visitLabel(p1: Label): Unit = {}
+
+      override def visitLdcInsn(p1: scala.Any): Unit = {}
+
+      override def visitIincInsn(p1: Int, p2: Int): Unit = {}
+
+      def visitTableSwitchInsn(p1: Int, p2: Int, p3: Label, p4: Array[Label]): Unit = {}
+
+      override def visitLookupSwitchInsn(p1: Label, p2: Array[Int], p3: Array[Label]): Unit = {}
+
+      override def visitMultiANewArrayInsn(p1: String, p2: Int): Unit = {}
+
+      override def visitTryCatchBlock(p1: Label, p2: Label, p3: Label, p4: String): Unit = {}
+
+      override def visitLocalVariable(p1: String, p2: String, p3: String, p4: Label, p5: Label, p6: Int): Unit = {}
+
+      override def visitLineNumber(p1: Int, p2: Label): Unit = {}
+
+      override def visitMaxs(p1: Int, p2: Int): Unit = {}
+
+      override def visitEnd(): Unit = {}
+    }
+
+  override def visitEnd(): Unit = {}
 }
