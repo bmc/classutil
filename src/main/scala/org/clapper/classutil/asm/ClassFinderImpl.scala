@@ -44,13 +44,10 @@ import org.clapper.classutil._
 import scala.collection.mutable.{Set => MutableSet}
 import scala.collection.mutable.{HashMap, HashSet}
 
-import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.commons.EmptyVisitor;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.Opcodes;
+import org.objectweb.asm._
 
 import java.io.{File, InputStream, IOException}
+import scala.Some
 
 
 private[classutil] object ASMBitmapMapper {
@@ -195,3 +192,4 @@ private[classutil] object ClassFile {
     visitor.classes.toIterator
   }
 }
+
