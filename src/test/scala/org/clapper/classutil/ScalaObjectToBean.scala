@@ -64,20 +64,20 @@ class ScalaObjectToBeanTest extends FunSuite {
 
     for ((name, cls, value) <- expectedGetters) {
       val methods = bean.getClass.getMethods.filter(_.getName == name)
-      expectResult(1, "Should be 1 method named \"" + name + "\"") {
+      assertResult(1, "Should be 1 method named \"" + name + "\"") {
         methods.length
       }
 
       val method = methods(0)
-      expectResult(true, "Method " + name + "() has appropriate type.") {
+      assertResult(true, "Method " + name + "() has appropriate type.") {
         cls.isAssignableFrom(method.getReturnType)
       }
 
-      expectResult(value, "Method " + name + "() returns " + value.toString) {
+      assertResult(value, "Method " + name + "() returns " + value.toString) {
         method.invoke(bean)
       }
 
-      expectResult(false, "Method should not return a proxy") {
+      assertResult(false, "Method should not return a proxy") {
         import java.lang.reflect.Proxy
 
         Proxy.isProxyClass(method.invoke(bean).getClass)
@@ -96,45 +96,45 @@ class ScalaObjectToBeanTest extends FunSuite {
       val setterMethods = allMethods.filter(_.getName == setterName)
       val getterMethods = allMethods.filter(_.getName == getterName)
 
-      expectResult(1, "Should be 1 method named \"" + setterName + "\"") {
+      assertResult(1, "Should be 1 method named \"" + setterName + "\"") {
         setterMethods.length
       }
 
-      expectResult(1, "Should be 1 method named \"" + getterName + "\"") {
+      assertResult(1, "Should be 1 method named \"" + getterName + "\"") {
         getterMethods.length
       }
 
       val setterMethod = setterMethods(0)
       val getterMethod = getterMethods(0)
 
-      expectResult(true, getterName + "() has appropriate type.") {
+      assertResult(true, getterName + "() has appropriate type.") {
         cls.isAssignableFrom(getterMethod.getReturnType)
       }
 
-      expectResult(oldVal, getterName + "() returns " + oldVal.toString) {
+      assertResult(oldVal, getterName + "() returns " + oldVal.toString) {
         getterMethod.invoke(bean)
       }
 
-      expectResult(false, getterName + "() should not return a proxy") {
+      assertResult(false, getterName + "() should not return a proxy") {
         import java.lang.reflect.Proxy
 
         Proxy.isProxyClass(getterMethod.invoke(bean).getClass)
       }
 
-      expectResult(1, setterName + "() total parameters") {
+      assertResult(1, setterName + "() total parameters") {
         setterMethod.getParameterTypes.length
       }
 
-      expectResult(true, setterName + "()'s parameter type is correct") {
+      assertResult(true, setterName + "()'s parameter type is correct") {
         val paramTypes = setterMethod.getParameterTypes
         cls.isAssignableFrom(paramTypes(0))
       }
 
-      expectResult(true, setterName + "() returns void") {
+      assertResult(true, setterName + "() returns void") {
         setterMethod.getReturnType.getName == "void"
       }
 
-      expectResult(true, setterName + "() changes the value") {
+      assertResult(true, setterName + "() changes the value") {
         setterMethod.invoke(bean, newVal.asInstanceOf[AnyRef])
         getterMethod.invoke(bean) == newVal
       }
@@ -179,7 +179,7 @@ class ScalaObjectToBeanTest extends FunSuite {
     )
 
     for ((methodName, label, obj, expected) <- hasMethods) {
-      expectResult(expected, label + " has " + methodName + " method") {
+      assertResult(expected, label + " has " + methodName + " method") {
         hasMethod(obj, methodName)
       }
     }
@@ -194,7 +194,7 @@ class ScalaObjectToBeanTest extends FunSuite {
     )
 
     for ((methodName, label, obj, expected) <- isProxy) {
-      expectResult(expected, label + "." + methodName + " returns Proxy") {
+      assertResult(expected, label + "." + methodName + " returns Proxy") {
         import java.lang.reflect.Proxy
         val value = obj.getClass.getMethod(methodName).invoke(obj)
         Proxy.isProxyClass(value.getClass)
@@ -213,7 +213,7 @@ class ScalaObjectToBeanTest extends FunSuite {
     )
 
     for ((label, obj, methodName, expected) <- values) {
-      expectResult(expected, label + "." + methodName + "=" + expected) {
+      assertResult(expected, label + "." + methodName + "=" + expected) {
         obj.getClass.getMethod(methodName).invoke(obj)
       }
     }

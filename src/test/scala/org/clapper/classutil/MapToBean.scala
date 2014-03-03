@@ -54,11 +54,11 @@ class MapToBeanTest extends FunSuite {
                              ("getFourIntClass", classOf[Class[Int]]),
                              ("getFiveMap", classOf[Object]))
     for ((name, cls) <- expectedNames) {
-      expectResult(true, "Looking for method name " + name + "()") {
+      assertResult(true, "Looking for method name " + name + "()") {
         methodNames.contains(name)
       }
 
-      expectResult(true, "Method " + name + " has appropriate type.") {
+      assertResult(true, "Method " + name + " has appropriate type.") {
         cls.isAssignableFrom(
           bean.getClass.getMethod(name).getReturnType
         )
@@ -68,7 +68,7 @@ class MapToBeanTest extends FunSuite {
     val getFiveMap = bean.getClass.getMethod("getFiveMap");
     val obj = getFiveMap.invoke(bean);
     val getOne = obj.getClass.getMethod("getOne");
-    expectResult(1, "Recursive access") {
+    assertResult(1, "Recursive access") {
       getOne.invoke(obj);
     }
   }
@@ -82,11 +82,11 @@ class MapToBeanTest extends FunSuite {
                              ("getFourIntClass", classOf[Class[Int]]),
                              ("getFiveMap", classOf[Map[String, Any]]))
     for ((name, cls) <- expectedNames) {
-      expectResult(true, "Looking for method name " + name + "()") {
+      assertResult(true, "Looking for method name " + name + "()") {
         methodNames.contains(name)
       }
 
-      expectResult(true, "Method " + name + " has appropriate type.") {
+      assertResult(true, "Method " + name + " has appropriate type.") {
         cls.isAssignableFrom(bean.getClass.getMethod(name).getReturnType)
       }
     }
