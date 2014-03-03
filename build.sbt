@@ -5,17 +5,17 @@ name := "classutil"
 
 organization := "org.clapper"
 
-version := "1.0.3"
+version := "1.0.4"
 
 licenses := Seq(
-  "BSD" -> url("http://software.clapper.org/classutil/license.html")
+  "BSD New" -> url("http://software.clapper.org/classutil/license.html")
 )
 
 homepage := Some(url("http://software.clapper.org/classutil/"))
 
 description := "A library for fast runtime class-querying, and more"
 
-scalaVersion := "2.10.0"
+scalaVersion := "2.10.3"
 
 // ---------------------------------------------------------------------------
 // Additional compiler options and plugins
@@ -26,9 +26,7 @@ scalacOptions ++= Seq(
 
 autoCompilerPlugins := true
 
-libraryDependencies <<= (scalaVersion, libraryDependencies) { (ver, deps) =>
-    deps :+ compilerPlugin("org.scala-lang.plugins" % "continuations" % ver)
-}
+addCompilerPlugin("org.scala-lang.plugins" % "continuations" % "2.10.3")
 
 seq(lsSettings :_*)
 
@@ -36,19 +34,12 @@ seq(lsSettings :_*)
 
 (description in LsKeys.lsync) <<= description(d => d)
 
+seq(bintraySettings:_*)
+
 // ---------------------------------------------------------------------------
 // ScalaTest dependendency
 
-libraryDependencies <<= (scalaVersion, libraryDependencies) { (sv, deps) =>
-    // Select ScalaTest version based on Scala version
-    val scalatestVersionMap = Map(
-      "2.10.0" -> ("scalatest_2.10.0", "2.0.M5")
-    )
-    val (scalatestArtifact, scalatestVersion) = scalatestVersionMap.getOrElse(
-        sv, error("Unsupported Scala version for ScalaTest: " + scalaVersion)
-    )
-    deps :+ "org.scalatest" % scalatestArtifact % scalatestVersion % "test"
-}
+libraryDependencies += "org.scalatest" % "scalatest_2.10" % "2.0" % "test"
 
 libraryDependencies <<= (scalaVersion, libraryDependencies) { (sv, deps) =>
   // ScalaTest still uses the (deprecated) scala.actors API.
@@ -69,13 +60,7 @@ libraryDependencies ++= Seq(
 // ---------------------------------------------------------------------------
 // Publishing criteria
 
-publishTo <<= version { v: String =>
-  val nexus = "https://oss.sonatype.org/"
-  if (v.trim.endsWith("SNAPSHOT"))
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
+// Don't set publishTo. The Bintray plugin does that automatically.
 
 publishMavenStyle := true
 
