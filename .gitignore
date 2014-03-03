@@ -10,3 +10,4 @@ project/plugins/target
 target
 *.sublime-*
 *.swp
+.idea
