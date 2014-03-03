@@ -1,0 +1,5 @@
+* Merged change from [Patrick Berryhill](https://github.com/pjberry) providing
+  support for ASM 4.x.
+* Now publishes to Bintray, instead of oss.sonatype.org.
+* Updated test code to latest version of ScalaTest.
+

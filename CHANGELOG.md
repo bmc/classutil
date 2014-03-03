@@ -1,5 +1,24 @@
 # Change log for ClassUtil library
 
+Version 1.0.4
+
+* Merged change from [Patrick Berryhill](https://github.com/pjberry) providing
+  support for ASM 4.x.
+* Now publishes to Bintray, instead of oss.sonatype.org.
+* Updated test code to latest version of ScalaTest.
+
+Version 1.0.3:
+
+Fixes and enhancements from [Jon Crussell](http://github.com/jcrussell):
+
+* Added a new (private) `BaseInfo` trait as a super trait for `MethodInfo`,
+  `FieldInfo` and `ClassInfo`, allowing the various modifier convenience
+  methods to be shared among the three public traits.
+* Added descriptors and final values to `FieldInfo`.
+* Removed spurious `hashCode()` and `toString()` methods from `FieldInfoImpl`.
+* Added a `Synthetic` modifier.
+* Fixed a "missing method" bug caused by hash code collisions.
+
 Version 1.0.2:
 
 `ClassFinder` now records method descriptors, not just method signatures.
