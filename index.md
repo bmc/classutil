@@ -53,38 +53,36 @@ classpath at runtime:
 
 # Installation
 
-ClassUtil is published to the `oss.sonatype.org` repository and automatically
-sync'd with the [Maven Central Repository][].
+ClassUtil is published to my [Bintray Maven repository][], which is
+automatically linked to Bintray's [JCenter][] repository.
 
-* Versions 1.0.1 and 1.0.2 supports Scala 2.10.
+* Versions 1.0.1 and greater support Scala 2.10.
 * Version 1.0.0 supports Scala 2.10.0-M7
 * Version 0.4.6 supports Scala 2.9.2, 2.9.1-1, 2.9.1, 2.9.0-1, 2.9.0, 2.8.2,
   2.8.1 and 2.8.0.
 
 ## Installing with Maven
 
-If you're using [Maven][], just specify the artifact, and Maven will do the
-rest for you:
+If you're using [Maven][], first declare the JCenter repository:
 
-* Group ID: `org.clapper`
-* Artifact ID: `classutil_2.9.2` or `classutil_2.10`
-* Version: `0.4.6`, `1.0.0` or `1.0.2`
-* Type: `jar`
+    <repositories>
+      <repository>
+        <snapshots>
+          <enabled>false</enabled>
+        </snapshots>
+        <id>central</id>
+        <name>bintry</name>
+        <url>http://jcenter.bintray.com</url>
+      </repository>
+      ...
+    </repositories>
 
-For example:
-
-    <dependency>
-      <groupId>org.clapper</groupId>
-      <artifactId>classutil_2.9.2</artifactId>
-      <version>0.4.6</version>
-    </dependency>
-
-or:
+Then, specify the `classutil` artifact:
 
     <dependency>
       <groupId>org.clapper</groupId>
       <artifactId>classutil_2.10</artifactId>
-      <version>1.0.2</version>
+      <version>1.0.4</version>
     </dependency>
 
 For more information on using Maven and Scala, see Josh Suereth's
@@ -92,35 +90,41 @@ For more information on using Maven and Scala, see Josh Suereth's
 
 ## Using with SBT
 
-#### 0.7.x
-
-If you're using [SBT][] 0.7.x to compile your code, you can place the
-following line in your project file (i.e., the Scala file in your
-`project/build/` directory):
-
-    val classutil = "org.clapper" %% "classutil" % "0.4.6"
-
 #### 0.11.x/0.12.x
 
 If you're using [SBT][] 0.11.x or 0.12.x to compile your code, you can use the
-following line in your `build.sbt` file (for Quick Configuration). If you're
-using an SBT 0.11.x/0.12.x Full Configuration, you're obviously smart enough to
-figure out what to do, on your own.
+following line in your `build.sbt` file (for Quick Configuration).
 
-For Scala 2.9 and earlier:
+    repositories += "JCenter" at "http://jcenter.bintray.com/"
 
-    libraryDependencies += "org.clapper" %% "classutil" % "0.4.6"
+    libraryDependencies += "org.clapper" % "classutil_2.10" % "1.0.4"
 
-For Scala 2.10:
+#### 0.13.x
 
-    libraryDependencies += "org.clapper" % "classutil_2.10" % "1.0.2"
+With SBT 0.13.x, you can just use [Doug Tangren][]'s `bintray-sbt` plugin.
+In your `project/plugins.sbt` file, add:
 
-ClassUtil is also registered with [Doug Tangren][]'s excellent
-[ls.implicit.ly][] catalog. If you use the `ls` SBT plugin, you can install
-ClassUtil with
+    resolvers += Resolver.url(
+      "bintray-sbt-plugin-releases",
+      url("http://dl.bintray.com/content/sbt/sbt-plugin-releases"))(
+        Resolver.ivyStylePatterns)
 
-    sbt> ls-install classutil
+    addSbtPlugin("me.lessis" % "bintray-sbt" % "0.1.1")
 
+Then, in your `build.sbt` file, add:
+
+    seq(bintrayResolverSettings:_*)
+
+That automatically adds JCenter to the list of repositories. Finally, add:
+
+    libraryDependencies += "org.clapper" % "classutil" % "1.0.4"
+
+to get the latest version of ClassUtil.
+
+You can also add my maven repository manually, in case the latest version
+hasn't yet been sync'd to JCenter:
+
+    resolvers += bintray.Opts.resolver.repo("bmc", "maven")
 
 # Building from Source
 
@@ -582,3 +586,5 @@ request. Along with any patch you send:
 [Case classes]: http://www.scala-lang.org/node/107
 [changelog]: https://github.com/bmc/classutil/blob/master/CHANGELOG.md
 [ls.implicit.ly]: http://ls.implicit.ly
+[Bintray Maven repository]: https://bintray.com/bmc/maven
+[JCenter]: https://bintray.com/bintray/jcenter

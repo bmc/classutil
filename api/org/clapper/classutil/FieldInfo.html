@@ -9,11 +9,6 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../../lib/template.js"></script>
-      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
-      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -40,14 +35,14 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">FieldInfo</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">FieldInfo</span><span class="result"> extends <span class="extype" name="org.clapper.classutil.BaseInfo">BaseInfo</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Information about a field, as read from a class file.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="org.clapper.classutil.BaseInfo">BaseInfo</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -65,7 +60,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="org.clapper.classutil.FieldInfo"><span>FieldInfo</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="org.clapper.classutil.FieldInfo"><span>FieldInfo</span></li><li class="in" name="org.clapper.classutil.BaseInfo"><span>BaseInfo</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -89,7 +84,22 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="org.clapper.classutil.FieldInfo#modifiers" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="org.clapper.classutil.FieldInfo#descriptor" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="descriptor:String"></a>
+      <a id="descriptor:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">descriptor</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The field's descriptor which describes it's type
+Ex: Ljava/lang/String;
+</p>
+    </li><li name="org.clapper.classutil.BaseInfo#modifiers" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="modifiers:Set[org.clapper.classutil.Modifier.Modifier]"></a>
       <a id="modifiers:Set[Modifier]"></a>
       <h4 class="signature">
@@ -101,8 +111,9 @@
         <span class="name">modifiers</span><span class="result">: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="Modifier$.html#Modifier=org.clapper.classutil.Modifier.Value" class="extmbr" name="org.clapper.classutil.Modifier.Modifier">Modifier</a>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">The field's modifiers.</p>
-    </li><li name="org.clapper.classutil.FieldInfo#name" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">The entity's modifiers.</p><div class="fullcomment"><div class="comment cmt"><p>The entity's modifiers.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseInfo</dd></dl></div>
+    </li><li name="org.clapper.classutil.BaseInfo#name" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="name:String"></a>
       <a id="name:String"></a>
       <h4 class="signature">
@@ -114,7 +125,8 @@
         <span class="name">name</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">The field's name.</p>
+      <p class="shortcomment cmt">The name of the entity.</p><div class="fullcomment"><div class="comment cmt"><p>The name of the entity.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseInfo</dd></dl></div>
     </li><li name="org.clapper.classutil.FieldInfo#signature" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="signature:String"></a>
       <a id="signature:String"></a>
@@ -127,7 +139,21 @@
         <span class="name">signature</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">The field's JVM signature.</p>
+      <p class="shortcomment cmt">The field's JVM signature (only available with generics).</p>
+    </li><li name="org.clapper.classutil.FieldInfo#value" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="value:Option[Object]"></a>
+      <a id="value:Option[AnyRef]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">value</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.AnyRef">AnyRef</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">The field's default value, only available when the field
+is a static field that is a primitive or a String type.</p>
     </li></ol>
             </div>
 
@@ -223,8 +249,11 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -265,8 +294,11 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<span class="extype" name="java.lang">java.lang</span>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -295,6 +327,50 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.clapper.classutil.FieldInfo">FieldInfo</a> → AnyRef → Any</dd></dl></div>
+    </li><li name="org.clapper.classutil.BaseInfo#isAbstract" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isAbstract:Boolean"></a>
+      <a id="isAbstract:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isAbstract</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Convenience method that determines whether the class is abstract
+This method is just shorthand for:</p><div class="fullcomment"><div class="comment cmt"><p>Convenience method that determines whether the class is abstract
+This method is just shorthand for:</p><pre>modifiers contains Modifier.Abstract</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseInfo</dd></dl></div>
+    </li><li name="org.clapper.classutil.BaseInfo#isConcrete" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isConcrete:Boolean"></a>
+      <a id="isConcrete:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isConcrete</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Convenience method to determine whether the class is concrete (i.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience method to determine whether the class is concrete (i.e.,
+isn't abstract and isn't an interface).
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseInfo</dd></dl></div>
+    </li><li name="org.clapper.classutil.BaseInfo#isFinal" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isFinal:Boolean"></a>
+      <a id="isFinal:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isFinal</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Convenience methods that determines whether the class is final.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is final.
+This method is just shorthand for:</p><pre>modifiers contains Modifier.Final</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseInfo</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -308,6 +384,105 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.clapper.classutil.BaseInfo#isInterface" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInterface:Boolean"></a>
+      <a id="isInterface:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInterface</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Convenience method that determines whether the class implements an
+interface.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience method that determines whether the class implements an
+interface. This method is just shorthand for:</p><pre>modifiers contains Modifier.Interface</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseInfo</dd></dl></div>
+    </li><li name="org.clapper.classutil.BaseInfo#isPrivate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isPrivate:Boolean"></a>
+      <a id="isPrivate:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isPrivate</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Convenience method that determines whether the class is private.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience method that determines whether the class is private.
+This method is just shorthand for:</p><pre>modifiers contains Modifier.Private</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseInfo</dd></dl></div>
+    </li><li name="org.clapper.classutil.BaseInfo#isProtected" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isProtected:Boolean"></a>
+      <a id="isProtected:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isProtected</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Convenience method that determines whether the class is protected.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience method that determines whether the class is protected.
+This method is just shorthand for:</p><pre>modifiers contains Modifier.Protected</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseInfo</dd></dl></div>
+    </li><li name="org.clapper.classutil.BaseInfo#isPublic" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isPublic:Boolean"></a>
+      <a id="isPublic:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isPublic</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Convenience methods that determines whether the class is public.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is public.
+This method is just shorthand for:</p><pre>modifiers contains Modifier.Public</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseInfo</dd></dl></div>
+    </li><li name="org.clapper.classutil.BaseInfo#isStatic" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isStatic:Boolean"></a>
+      <a id="isStatic:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isStatic</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Convenience methods that determines whether the class is static.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is static.
+This method is just shorthand for:</p><pre>modifiers contains Modifier.Static</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseInfo</dd></dl></div>
+    </li><li name="org.clapper.classutil.BaseInfo#isSynchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isSynchronized:Boolean"></a>
+      <a id="isSynchronized:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isSynchronized</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Convenience methods that determines whether the class is synchronized.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is synchronized.
+This method is just shorthand for:</p><pre>modifiers contains Modifier.Synchronized</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseInfo</dd></dl></div>
+    </li><li name="org.clapper.classutil.BaseInfo#isSynthetic" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isSynthetic:Boolean"></a>
+      <a id="isSynthetic:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isSynthetic</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Convenience methods that determines whether the class is synthetic.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience methods that determines whether the class is synthetic.
+This method is just shorthand for:</p><pre>modifiers contains Modifier.Synthetic</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseInfo</dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -360,7 +535,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.clapper.classutil.FieldInfo#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="org.clapper.classutil.BaseInfo#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -373,8 +548,8 @@
       </span>
       </h4>
       <p class="shortcomment cmt">A printable version of the field.</p><div class="fullcomment"><div class="comment cmt"><p>A printable version of the field. Currently, the string version is
-the signature.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.clapper.classutil.FieldInfo">FieldInfo</a> → AnyRef → Any</dd></dl></div>
+the entity name.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseInfo → AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -388,7 +563,10 @@ the signature.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -404,7 +582,10 @@ the signature.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -420,7 +601,10 @@ the signature.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">()</span>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
               
         </dd></dl></div>
     </li></ol>
@@ -432,7 +616,9 @@ the signature.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="org.clapper.classutil.BaseInfo">
+              <h3>Inherited from <span class="extype" name="org.clapper.classutil.BaseInfo">BaseInfo</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
@@ -452,7 +638,6 @@ the signature.
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
     </body>
       </html>

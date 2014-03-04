@@ -23,9 +23,9 @@ ClassUtil is fast for several reasons:
   classes using an efficient lazy iterator, which offers minimal startup
   penalty and the ability to cut the traversal short.
 
-ClassUtil is copyright &copy; 2010-2011 [Brian M. Clapper][] and is released
+ClassUtil is copyright &copy; 2010-2014 [Brian M. Clapper][] and is released
 under a new BSD license.
 
-[library's home page]: http://bmc.github.com/classutil
+[library's home page]: http://software.clapper.org/classutil
 [ASM]: http://asm.ow2.org/
 [Brian M. Clapper]: mailto:bmc@clapper.org

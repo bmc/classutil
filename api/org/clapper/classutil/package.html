@@ -9,11 +9,6 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
-      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
-      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
-      <script type="text/javascript" src="../../../lib/template.js"></script>
-      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
-      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -88,7 +83,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="org.clapper.classutil.ClassFinder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ClassFinderextendsObject"></a>
+      <a id="ClassFinderextendsAnyRef"></a>
       <a id="ClassFinder:ClassFinder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -102,7 +97,7 @@
       <p class="comment cmt">A <code>ClassFinder</code> finds classes in a class path, returning the result in a
 lazy iterator.</p>
     </li><li name="org.clapper.classutil.ClassInfo" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="ClassInfoextendsObject"></a>
+      <a id="ClassInfoextendsBaseInfo"></a>
       <a id="ClassInfo:ClassInfo"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -110,12 +105,12 @@ lazy iterator.</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="ClassInfo.html"><span class="name">ClassInfo</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="ClassInfo.html"><span class="name">ClassInfo</span></a><span class="result"> extends <span class="extype" name="org.clapper.classutil.BaseInfo">BaseInfo</span></span>
       </span>
       </h4>
       <p class="comment cmt">Information about a class, as read from a class file.</p>
     </li><li name="org.clapper.classutil.FieldInfo" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="FieldInfoextendsObject"></a>
+      <a id="FieldInfoextendsBaseInfo"></a>
       <a id="FieldInfo:FieldInfo"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -123,12 +118,12 @@ lazy iterator.</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="FieldInfo.html"><span class="name">FieldInfo</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="FieldInfo.html"><span class="name">FieldInfo</span></a><span class="result"> extends <span class="extype" name="org.clapper.classutil.BaseInfo">BaseInfo</span></span>
       </span>
       </h4>
       <p class="comment cmt">Information about a field, as read from a class file.</p>
     </li><li name="org.clapper.classutil.MapToBeanMapper" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="MapToBeanMapperextendsObject"></a>
+      <a id="MapToBeanMapperextendsAnyRef"></a>
       <a id="MapToBeanMapper:MapToBeanMapper"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -142,7 +137,7 @@ lazy iterator.</p>
       <p class="comment cmt">Takes a Scala <code>Map</code>, with <code>String</code> keys and object values, and generates
 an object, with fields for each map value.</p>
     </li><li name="org.clapper.classutil.MethodInfo" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="MethodInfoextendsObject"></a>
+      <a id="MethodInfoextendsBaseInfo"></a>
       <a id="MethodInfo:MethodInfo"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -150,7 +145,7 @@ an object, with fields for each map value.</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="MethodInfo.html"><span class="name">MethodInfo</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="MethodInfo.html"><span class="name">MethodInfo</span></a><span class="result"> extends <span class="extype" name="org.clapper.classutil.BaseInfo">BaseInfo</span></span>
       </span>
       </h4>
       <p class="comment cmt">Information about a method, as read from a class file.</p>
@@ -258,7 +253,6 @@ to a method, class or field.</p>
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-
-
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
     </body>
       </html>
