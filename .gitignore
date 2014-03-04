@@ -11,3 +11,4 @@ target
 *.sublime-*
 *.swp
 .idea
+atlassian-ide-plugin.xml
