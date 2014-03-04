@@ -165,31 +165,37 @@ library.
 
 ### Getting information on all classes in the current class path
 
-    import org.clapper.classutil.ClassFinder
+{% highlight scala %}
+import org.clapper.classutil.ClassFinder
 
-    val finder = ClassFinder()
-    val classes = finder.getClasses // classes is an Iterator[ClassInfo]
-    classes.foreach(println(_))
+val finder = ClassFinder()
+val classes = finder.getClasses // classes is an Iterator[ClassInfo]
+classes.foreach(println(_))
+{% endhighlight %}
 
 ### Getting all concrete classes in a custom class path
 
-    import org.clapper.classutil.ClassFinder
-    import java.io.File
+{% highlight scala %}
+import org.clapper.classutil.ClassFinder
+import java.io.File
 
-    val classpath = List("foo.jar", "bar.jar", "baz.zip").map(new File(_))
-    val finder = ClassFinder(classpath)
-    val classes = finder.getClasses.filter(_.isConcrete)
-    classes.foreach(println(_))
+val classpath = List("foo.jar", "bar.jar", "baz.zip").map(new File(_))
+val finder = ClassFinder(classpath)
+val classes = finder.getClasses.filter(_.isConcrete)
+classes.foreach(println(_))
+{% endhighlight %}
 
 ### Getting all interfaces in a custom class path
 
-    import org.clapper.classutil.ClassFinder
-    import java.io.File
+{% highlight scala %}
+import org.clapper.classutil.ClassFinder
+import java.io.File
 
-    val classpath = List("foo.jar", "bar.jar", "baz.zip").map(new File(_))
-    val finder = ClassFinder(classpath)
-    val classes = finder.getClasses.filter(_.isInterface)
-    classes.foreach(println(_))
+val classpath = List("foo.jar", "bar.jar", "baz.zip").map(new File(_))
+val finder = ClassFinder(classpath)
+val classes = finder.getClasses.filter(_.isInterface)
+classes.foreach(println(_))
+{% endhighlight %}
 
 ### Finding all classes that implement an interface, directly or indirectly
 
@@ -199,14 +205,16 @@ plugin capability, you may need to discover all concrete classes that
 implement your plugin interface. The `ClassFinder` companion object
 provides a special utility function for that:
 
-    import org.clapper.classutil.ClassFinder
-    import java.io.File
+{% highlight scala %}
+import org.clapper.classutil.ClassFinder
+import java.io.File
 
-    val classpath = List("foo.jar", "bar.jar", "baz.zip").map(new File(_))
-    val finder = ClassFinder(classpath)
-    val classes = finder.getClasses
-    val plugins = ClassFinder.concreteSubclasses("org.example.plugin", classes)
-    plugins.foreach(println(_))
+val classpath = List("foo.jar", "bar.jar", "baz.zip").map(new File(_))
+val finder = ClassFinder(classpath)
+val classes = finder.getClasses
+val plugins = ClassFinder.concreteSubclasses("org.example.plugin", classes)
+plugins.foreach(println(_))
+{% endhighlight %}
 
 Note that the `concreteSubclasses()` method called above takes the iterator
 of `ClassInfo` objects returned by `ClassFinder.getClasses`. This
@@ -216,13 +224,15 @@ certainly recreate the iterator, but at a cost. If you need to make
 multiple calls to `concreteSubclasses` with the same classpath, consider
 converting the iterator to a map first, as shown below:
 
-    import org.clapper.classutil.ClassFinder
+{% highlight scala %}
+import org.clapper.classutil.ClassFinder
 
-    val finder = ClassFinder(myPath)
-    val classes = finder.getClasses  // classes is an Iterator[ClassInfo]
-    val classMap = ClassFinder.classInfoMap(classes) // runs iterator out, once
-    val foos = ClassFinder.concreteSubclasses("org.example.Foo", classMap)
-    val bars = ClassFinder.concreteSubclasses("org.example.Bar", classMap)
+val finder = ClassFinder(myPath)
+val classes = finder.getClasses  // classes is an Iterator[ClassInfo]
+val classMap = ClassFinder.classInfoMap(classes) // runs iterator out, once
+val foos = ClassFinder.concreteSubclasses("org.example.Foo", classMap)
+val bars = ClassFinder.concreteSubclasses("org.example.Bar", classMap)
+{% endhighlight %}
 
 **WARNING**: `concreteSubclasses` can chew up a lot of heap space
 temporarily, if called with a large classpath. Either use a "focused"
@@ -454,37 +464,38 @@ instance of the newly generated bean class.
 
 An example will help clarify this part of the API:
 
-    import org.clapper.classutil.ScalaObjectToBean
+{% highlight scala %}
+import org.clapper.classutil.ScalaObjectToBean
 
-    case class Foo(name: String, value: Int)
-    case class Bar(name: String, foo: Foo)
+case class Foo(name: String, value: Int)
+case class Bar(name: String, foo: Foo)
 
-    val foo = Foo("foo100", 100)
-    val bar = Bar("bar1", foo)
-    val beanFoo = ScalaObjectToBean(foo)
-    val beanBar = ScalaObjectToBean(bar)
+val foo = Foo("foo100", 100)
+val bar = Bar("bar1", foo)
+val beanFoo = ScalaObjectToBean(foo)
+val beanBar = ScalaObjectToBean(bar)
 
-    println("beanFoo:")
-    println("-" * 30)
-    beanFoo.getClass.getMethods.filter(_.getName startsWith "get").foreach(println _)
+println("beanFoo:")
+println("-" * 30)
+beanFoo.getClass.getMethods.filter(_.getName startsWith "get").foreach(println _)
 
-    println("beanBar:")
-    println("-" * 30)
-    beanBar.getClass.getMethods.filter(_.getName startsWith "get").foreach(println _)
+println("beanBar:")
+println("-" * 30)
+beanBar.getClass.getMethods.filter(_.getName startsWith "get").foreach(println _)
 
-    def call(obj: AnyRef, methodName: String) =
-    {
-        val method = obj.getClass.getMethod(methodName)
-        method.invoke(obj)
-    }
+def call(obj: AnyRef, methodName: String) = {
+  val method = obj.getClass.getMethod(methodName)
+  method.invoke(obj)
+}
 
-    println()
-    println("beanFoo.getName returns " + call(beanFoo, "getName"))
-    println("beanFoo.getValue returns " + call(beanFoo, "getValue"))
-    println("beanBar.getName returns " + call(beanBar, "getName"))
-    val beanFoo2 = call(beanBar, "getFoo")
-    println("beanBar.getFoo returns " + beanFoo2)
-    println("beanBar.getFoo.getValue returns " + call(beanFoo2, "getValue"))
+println()
+println("beanFoo.getName returns " + call(beanFoo, "getName"))
+println("beanFoo.getValue returns " + call(beanFoo, "getValue"))
+println("beanBar.getName returns " + call(beanBar, "getName"))
+val beanFoo2 = call(beanBar, "getFoo")
+println("beanBar.getFoo returns " + beanFoo2)
+println("beanBar.getFoo.getValue returns " + call(beanFoo2, "getValue"))
+{% endhighlight %}
 
 This example takes instances of two cases classes and maps them to beans.
 Running it produces the following output:
