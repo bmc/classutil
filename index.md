@@ -269,7 +269,7 @@ all the bean fields with Scala's `@BeanProperty` annotation.
 
 To this end, ClassUtil provides two solutions:
 
-- `MapToBean`, which traverses a map and convert each name/value pair into a
+- `MapToBean` traverses a map and converts each name/value pair into a
   Java Beans `get` method.
 - `ScalaObjectToBean` looks for Scala getter and setter methods and generates
   a wrapper bean with traditional Java `get` and `set` methods.
@@ -306,83 +306,73 @@ There are a few restrictions imposed on any map that is to be converted.
 
 An example will help clarify this part of the API:
 
-    import org.clapper.classutil.MapToBean
+{% highlight scala %}
+import org.clapper.classutil.MapToBean
 
-    val charList = List('a', 'b', 'c')
+val charList = List('a', 'b', 'c')
 
-    val subMap = Map("sub1" -> 1, "sub2" -> 2)
-    val map =  Map("int" -> 1,
-                   "float" -> 2f,
-                   "someString" -> "three",
-                   "intClass" -> classOf[Int],
-                   "subMap" -> subMap,
-                   "list" -> charList)
-    val obj = MapToBean(map)
+val subMap = Map("sub1" -> 1, "sub2" -> 2)
+val map =  Map("int" -> 1,
+               "float" -> 2f,
+               "someString" -> "three",
+               "intClass" -> classOf[Int],
+               "subMap" -> subMap,
+               "list" -> charList)
+val obj = MapToBean(map)
 
-    obj.getClass.getMethods.filter(_.getName startsWith "get").foreach(println _)
+obj.getClass.getMethods.filter(_.getName startsWith "get").foreach(println _)
 
-    def call(methodName: String) =
-    {
-        val method = obj.getClass.getMethod(methodName)
-        method.invoke(obj)
-    }
+def call(methodName: String) = {
+    val method = obj.getClass.getMethod(methodName)
+    method.invoke(obj)
+}
 
-    println()
-    println("getSubMap returns " + call("getSubMap"))
+println()
+println("getSubMap returns " + call("getSubMap"))
+{% endhighlight %}
 
 This example takes a map:
 
-    val map =  Map("int" -> 1,
-                   "float" -> 2f,
-                   "someString" -> "three",
-                   "intClass" -> classOf[Int],
-                   "subMap" -> subMap,
-                   "list" -> charList)
+{% highlight scala %}
+val map =  Map("int" -> 1,
+               "float" -> 2f,
+               "someString" -> "three",
+               "intClass" -> classOf[Int],
+               "subMap" -> subMap,
+               "list" -> charList)
+{% endhighlight %}
 
 and produces a Java Bean that behaves like an instance of the following class:
 
-    public class Bean1
+{% highlight java %}
+public class Bean1
+{
+    public Integer getInt()
     {
-        public Integer getInt()
-        {
-            return 1;
-        }
-
-        public Float getFloat()
-        {
-            return 2f;
-        }
-
-        public Class getIntClass()
-        {
-            return Integer.class;
-        }
-
-        public Object getSubMap()
-        {
-            return MapToBean(subMap);
-        }
-
-        public scala.collection.immutable.$colon$colon getList()
-        {
-            return charList;
-        }
+        return 1;
     }
 
-The above Scala script produces the following output:
+    public Float getFloat()
+    {
+        return 2f;
+    }
 
-    public final java.lang.Integer $Proxy1.getInt()
-    public final java.lang.Float $Proxy1.getFloat()
-    public final $Proxy0 $Proxy1.getSubMap()
-    public final java.lang.Class $Proxy1.getIntClass()
-    public final java.lang.String $Proxy1.getSomeString()
-    public final scala.collection.immutable.$colon$colon $Proxy1.getList()
-    public static java.lang.Class java.lang.reflect.Proxy.getProxyClass(java.lang.ClassLoader,java.lang.Class[]) throws java.lang.IllegalArgumentException
-    public static java.lang.reflect.InvocationHandler java.lang.reflect.Proxy.getInvocationHandler(java.lang.Object) throws java.lang.IllegalArgumentException
-    public final native java.lang.Class java.lang.Object.getClass()
+    public Class getIntClass()
+    {
+        return Integer.class;
+    }
 
-    getSubMap returns Map(getSub1 -> 1, getSub2 -> 2)
-    keys=Set(intClass, float, someString, int, subMap, list)
+    public Object getSubMap()
+    {
+        return MapToBean(subMap);
+    }
+
+    public scala.collection.immutable.$colon$colon getList()
+    {
+        return charList;
+    }
+}
+{% endhighlight %}
 
 Nested maps are automatically converted via `MapToBean`, unless `recurse` is
 `false`.
@@ -401,17 +391,21 @@ to map.
 First, it recognizes that any Scala `val` or `var` is really a getter method
 returning some type. That is, it knows that Scala compiles the following
 
-    val x: Int = 0
-    var y: Int = 10
+{% highlight scala %}
+val x: Int = 0
+var y: Int = 10
+{% endhighlight %}
 
 down to the equivalent of the this Java code:
 
-    private int _x = 0;
-    private int _y = 10;
+{% highlight java %}
+private int _x = 0;
+private int _y = 10;
 
-    public int x() { return _x; }
-    public int y() { return _y; }
-    public void y_$eq(int newY) { _y = newY; }
+public int x() { return _x; }
+public int y() { return _y; }
+public void y_$eq(int newY) { _y = newY; }
+{% endhighlight %}
 
 So, the mapper looks for Scala getter methods that take no parameters
 and return some non-void (i.e., non-`Unit`) value, and it looks for
