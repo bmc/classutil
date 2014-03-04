@@ -588,3 +588,4 @@ request. Along with any patch you send:
 [ls.implicit.ly]: http://ls.implicit.ly
 [Bintray Maven repository]: https://bintray.com/bmc/maven
 [JCenter]: https://bintray.com/bintray/jcenter
+[Doug Tangren]: https://github.com/softprops/
