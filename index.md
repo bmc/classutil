@@ -43,8 +43,8 @@ ClassUtil is fast for several reasons:
 ClassUtil uses the following libraries, which must be present in the
 classpath at runtime:
 
-* The main [ASM][] library (version 3), e.g., `asm-3.3.1.jar`
-* The [ASM][] commons library (version 3), e.g., `asm-commons-3.3.1.jar`
+* The main [ASM][] library (version 4 or better)
+* The [ASM][] commons library (version 4 or better)
 * The [Grizzled Scala][] library
 * The [Grizzled SLF4J][] library, for logging
 * The [SLF4J][] API library, for logging (e.g., `slf4j-api-1.6.4.jar`)
