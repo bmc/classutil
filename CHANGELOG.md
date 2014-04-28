@@ -1,5 +1,13 @@
 # Change log for ClassUtil library
 
+Version 1.0.5
+
+* Removed use of [Grizzled Scala][] generators, replacing them with Scala
+  streams. (Generators were based on continuation passing, which is
+  unsupported and unmaintained.)
+* Now builds for Scala 2.11 and 2.10.
+* Updated to [ASM][] 5.0.2
+
 Version 1.0.4
 
 * Merged change from [Patrick Berryhill](https://github.com/pjberry) providing

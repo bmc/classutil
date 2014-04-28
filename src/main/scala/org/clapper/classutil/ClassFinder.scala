@@ -45,17 +45,14 @@
   */
 package org.clapper.classutil
 
-import scala.collection.mutable.{Set => MutableSet}
-import scala.util.continuations.cps
 import scala.annotation.tailrec
 import scala.language.reflectiveCalls
 
 import grizzled.slf4j._
-import grizzled.generator._
 
 import java.util.jar.{JarFile, Manifest => JarManifest}
 import java.util.zip.{ZipFile, ZipEntry}
-import java.io.{File, InputStream, IOException}
+import java.io.{File, InputStream}
 
 /** An enumerated high-level view of the modifiers that can be attached
   * to a method, class or field.
@@ -287,25 +284,23 @@ class ClassFinder(path: Seq[File]) {
     * `ClassInfo` object. The `ClassInfo` objects are returned lazily,
     * rather than loaded all up-front.
     *
-    * @param path  the class path
-    *
-    * @return an iterator over `ClassInfo` objects
+    * @return a `Stream` of `ClassInfo` objects
     */
-  def getClasses(): Iterator[ClassInfo] = find(classpath)
+  def getClasses(): Stream[ClassInfo] = find(classpath)
 
   /* ---------------------------------------------------------------------- *\
    Private Methods
    \* ---------------------------------------------------------------------- */
 
-  private def find(path: Seq[File]): Iterator[ClassInfo] = {
+  private def find(path: Seq[File]): Stream[ClassInfo] = {
     path match {
-      case Nil          => Iterator.empty
+      case Nil          => Stream.empty[ClassInfo]
       case item :: Nil  => findClassesIn(item)
       case item :: tail => findClassesIn(item) ++ find(tail)
     }
   }
 
-  private def findClassesIn(f: File): Iterator[ClassInfo] = {
+  private def findClassesIn(f: File): Stream[ClassInfo] = {
     val name = f.getPath.toLowerCase
 
     if (name.endsWith(".jar"))
@@ -315,10 +310,10 @@ class ClassFinder(path: Seq[File]) {
     else if (f.isDirectory)
       processDirectory(f)
     else
-      Iterator.empty
+      Stream.empty[ClassInfo]
   }
 
-  private def processJar(file: File): Iterator[ClassInfo] = {
+  private def processJar(file: File): Stream[ClassInfo] = {
     val jar = new JarFile(file)
     val list1 = processOpenZip(file, jar)
 
@@ -356,19 +351,21 @@ class ClassFinder(path: Seq[File]) {
     }
   }
 
-  private def processZip(file: File): Iterator[ClassInfo] =
+  private def processZip(file: File): Stream[ClassInfo] =
     processOpenZip(file, new ZipFile(file))
 
   private def processOpenZip(file: File, zipFile: ZipFile) = {
     import scala.collection.JavaConversions._
 
-    val zipFileName = file.getPath
     val classInfoIterators =
       zipFile.entries.
+              toStream.
               filter((e: ZipEntry) => isClass(e)).
               map((e: ZipEntry) => classData(zipFile.getInputStream(e), file))
 
-    generateFromIterators(classInfoIterators)
+    for { it   <- classInfoIterators
+          data <- it }
+      yield data
   }
 
   // Matches both ZipEntry and File
@@ -380,7 +377,7 @@ class ClassFinder(path: Seq[File]) {
   private def isClass(e: FileEntry): Boolean =
     (! e.isDirectory) && (e.getName.toLowerCase.endsWith(".class"))
 
-  private def processDirectory(dir: File): Iterator[ClassInfo] = {
+  private def processDirectory(dir: File): Stream[ClassInfo] = {
     import grizzled.file.GrizzledFile._
     import java.io.FileInputStream
 
@@ -397,7 +394,9 @@ class ClassFinder(path: Seq[File]) {
         }
       }
 
-    generateFromIterators(iterators)
+    for { it <- iterators
+          data <- it }
+      yield data
   }
 
   private def classData(is: InputStream,
@@ -406,31 +405,6 @@ class ClassFinder(path: Seq[File]) {
 
     ClassFile.load(is, location)
   }
-
-  /** Generate classes from an iterator of iterators.
-    */
-  private def generateFromIterators(iterators: Iterator[Iterator[ClassInfo]])=
-    generator[ClassInfo] {
-      def doIterator(iterator: Iterator[ClassInfo]):
-        Unit @cps[Iteration[ClassInfo]] = {
-
-        if (iterator.hasNext) {
-          generate(iterator.next)
-          doIterator(iterator)
-        }
-      }
-
-      def doIterators(iterators: Iterator[Iterator[ClassInfo]]):
-        Unit @cps[Iteration[ClassInfo]] = {
-
-        if (iterators.hasNext) {
-          doIterator(iterators.next)
-          doIterators(iterators)
-        }
-      }
-
-      doIterators(iterators)
-    }
 }
 
 /** The entrance to the factory floor, providing methods for finding and

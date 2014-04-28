@@ -5,7 +5,7 @@ name := "classutil"
 
 organization := "org.clapper"
 
-version := "1.0.4"
+version := "1.0.5"
 
 licenses := Seq(
   "BSD New" -> url("http://software.clapper.org/classutil/license.html")
@@ -17,29 +17,27 @@ description := "A library for fast runtime class-querying, and more"
 
 scalaVersion := "2.10.3"
 
+crossScalaVersions := Seq("2.10.3", "2.11.0")
+
 // ---------------------------------------------------------------------------
 // Additional compiler options and plugins
 
-scalacOptions ++= Seq(
-  "-P:continuations:enable", "-deprecation", "-unchecked", "-feature"
-)
+scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
 
 autoCompilerPlugins := true
 
-addCompilerPlugin("org.scala-lang.plugins" % "continuations" % "2.10.3")
-
-seq(lsSettings :_*)
+lsSettings
 
 (LsKeys.tags in LsKeys.lsync) := Seq("classes", "byte code")
 
 (description in LsKeys.lsync) <<= description(d => d)
 
-seq(bintraySettings:_*)
+bintraySettings
 
 // ---------------------------------------------------------------------------
 // ScalaTest dependendency
 
-libraryDependencies += "org.scalatest" % "scalatest_2.10" % "2.0" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.3" % "test"
 
 libraryDependencies <<= (scalaVersion, libraryDependencies) { (sv, deps) =>
   // ScalaTest still uses the (deprecated) scala.actors API.
@@ -50,11 +48,11 @@ libraryDependencies <<= (scalaVersion, libraryDependencies) { (sv, deps) =>
 // Other dependendencies
 
 libraryDependencies ++= Seq(
-    "org.ow2.asm" % "asm" % "4.2",
-    "org.ow2.asm" % "asm-commons" % "4.2",
-    "org.ow2.asm" % "asm-util" % "4.2",
-    "org.clapper" % "grizzled-scala_2.10" % "1.1.2",
-    "org.clapper" % "grizzled-slf4j_2.10" % "1.0.1"
+    "org.ow2.asm" % "asm" % "5.0.2",
+    "org.ow2.asm" % "asm-commons" % "5.0.2",
+    "org.ow2.asm" % "asm-util" % "5.0.2",
+    "org.clapper" %% "grizzled-scala" % "1.2",
+    "org.clapper" %% "grizzled-slf4j" % "1.0.2"
 )
 
 // ---------------------------------------------------------------------------

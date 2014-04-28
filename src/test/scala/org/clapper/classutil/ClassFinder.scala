@@ -73,20 +73,7 @@ class ClassFinderTest extends FunSuite {
     assert(classInfoList.length === classFiles.length)
 
     // Next, check the iterator by looping over it.
-    val classInfoIterator = classFinder.getClasses
-    assert(countIterator(classInfoIterator) === totalExpected)
-  }
-
-  private def countIterator(classInfos: Iterator[ClassInfo]): Int = {
-    @tailrec def countNext(cur: Int, i: Iterator[ClassInfo]): Int = {
-      if (i.hasNext) {
-        i.next
-        countNext(cur + 1, i)
-      }
-      else
-        cur
-    }
-
-    countNext(0, classInfos)
+    val classInfoStream = classFinder.getClasses
+    assert(classInfoStream.length === totalExpected)
   }
 }

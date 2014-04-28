@@ -1,0 +1,37 @@
+{
+  "organization" : "org.clapper",
+  "name" : "classutil",
+  "version" : "1.0.5",
+  "description" : "A library for fast runtime class-querying, and more",
+  "site" : "http://software.clapper.org/classutil/",
+  "tags" : [ "classes", "byte code" ],
+  "docs" : "",
+  "resolvers" : [ "https://oss.sonatype.org/content/repositories/releases" ],
+  "dependencies" : [ {
+    "organization" : "org.ow2.asm",
+    "name" : "asm",
+    "version" : "5.0.2"
+  }, {
+    "organization" : "org.ow2.asm",
+    "name" : "asm-commons",
+    "version" : "5.0.2"
+  }, {
+    "organization" : "org.ow2.asm",
+    "name" : "asm-util",
+    "version" : "5.0.2"
+  }, {
+    "organization" : "org.clapper",
+    "name" : "grizzled-scala",
+    "version" : "1.2"
+  }, {
+    "organization" : "org.clapper",
+    "name" : "grizzled-slf4j",
+    "version" : "1.0.2"
+  } ],
+  "scalas" : [ "2.10.3", "2.11.0" ],
+  "licenses" : [ {
+    "name" : "BSD New",
+    "url" : "http://software.clapper.org/classutil/license.html"
+  } ],
+  "sbt" : false
+}
