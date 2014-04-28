@@ -56,7 +56,8 @@ classpath at runtime:
 ClassUtil is published to my [Bintray Maven repository][], which is
 automatically linked to Bintray's [JCenter][] repository.
 
-* Versions 1.0.1 and greater support Scala 2.10.
+* Version 1.0.5 supports Scala 2.10 and 2.11.
+* Versions 1.0.1 through 1.0.4 support Scala 2.10.
 * Version 1.0.0 supports Scala 2.10.0-M7
 * Version 0.4.6 supports Scala 2.9.2, 2.9.1-1, 2.9.1, 2.9.0-1, 2.9.0, 2.8.2,
   2.8.1 and 2.8.0.
