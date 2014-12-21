@@ -95,11 +95,13 @@ private[classutil] class ClassInfoImpl(val name: String,
                                        val access: Int,
                                        val location: File)
 extends ClassInfo with ASMBitmapMapper {
-  def methods = Set.empty[MethodInfo] ++ methodSet
-  def fields  = Set.empty[FieldInfo] ++ fieldSet
+  def methods     = Set.empty[MethodInfo] ++ methodSet
+  def fields      = Set.empty[FieldInfo] ++ fieldSet
+  def annotations = Set.empty[AnnotationInfo] ++ annotationSet
 
   var methodSet = MutableSet.empty[MethodInfo]
   var fieldSet = MutableSet.empty[FieldInfo]
+  var annotationSet = MutableSet.empty[AnnotationInfo]
   val modifiers = mapModifiers(access, ASMBitmapMapper.AccessMap)
 }
 
@@ -119,6 +121,14 @@ private[classutil] class FieldInfoImpl(val name: String,
                                        val access: Int)
 extends FieldInfo with ASMBitmapMapper {
   val modifiers = mapModifiers(access, ASMBitmapMapper.AccessMap)
+}
+
+private[classutil] class AnnotationInfoImpl(val descriptor: String,
+                                            val visible: Boolean)
+extends AnnotationInfo {
+  def params = Map.empty[String, Any] ++ paramMap
+
+  var paramMap = HashMap.empty[String, Any]
 }
 
 private[classutil] class ClassVisitor(location: File)
@@ -174,6 +184,39 @@ extends EmptyVisitor with ASMBitmapMapper {
                                                    initialVal,
                                                    access)
     null
+  }
+
+  class AnnotationVisitor(annotationInfo: AnnotationInfoImpl)
+    extends org.objectweb.asm.AnnotationVisitor(api) {
+
+    override def visit(name: String, value: Any) =
+      annotationInfo.paramMap += (name -> value)
+
+    override def visitEnum(name: String, desc: String, value: String) =
+      annotationInfo.paramMap += (name -> value)
+
+    override def visitAnnotation(name: String, desc: String) = {
+      val innerAnnInfo = new AnnotationInfoImpl(desc, annotationInfo.visible)
+      annotationInfo.paramMap += (name -> innerAnnInfo)
+      new AnnotationVisitor(innerAnnInfo)
+    }
+
+    override def visitArray(name: String): AnnotationVisitor = {
+      val dummyInfo = new AnnotationInfoImpl(null, false)
+      new AnnotationVisitor(dummyInfo) {
+        override def visitEnd() =
+          annotationInfo.paramMap += (name -> dummyInfo.paramMap.values.toArray)
+      }
+    }
+  }
+
+  override def visitAnnotation(descriptor: String,
+                               visible: Boolean): AnnotationVisitor = {
+    assert(currentClass != None)
+    val annotationInfo = new AnnotationInfoImpl(descriptor, visible)
+    currentClass.get.annotationSet += annotationInfo
+
+    new AnnotationVisitor(annotationInfo)
   }
 
   private def mapClassName(name: String): String = {
