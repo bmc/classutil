@@ -41,8 +41,8 @@ package org.clapper.classutil.asm
 
 import org.clapper.classutil._
 
-import scala.collection.mutable.{Set => MutableSet}
-import scala.collection.mutable.{HashMap, HashSet}
+import scala.collection.mutable.{Set => MutableSet, ArrayBuilder}
+import scala.collection.mutable.HashMap
 
 import org.objectweb.asm._
 
@@ -201,11 +201,28 @@ extends EmptyVisitor with ASMBitmapMapper {
       new AnnotationVisitor(innerAnnInfo)
     }
 
-    override def visitArray(name: String): AnnotationVisitor = {
-      val dummyInfo = new AnnotationInfoImpl(null, false)
-      new AnnotationVisitor(dummyInfo) {
-        override def visitEnd() =
-          annotationInfo.paramMap += (name -> dummyInfo.paramMap.values.toArray)
+    override def visitArray(name: String) = new AnnotationArrayVisitor {
+      override def visitEnd(): Unit = annotationInfo.paramMap += (name -> arrBuilder.result)
+    }
+  }
+
+  class AnnotationArrayVisitor extends org.objectweb.asm.AnnotationVisitor(api) {
+    protected val arrBuilder = ArrayBuilder.make[Any]
+
+    override def visit(name: String, value: Any) = arrBuilder += value
+
+    override def visitEnum(name: String, desc: String, value: String) = arrBuilder += value
+
+    override def visitAnnotation(name: String, desc: String) = {
+      val innerAnnInfo = new AnnotationInfoImpl(desc, false)
+      arrBuilder += innerAnnInfo
+      new AnnotationVisitor(innerAnnInfo)
+    }
+
+    override def visitArray(name: String) = {
+      val outer = this
+      new AnnotationArrayVisitor {
+        override def visitEnd(): Unit = outer.arrBuilder += arrBuilder.result
       }
     }
   }
