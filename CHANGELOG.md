@@ -1,5 +1,13 @@
 # Change log for ClassUtil library
 
+Version 1.0.6
+
+* Add ability to retrieve runtime annotations. Patch courtesy of
+  [github.com/ruippeixotog](https://github.com/ruippeixotog).
+* Updated various dependencies.
+* Removed `ls` SBT plugin.
+* Updated to SBT 0.13.8.
+
 Version 1.0.5
 
 * Removed use of [Grizzled Scala][] generators, replacing them with Scala
