@@ -228,6 +228,27 @@ trait FieldInfo extends BaseInfo {
   }
 }
 
+/** Information about a field, as read from a class file.
+  */
+trait AnnotationInfo {
+
+  /** The annotations's descriptor which describes it's type
+    * Ex: Lscala/reflect/ScalaSignature;
+    */
+  val descriptor: String
+
+  val visible: Boolean
+
+  def params: Map[String, Any]
+
+  override def hashCode = (descriptor, params).hashCode
+
+  override def equals(o: Any) = o match {
+    case m: AnnotationInfo => m.descriptor == descriptor && m.params == params
+    case _                 => false
+  }
+}
+
 /** Information about a class, as read from a class file.
   */
 trait ClassInfo extends BaseInfo {
@@ -255,6 +276,10 @@ trait ClassInfo extends BaseInfo {
   /** A set of the fields in the class.
     */
   def fields: Set[FieldInfo]
+
+  /** A set of the runtime-retained annotations in the class.
+    */
+  def annotations: Set[AnnotationInfo]
 
   /** Convenience method to determine whether this class directly
     * implements a specific interface. Since a `ClassInfo` object contains
