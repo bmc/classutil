@@ -1,5 +1,12 @@
 # Change log for ClassUtil library
 
+Version 1.0.7
+
+* Now compiles against Scala 2.12, as well as 2.11 and 2.10.
+* Updated to SBT 0.13.11.
+* Added `activator`, for a self-bootstrapping build.
+* Updated license to BSD 3-Clause license.
+
 Version 1.0.6
 
 * Add ability to retrieve runtime annotations. Patch courtesy of

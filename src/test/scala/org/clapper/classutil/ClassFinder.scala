@@ -40,7 +40,7 @@ package org.clapper.classutil
 import org.scalatest.{FunSuite, Assertions}
 
 import java.io.File
-import grizzled.file.GrizzledFile._
+import grizzled.file.Implicits._
 import scala.annotation.tailrec
 
 class ClassFinderTest extends FunSuite {

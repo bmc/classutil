@@ -403,7 +403,7 @@ class ClassFinder(path: Seq[File]) {
     (! e.isDirectory) && (e.getName.toLowerCase.endsWith(".class"))
 
   private def processDirectory(dir: File): Stream[ClassInfo] = {
-    import grizzled.file.GrizzledFile._
+    import grizzled.file.Implicits._
     import java.io.FileInputStream
 
     val inputStreams = dir.listRecursively().filter(isClass _).
