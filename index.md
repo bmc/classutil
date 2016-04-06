@@ -104,11 +104,16 @@ the repository, run this command:
 
 ## Building
 
-Building the library requires [SBT][] 0.10.1. Install SBT, as described at
-the SBT web site. Then, assuming you have an `sbt` shell script (or .BAT
-file, for Windows), run:
+Building the library requires [SBT][] 0.13.1, but you don't have to
+install it (unless you're building on Windows). Instead, just use the
+`./activator` script at the top level of the repository. The script,
+part of [Lightbend Activator)(https://www.lightbend.com/activator/download),
+automatically downloads the appropriate versions of SBT and Scala for
+you. (You _do_ need to have an installed Java JDK. I recommend 1.8.)
 
-    sbt +compile +package
+You can build with this one simple command:
+
+    ./activator +compile +package
 
 The resulting jar files will be under the top-level `target` directory, in
 subdirectories specific to each Scala version.
