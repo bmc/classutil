@@ -1,5 +1,9 @@
 # Change log for ClassUtil library
 
+Version 1.0.8
+
+* Built against Scala 2.12.0-M4, instead of -M1
+
 Version 1.0.7
 
 * Now compiles against Scala 2.12, as well as 2.11 and 2.10.
