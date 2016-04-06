@@ -81,7 +81,7 @@ For more information on using Maven and Scala, see Josh Suereth's
 
 With SBT 0.13.x, use:
 
-    libraryDependencies += "org.clapper" % "classutil" % "1.0.7"
+    libraryDependencies += "org.clapper" %% "classutil" % "1.0.7"
 
 to get the latest version of ClassUtil.
 
