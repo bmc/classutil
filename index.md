@@ -126,7 +126,7 @@ import org.clapper.classutil.ClassFinder
 
 val finder = ClassFinder()
 val classes = finder.getClasses // classes is an Iterator[ClassInfo]
-classes.foreach(println(_))
+classes.foreach(println)
 {% endhighlight %}
 
 ### Getting all concrete classes in a custom class path
@@ -138,7 +138,7 @@ import java.io.File
 val classpath = List("foo.jar", "bar.jar", "baz.zip").map(new File(_))
 val finder = ClassFinder(classpath)
 val classes = finder.getClasses.filter(_.isConcrete)
-classes.foreach(println(_))
+classes.foreach(println)
 {% endhighlight %}
 
 ### Getting all interfaces in a custom class path
@@ -150,7 +150,7 @@ import java.io.File
 val classpath = List("foo.jar", "bar.jar", "baz.zip").map(new File(_))
 val finder = ClassFinder(classpath)
 val classes = finder.getClasses.filter(_.isInterface)
-classes.foreach(println(_))
+classes.foreach(println)
 {% endhighlight %}
 
 ### Finding all classes that implement an interface, directly or indirectly
@@ -169,7 +169,7 @@ val classpath = List("foo.jar", "bar.jar", "baz.zip").map(new File(_))
 val finder = ClassFinder(classpath)
 val classes = finder.getClasses
 val plugins = ClassFinder.concreteSubclasses("org.example.plugin", classes)
-plugins.foreach(println(_))
+plugins.foreach(println)
 {% endhighlight %}
 
 Note that the `concreteSubclasses()` method called above takes the iterator
@@ -286,7 +286,7 @@ val map =  Map("int" -> 1,
                "list" -> charList)
 val obj = MapToBean(map)
 
-obj.getClass.getMethods.filter(_.getName startsWith "get").foreach(println _)
+obj.getClass.getMethods.filter(_.getName startsWith "get").foreach(println)
 
 def call(methodName: String) = {
     val method = obj.getClass.getMethod(methodName)
@@ -433,11 +433,11 @@ val beanBar = ScalaObjectToBean(bar)
 
 println("beanFoo:")
 println("-" * 30)
-beanFoo.getClass.getMethods.filter(_.getName startsWith "get").foreach(println _)
+beanFoo.getClass.getMethods.filter(_.getName startsWith "get").foreach(println)
 
 println("beanBar:")
 println("-" * 30)
-beanBar.getClass.getMethods.filter(_.getName startsWith "get").foreach(println _)
+beanBar.getClass.getMethods.filter(_.getName startsWith "get").foreach(println)
 
 def call(obj: AnyRef, methodName: String) = {
   val method = obj.getClass.getMethod(methodName)
