@@ -54,8 +54,10 @@ classpath at runtime:
 # Installation
 
 ClassUtil is published to my [Bintray Maven repository][], which is
-automatically linked to Bintray's [JCenter][] repository.
+automatically linked to Bintray's [JCenter][] repository. It's also sync'd
+to Maven Central.
 
+* Version 1.0.7 supports Scala 2.10, 2.11, and 2.12-M1.
 * Version 1.0.5 supports Scala 2.10 and 2.11.
 * Versions 1.0.1 through 1.0.4 support Scala 2.10.
 * Version 1.0.0 supports Scala 2.10.0-M7
@@ -64,26 +66,12 @@ automatically linked to Bintray's [JCenter][] repository.
 
 ## Installing with Maven
 
-If you're using [Maven][], first declare the JCenter repository:
-
-    <repositories>
-      <repository>
-        <snapshots>
-          <enabled>false</enabled>
-        </snapshots>
-        <id>central</id>
-        <name>bintry</name>
-        <url>http://jcenter.bintray.com</url>
-      </repository>
-      ...
-    </repositories>
-
-Then, specify the `classutil` artifact:
+Specify the `classutil` artifact:
 
     <dependency>
       <groupId>org.clapper</groupId>
       <artifactId>classutil_2.10</artifactId>
-      <version>1.0.4</version>
+      <version>1.0.7</version>
     </dependency>
 
 For more information on using Maven and Scala, see Josh Suereth's
@@ -91,41 +79,11 @@ For more information on using Maven and Scala, see Josh Suereth's
 
 ## Using with SBT
 
-#### 0.11.x/0.12.x
+With SBT 0.13.x, use:
 
-If you're using [SBT][] 0.11.x or 0.12.x to compile your code, you can use the
-following line in your `build.sbt` file (for Quick Configuration).
-
-    repositories += "JCenter" at "http://jcenter.bintray.com/"
-
-    libraryDependencies += "org.clapper" % "classutil_2.10" % "1.0.4"
-
-#### 0.13.x
-
-With SBT 0.13.x, you can just use [Doug Tangren][]'s `bintray-sbt` plugin.
-In your `project/plugins.sbt` file, add:
-
-    resolvers += Resolver.url(
-      "bintray-sbt-plugin-releases",
-      url("http://dl.bintray.com/content/sbt/sbt-plugin-releases"))(
-        Resolver.ivyStylePatterns)
-
-    addSbtPlugin("me.lessis" % "bintray-sbt" % "0.1.1")
-
-Then, in your `build.sbt` file, add:
-
-    seq(bintrayResolverSettings:_*)
-
-That automatically adds JCenter to the list of repositories. Finally, add:
-
-    libraryDependencies += "org.clapper" % "classutil" % "1.0.4"
+    libraryDependencies += "org.clapper" % "classutil" % "1.0.7"
 
 to get the latest version of ClassUtil.
-
-You can also add my maven repository manually, in case the latest version
-hasn't yet been sync'd to JCenter:
-
-    resolvers += bintray.Opts.resolver.repo("bmc", "maven")
 
 # Building from Source
 
