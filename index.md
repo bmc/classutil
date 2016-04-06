@@ -29,15 +29,6 @@ ClassUtil is fast for several reasons:
   penalty and the ability to terminate the traversal before reading
   and loading all the elements.
 
-# Requirements
-
-## Compile-time
-
-* ClassUtil requires a Scala 2.8 environment, or better, because it uses the
-  [continuations][] plug-in, which is not available in versions before 2.8.
-* Other compile-time requirements are automatically satisfied, if you
-  use Maven or SBT. See below.
-
 ## Runtime requirements
 
 ClassUtil uses the following libraries, which must be present in the
