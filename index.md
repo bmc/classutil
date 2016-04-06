@@ -104,7 +104,7 @@ the repository, run this command:
 
 ## Building
 
-Building the library requires [SBT][] 0.13.1, but you don't have to
+Building the library requires [SBT][] 0.13.x, but you don't have to
 install it (unless you're building on Windows). Instead, just use the
 `./activator` script at the top level of the repository. The script,
 part of [Lightbend Activator)(https://www.lightbend.com/activator/download),
