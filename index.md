@@ -362,7 +362,7 @@ val x: Int = 0
 var y: Int = 10
 {% endhighlight %}
 
-down to the equivalent of the this Java code:
+down to the equivalent of this Java code:
 
 {% highlight java %}
 private int _x = 0;
