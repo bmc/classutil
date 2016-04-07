@@ -1,5 +1,15 @@
 # Change log for ClassUtil library
 
+Version 1.0.9
+
+* Bug fix: `ClassFinder.concreteSubclasses` did not properly handle traits and
+  interfaces. Specifically, when looking for all implementations of an
+  interface or trait, it did not properly find classes that were indirect
+  implementers; it only found immediate descendents.
+* Fixed some inconsistencies: `ClassFinder.getClasses` returns a `Stream`,
+  but `ClassFinder.concreteSubclasses` only accepted an `Iterator` or a
+  `Map`. A `Stream` version now exists.
+
 Version 1.0.8
 
 * Built against Scala 2.12.0-M4, instead of -M1
