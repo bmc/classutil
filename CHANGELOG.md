@@ -2,6 +2,7 @@
 
 Version 1.0.9
 
+* Updated to ASM version 5.1
 * Bug fix: `ClassFinder.concreteSubclasses` did not properly handle traits and
   interfaces. Specifically, when looking for all implementations of an
   interface or trait, it did not properly find classes that were indirect

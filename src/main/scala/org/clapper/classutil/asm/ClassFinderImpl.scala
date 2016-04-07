@@ -132,7 +132,7 @@ extends AnnotationInfo {
 }
 
 private[classutil] class ClassVisitor(location: File)
-extends EmptyVisitor with ASMBitmapMapper {
+extends ASMEmptyVisitor with ASMBitmapMapper {
 
   var classes = MutableSet.empty[ClassInfo]
   var currentClass: Option[ClassInfoImpl] = None

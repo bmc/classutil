@@ -48,8 +48,6 @@ package org.clapper.classutil
 import scala.annotation.tailrec
 import scala.language.reflectiveCalls
 
-import grizzled.slf4j._
-
 import java.util.jar.{JarFile, Manifest => JarManifest}
 import java.util.zip.{ZipFile, ZipEntry}
 import java.io.{File, InputStream}
@@ -302,7 +300,6 @@ trait ClassInfo extends BaseInfo {
   */
 class ClassFinder(path: Seq[File]) {
   val classpath = path.toList
-  private val log = Logger(this.getClass)
 
   /** Find all classes in the specified path, which can contain directories,
     * zip files and jar files. Returns metadata about each class in a
@@ -365,7 +362,6 @@ class ClassFinder(path: Seq[File]) {
       Nil
 
     else {
-      log.debug("Adding ClassPath from jar " + jar.getName)
       val parent = jarFile.getParent
       val tokens = value.split("""\s+""").toList
 

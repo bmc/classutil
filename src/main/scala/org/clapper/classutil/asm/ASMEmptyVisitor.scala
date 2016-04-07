@@ -2,7 +2,8 @@ package org.clapper.classutil.asm
 
 import org.objectweb.asm._
 
-private[classutil] class EmptyVisitor(apiVersion: Int) extends org.objectweb.asm.ClassVisitor(apiVersion) {
+private[classutil] class ASMEmptyVisitor(apiVersion: Int)
+  extends org.objectweb.asm.ClassVisitor(apiVersion) {
 
   import scala.language.existentials
 
