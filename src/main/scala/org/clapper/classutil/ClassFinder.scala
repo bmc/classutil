@@ -393,20 +393,20 @@ class ClassFinder(path: Seq[File]) {
       yield data
   }
 
-  // Matches both ZipEntry and File
-  type FileEntry = {
+  // Structural type that matches both ZipEntry and File
+  private type FileEntry = {
     def isDirectory(): Boolean
     def getName(): String
   }
 
   private def isClass(e: FileEntry): Boolean =
-    (! e.isDirectory) && (e.getName.toLowerCase.endsWith(".class"))
+    (! e.isDirectory) && e.getName.toLowerCase.endsWith(".class")
 
   private def processDirectory(dir: File): Stream[ClassInfo] = {
     import grizzled.file.Implicits._
     import java.io.FileInputStream
 
-    val inputStreams = dir.listRecursively().filter(isClass _).
+    val inputStreams = dir.listRecursively().filter(isClass).
                            map(f => new FileInputStream(f))
 
     val iterators =
@@ -452,21 +452,31 @@ object ClassFinder {
     *
     * @param path  the classpath, which is a sequence of `File`
     *               objects representing directories, jars and zip files
-    *               to search. Defaults to `classpath`.
+    *               to search. Defaults to `classpath` if empty.
     *
     * @return a new `ClassFinder` object
     */
   def apply(path: Seq[File] = Seq.empty[File]) =
-    new ClassFinder(if (path.length > 0) path else classpath)
+    new ClassFinder(if (path.nonEmpty) path else classpath)
 
   /** Create a map from an Iterator of ClassInfo objects. The resulting
     * map is indexed by class name.
+    *
+    * @return a map of (classname, `ClassInfo`) pairs
     */
   def classInfoMap(iterator: Iterator[ClassInfo]): Map[String, ClassInfo] =
-    iterator.map(c => (c.name -> c)).toMap
+    iterator.map(c => c.name -> c).toMap
+
+  /** Create a map from a Stream of ClassInfo objects. The resulting map is
+    * indexed by class name.
+    *
+    * @return a map of (classname, `ClassInfo`) pairs
+    */
+  def classInfoMap(stream: Stream[ClassInfo]): Map[String, ClassInfo] =
+    classInfoMap(stream.toIterator)
 
   /** Convenience method that scans the specified classes for all concrete
-    * classes that are subclasses of the named class. A subclass, in this
+    * classes that are subclasses of a superclass or trait. A subclass, in this
     * definition, is a class that directly or indirectly (a) implements an
     * interface (if the named class is an interface) or (b) extends a
     * subclass (if the named class is a class). The class must be
@@ -475,45 +485,130 @@ object ClassFinder {
     *
     * '''WARNINGS'''
     *
-    * This method converts the iterator to a map of classes, for easier
-    * lookup. Thus, upon its return, the iterator will be empty. You can
-    * certainly recreate the iterator, but at a cost. If you need to make
+    * This method converts the stream to a map of classes, for easier
+    * lookup. Thus, upon its return, the stream will be empty. You can
+    * certainly recreate the stream, but at a cost. If you need to make
     * multiple calls to this method with the same classpath, consider
-    * converting the iterator to a map first, as shown below:
+    * converting the stream to a map first, as shown below:
     * {{{
     * val finder = ClassFinder(myPath)
-    * val classes = finder.getClasses  // classes is an Iterator[ClassInfo]
-    * val classMap = ClassFinder.classInfoMap // runs the iterator out, once
-    * val foos = ClassFinder.concreteSubclasses("org.example.Foo", classMap)
-    * val bars = ClassFinder.concreteSubclasses("org.example.Bar", classMap)
+    * val classes = finder.getClasses  // classes is an Stream[ClassInfo]
+    * val classMap = ClassFinder.classInfoMap // runs the stream out, once
+    * val foos = ClassFinder.concreteSubclasses(classOf[org.example.Foo], classMap)
+    * val bars = ClassFinder.concreteSubclasses(classOf[Bar], classMap)
     * }}}
     *
     * This method can chew up a lot of temporary heap space, if called
     * with a large classpath.
     *
+    * @param ancestor the `Class` object of the superclass or trait for which
+    *                 to find descendent concrete subclasses
+    * @param classes  the stream of `ClassInfo` objects to search
+    *
+    * @return an iterator of `ClassInfo` objects that are concrete subclasses
+    *         of `ancestor`. The iterator will be empty if no matching classes
+    *         could be found.
+    */
+  def concreteSubclasses(ancestor: Class[_], classes: Stream[ClassInfo]):
+    Iterator[ClassInfo] = {
+    findConcreteSubclasses(ancestor.getName, ClassFinder.classInfoMap(classes))
+  }
+
+  /** Variant of `concreteSubclasses()` that takes a string class name and
+    * a `Stream` of `ClassInfo` objects, rather than a `Class` and a `Stream`.
+    *
     * @param ancestor the name of the class for which to find descendent
     *                 concrete subclasses
+    * @param classes  the stream of `ClassInfo` objects to search
+    *
+    * @return an iterator of `ClassInfo` objects that are concrete subclasses
+    *         of `ancestor`. The iterator will be empty if no matching classes
+    *         could be found.
+    *
+    * @see `concreteSubclasses(Class[_], Stream[ClassInfo])`
+    */
+  def concreteSubclasses(ancestor: String, classes: Stream[ClassInfo]):
+    Iterator[ClassInfo] = {
+    findConcreteSubclasses(ancestor, ClassFinder.classInfoMap(classes))
+  }
+
+  /** Variant of `concreteSubclasses()` that takes a class and an `Iterator`
+    * of `ClassInfo` objects, rather than a `Class` and a `Stream`.
+    *
+    * @example
+    * {{{
+    *   val finder = ClassFinder(myPath)
+    *   val classes = finder.getClasses  // classes is an Stream[ClassInfo]
+    *   // Of course, it's easier just to call the version that takes a
+    *   // Stream...
+    *   ClassFinder.concreteSubclasses(classOf[Baz], classes.toIterator)
+    * }}}
+    *
+    * @param ancestor the `Class` object of the superclass or trait for which
+    *                 to find descendent concrete subclasses
     * @param classes  the iterator of `ClassInfo` objects to search
     *
     * @return an iterator of `ClassInfo` objects that are concrete subclasses
     *         of `ancestor`. The iterator will be empty if no matching classes
     *         could be found.
+    *
+    * @see `concreteSubclasses(Class[_], Stream[ClassInfo])`
+    */
+  def concreteSubclasses(ancestor: Class[_], classes: Iterator[ClassInfo]):
+    Iterator[ClassInfo] = {
+    findConcreteSubclasses(ancestor.getName, ClassFinder.classInfoMap(classes))
+  }
+
+  /** Variant of `concreteSubclasses()` that takes a string class name and
+    * an `Iterator` of `ClassInfo` objects, rather than a `Class` and an
+    * `Iterator`.
+    *
+    * @example
+    * {{{
+    *   val finder = ClassFinder(myPath)
+    *   val classes = finder.getClasses  // classes is an Stream[ClassInfo]
+    *   // Of course, it's easier just to call the version that takes a
+    *   // Stream...
+    *   ClassFinder.concreteSubclasses("org.example.Foo", classes.toIterator)
+    * }}}
+    *
+    * @param ancestor the name of the class for which to find descendent
+    *                 concrete subclasses
+    * @param classes  the stream of `ClassInfo` objects to search
+    *
+    * @return an iterator of `ClassInfo` objects that are concrete subclasses
+    *         of `ancestor`. The iterator will be empty if no matching classes
+    *         could be found.
+    *
+    * @see `concreteSubclasses(String, Stream[ClassInfo])`
+    * @see `concreteSubclasses(Class[_], Iterator[ClassInfo])`
     */
   def concreteSubclasses(ancestor: String, classes: Iterator[ClassInfo]):
     Iterator[ClassInfo] = {
-    concreteSubclasses(ancestor, ClassFinder.classInfoMap(classes))
+    findConcreteSubclasses(ancestor, ClassFinder.classInfoMap(classes))
   }
 
-  /** Convenience method that scans the specified classes for all concrete
-    * classes that are subclasses of the named class. A subclass, in this
-    * definition, is a class that directly or indirectly (a) implements an
-    * interface (if the named class is an interface) or (b) extends a
-    * subclass (if the named class is a class). The class must be
-    * concrete, so intermediate abstract classes are not returned, though
-    * any children of such abstract classes will be.
+  /** Variant of `concreteSubclasses()` that takes a class and a `Map`
+    * `ClassInfo` objects.
     *
-    * WARNING: This method can chew up a lot of temporary heap space, if
-    * called with a large classpath.
+    * @param ancestor the `Class` object of the superclass or trait for which
+    *                 to find descendent concrete subclasses
+    * @param classes  the iterator of `ClassInfo` objects to search
+    *
+    * @return an iterator of `ClassInfo` objects that are concrete subclasses
+    *         of `ancestor`. The iterator will be empty if no matching classes
+    *         could be found.
+    *
+    * @see `concreteSubclasses(Class[_], Stream[ClassInfo])`
+    * @see `concreteSubclasses(Class[_], Iterator[ClassInfo])`
+    */
+  def concreteSubclasses(ancestor: Class[_], classes: Map[String, ClassInfo]):
+    Iterator[ClassInfo] = {
+    findConcreteSubclasses(ancestor.getName, classes)
+  }
+
+  /** Variant of `concreteSubclasses()` that takes a string class name and
+    * a map, rather than a `Class` and a map.
     *
     * @param ancestor the name of the class for which to find descendent
     *                 concrete subclasses
@@ -522,36 +617,69 @@ object ClassFinder {
     * @return an iterator of `ClassInfo` objects that are concrete subclasses
     *         of `ancestor`. The iterator will be empty if no matching classes
     *         could be found.
+    *
+    * @see `concreteSubclasses(Class[_], Map[String, ClassInfo])`
+    * @see `concreteSubclasses(String, Stream[ClassInfo])`
+    * @see `concreteSubclasses(String, Iterator[ClassInfo])`
     */
   def concreteSubclasses(ancestor: String, classes: Map[String, ClassInfo]):
     Iterator[ClassInfo] = {
+
+    findConcreteSubclasses(ancestor, classes)
+  }
+
+  // -------------------------------------------------------------------------
+  // Private methods
+  // -------------------------------------------------------------------------
+
+  private def findConcreteSubclasses(ancestor: String,
+                                     classes:  Map[String, ClassInfo]):
+    Iterator[ClassInfo] = {
+
     // Convert the set of classes to search into a map of ClassInfo objects
     // indexed by class name.
 
-    @tailrec def classMatches(ancestorClassInfo: ClassInfo,
-                              classToCheck: ClassInfo): Boolean = {
-      if (classToCheck.name == ancestorClassInfo.name)
+     @tailrec def classMatches(targetClassInfo: ClassInfo,
+                              classesToCheck:  Seq[ClassInfo]): Boolean = {
+      val targetName = targetClassInfo.name // could use ancestor, but, yuck.
+      val classNames = classesToCheck.map(_.name)
+      val interfaceNamesToCheck = classesToCheck.flatMap(_.interfaces)
+      if (classNames contains targetName) {
+        // The current classes we're checking match the target class. Done.
         true
-      else if ((classToCheck.superClassName == ancestorClassInfo.name) ||
-               (classToCheck implements ancestorClassInfo.name))
+      }
+      else if (interfaceNamesToCheck contains targetName) {
+        // At least one of current classes implements an interface that is
+        // the target class. Done.
         true
+      }
       else {
-        classes.get(classToCheck.superClassName) match {
-          case None            => false
-          case Some(classInfo) => classMatches(ancestorClassInfo,
-                                               classInfo)
+        val superClasses = classesToCheck.flatMap { c =>
+          classes.get(c.superClassName)
+        }
+        val interfaces = interfaceNamesToCheck.flatMap { i =>
+          classes.get(i)
+        }
+
+        val newClassesToCheck = superClasses ++ interfaces
+        if (newClassesToCheck.isEmpty) {
+          // No matches. Done.
+          false
+        }
+        else {
+          // Dive deeper.
+          classMatches(targetClassInfo, newClassesToCheck)
         }
       }
     }
 
     // Find the ancestor class
-    classes.get(ancestor) match {
-      case None     =>
-        Iterator.empty
-      case Some(ci) =>
-        classes.values.toIterator.
-        filter(_.isConcrete).
-        filter(classMatches(ci, _))
+    classes.get(ancestor).map { classInfo =>
+      classes.values
+             .toIterator
+             .filter(_.isConcrete)
+             .filter(c => classMatches(classInfo, Seq(c)))
     }
+    .getOrElse(Iterator.empty)
   }
 }
