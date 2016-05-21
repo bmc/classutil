@@ -1,6 +1,8 @@
 classutil: Fast class finder utilities, plus some extras
 ========================================================
 
+[![Build Status](https://travis-ci.org/bmc/classutil.svg?branch=master)](https://travis-ci.org/bmc/classutil)
+
 ## Introduction
 
 The *org.clapper.classutil* (ClassUtil) library is a Scala package that
