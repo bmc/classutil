@@ -1,5 +1,10 @@
 # Change log for ClassUtil library
 
+Version 1.0.10
+
+* Minor tweaks to permit Travis CI builds.
+* Updated version of Lightbend Activator.
+
 Version 1.0.9
 
 * Updated to ASM version 5.1
