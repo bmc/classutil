@@ -5,7 +5,7 @@ name := "classutil"
 
 organization := "org.clapper"
 
-version := "1.0.9"
+version := "1.0.10"
 
 licenses := Seq(
   "BSD New" -> url("http://software.clapper.org/classutil/license.html")
@@ -15,9 +15,9 @@ homepage := Some(url("http://software.clapper.org/classutil/"))
 
 description := "A library for fast runtime class-querying, and more"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 
-crossScalaVersions := Seq("2.10.5", "2.11.7", "2.12.0-M4")
+crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0-M4")
 
 // ---------------------------------------------------------------------------
 // Additional compiler options and plugins
