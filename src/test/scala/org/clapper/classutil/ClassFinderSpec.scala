@@ -118,8 +118,6 @@ class ClassFinderSpec extends FlatSpec with Matchers {
     assert(targetDirectory.isDefined)
     val dir = targetDirectory.get
 
-    println(s"dir=$dir, exists=${dir.exists}")
-
     // SBT-dependent paths
     val classDir = new File(fileutil.joinPath(dir.getPath, "classes"))
     val testClassDir = new File(fileutil.joinPath(dir.getPath, "test-classes"))
