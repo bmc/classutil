@@ -5,7 +5,7 @@ name := "classutil"
 
 organization := "org.clapper"
 
-version := "1.0.10"
+version := "1.0.11"
 
 licenses := Seq(
   "BSD New" -> url("http://software.clapper.org/classutil/license.html")
@@ -52,7 +52,7 @@ libraryDependencies ++= Seq(
     "org.ow2.asm" % "asm" % "5.1",
     "org.ow2.asm" % "asm-commons" % "5.1",
     "org.ow2.asm" % "asm-util" % "5.1",
-    "org.clapper" %% "grizzled-scala" % "1.6.1"
+    "org.clapper" %% "grizzled-scala" % "2.4.0"
 )
 
 // ---------------------------------------------------------------------------

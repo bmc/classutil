@@ -1,5 +1,9 @@
 # Change log for ClassUtil library
 
+Version 1.0.11
+
+* Updated to Grizzled Scala version 2.4.0
+
 Version 1.0.10
 
 * Minor tweaks to permit Travis CI builds.
