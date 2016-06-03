@@ -1,5 +1,9 @@
 # Change log for ClassUtil library
 
+Version 1.0.12
+
+* Updated to Grizzled Scala version 2.4.1
+
 Version 1.0.11
 
 * Updated to Grizzled Scala version 2.4.0
