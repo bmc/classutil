@@ -2,6 +2,7 @@ classutil: Fast class finder utilities, plus some extras
 ========================================================
 
 [![Build Status](https://travis-ci.org/bmc/classutil.svg?branch=master)](https://travis-ci.org/bmc/classutil)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.clapper/classutil_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.clapper/classutil_2.11)
 
 ## Introduction
 
