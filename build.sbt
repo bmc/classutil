@@ -17,7 +17,7 @@ description := "A library for fast runtime class-querying, and more"
 
 scalaVersion := "2.11.8"
 
-crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0-M4")
+crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0-M5")
 
 // ---------------------------------------------------------------------------
 // Additional compiler options and plugins
@@ -43,7 +43,7 @@ def mappedDep(dep: sbt.ModuleID): sbt.ModuleID = {
 // ---------------------------------------------------------------------------
 // ScalaTest dependendency
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 
 // ---------------------------------------------------------------------------
 // Other dependendencies
@@ -52,7 +52,7 @@ libraryDependencies ++= Seq(
     "org.ow2.asm" % "asm" % "5.1",
     "org.ow2.asm" % "asm-commons" % "5.1",
     "org.ow2.asm" % "asm-util" % "5.1",
-    "org.clapper" %% "grizzled-scala" % "2.4.1"
+    "org.clapper" %% "grizzled-scala" % "2.8.0"
 )
 
 // ---------------------------------------------------------------------------
