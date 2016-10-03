@@ -376,13 +376,14 @@ class ClassFinder(path: Seq[File]) {
     processOpenZip(file, new ZipFile(file))
 
   private def processOpenZip(file: File, zipFile: ZipFile) = {
-    import scala.collection.JavaConversions._
+    import scala.collection.JavaConverters._
 
     val classInfoIterators =
-      zipFile.entries.
-              toStream.
-              filter((e: ZipEntry) => isClass(e)).
-              map((e: ZipEntry) => classData(zipFile.getInputStream(e), file))
+      zipFile.entries
+             .asScala
+             .toStream
+             .filter((e: ZipEntry) => isClass(e))
+             .map((e: ZipEntry) => classData(zipFile.getInputStream(e), file))
 
     for { it   <- classInfoIterators
           data <- it }
