@@ -5,7 +5,7 @@ name := "classutil"
 
 organization := "org.clapper"
 
-version := "1.0.12"
+version := "1.0.13"
 
 licenses := Seq(
   "BSD New" -> url("http://software.clapper.org/classutil/license.html")
@@ -17,7 +17,7 @@ description := "A library for fast runtime class-querying, and more"
 
 scalaVersion := "2.11.8"
 
-crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0-M5")
+crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0-RC1")
 
 // ---------------------------------------------------------------------------
 // Additional compiler options and plugins
@@ -52,7 +52,7 @@ libraryDependencies ++= Seq(
     "org.ow2.asm" % "asm" % "5.1",
     "org.ow2.asm" % "asm-commons" % "5.1",
     "org.ow2.asm" % "asm-util" % "5.1",
-    "org.clapper" %% "grizzled-scala" % "2.8.0"
+    "org.clapper" %% "grizzled-scala" % "3.0.0"
 )
 
 // ---------------------------------------------------------------------------

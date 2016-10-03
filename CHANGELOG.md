@@ -1,5 +1,12 @@
 # Change log for ClassUtil library
 
+Version 1.0.13
+
+* Updated Scala 2.12 cross-build to use Scala 2.12.0-RC1.
+* Updated to Grizzled Scala version 3.0.0
+* Replaced uses of `scala.collection.JavaConversions` with
+  `scala.collection.JavaConverters`
+
 Version 1.0.12
 
 * Updated to Grizzled Scala version 2.4.1
