@@ -1,5 +1,10 @@
 # Change log for ClassUtil library
 
+Version 1.1.0
+
+* Now builds against Scala 2.12.0-final.
+* Updated to Grizzled Scala version 3.1.0
+
 Version 1.0.13
 
 * Updated Scala 2.12 cross-build to use Scala 2.12.0-RC1.
