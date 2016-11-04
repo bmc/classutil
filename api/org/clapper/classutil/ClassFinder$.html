@@ -1,32 +1,217 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
-          <title>ClassFinder - org.clapper.classutil.ClassFinder</title>
-          <meta name="description" content="ClassFinder - org.clapper.classutil.ClassFinder" />
-          <meta name="keywords" content="ClassFinder org.clapper.classutil.ClassFinder" />
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
+      <link href="../../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../../../lib/index.js"></script>
+      <script type="text/javascript" src="../../../index.js"></script>
+      <script type="text/javascript" src="../../../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
-         if(top === self) {
-            var url = '../../../index.html';
-            var hash = 'org.clapper.classutil.ClassFinder$';
-            var anchor = window.location.hash;
-            var anchor_opt = '';
-            if (anchor.length >= 1)
-              anchor_opt = '@' + anchor.substring(1);
-            window.location.href = url + '#' + hash + anchor_opt;
-         }
-   	  </script>
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../../../';
+      </script>
     
         </head>
-        <body class="value">
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="index.html#_root_" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../../index.html">
+              <span class="name">root</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.org" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="org"></a><a id="org:org"></a>
+      <span class="permalink">
+      <a href="index.html#org" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../index.html">
+              <span class="name">org</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="org.clapper" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clapper"></a><a id="clapper:clapper"></a>
+      <span class="permalink">
+      <a href="../org/index.html#clapper" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../index.html">
+              <span class="name">clapper</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="org">org</a></dd></dl></div>
+    </li><li name="org.clapper.classutil" visbl="pub" class="indented3 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="classutil"></a><a id="classutil:classutil"></a>
+      <span class="permalink">
+      <a href="../../org/clapper/index.html#classutil" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="Classes and utilities for operating on JVM classes, at runtime." href="index.html">
+              <span class="name">classutil</span>
+            </a>
+      </span>
+      
+      <p class="shortcomment cmt">Classes and utilities for operating on JVM classes, at runtime.</p><div class="fullcomment"><div class="comment cmt"><p>Classes and utilities for operating on JVM classes, at runtime.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="org.clapper">clapper</a></dd></dl></div>
+    </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="AnnotationInfo.html" title="Information about a field, as read from a class file."></a>
+                        <a href="AnnotationInfo.html" title="Information about a field, as read from a class file.">
+                          AnnotationInfo
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <a class="object" href="" title="The entrance to the factory floor, providing methods for finding and
+filtering classes."></a>
+                        <a class="class" href="ClassFinder.html" title="A ClassFinder finds classes in a class path, returning the result in a
+lazy iterator."></a>
+                        <a href="ClassFinder.html" title="A ClassFinder finds classes in a class path, returning the result in a
+lazy iterator.">
+                          ClassFinder
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="ClassInfo.html" title="Information about a class, as read from a class file."></a>
+                        <a href="ClassInfo.html" title="Information about a class, as read from a class file.">
+                          ClassInfo
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="object" href="ClassUtil$.html" title="Some general-purpose class-related utility functions."></a>
+                        <a href="ClassUtil$.html" title="Some general-purpose class-related utility functions.">
+                          ClassUtil
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="FieldInfo.html" title="Information about a field, as read from a class file."></a>
+                        <a href="FieldInfo.html" title="Information about a field, as read from a class file.">
+                          FieldInfo
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="object" href="MapToBean$.html" title="Takes a Scala Map, with String keys and object values, and generates
+a Java Bean object, with fields for each map value."></a>
+                        <a href="MapToBean$.html" title="Takes a Scala Map, with String keys and object values, and generates
+a Java Bean object, with fields for each map value.">
+                          MapToBean
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="MapToBeanMapper.html" title="Takes a Scala Map, with String keys and object values, and generates
+an object, with fields for each map value."></a>
+                        <a href="MapToBeanMapper.html" title="Takes a Scala Map, with String keys and object values, and generates
+an object, with fields for each map value.">
+                          MapToBeanMapper
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="MethodInfo.html" title="Information about a method, as read from a class file."></a>
+                        <a href="MethodInfo.html" title="Information about a method, as read from a class file.">
+                          MethodInfo
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="object" href="Modifier$.html" title="An enumerated high-level view of the modifiers that can be attached
+to a method, class or field."></a>
+                        <a href="Modifier$.html" title="An enumerated high-level view of the modifiers that can be attached
+to a method, class or field.">
+                          Modifier
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="object" href="ScalaObjectToBean$.html" title="ScalaObjectToBean maps a Scala object into a read-only Java bean."></a>
+                        <a href="ScalaObjectToBean$.html" title="ScalaObjectToBean maps a Scala object into a read-only Java bean.">
+                          ScalaObjectToBean
+                        </a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="object value">
       <div id="definition">
-        <a href="ClassFinder.html" title="Go to companion"><img src="../../../lib/object_to_class_big.png" /></a>
-        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.clapper">clapper</a>.<a href="package.html" class="extype" name="org.clapper.classutil">classutil</a></p>
-        <h1><a href="ClassFinder.html" title="Go to companion">ClassFinder</a></h1>
+        <a href="ClassFinder.html" title="See companion class"><div class="big-circle object-companion-class">o</div></a>
+        <p id="owner"><a href="../../index.html" class="extype" name="org">org</a>.<a href="../index.html" class="extype" name="org.clapper">clapper</a>.<a href="index.html" class="extype" name="org.clapper.classutil">classutil</a></p>
+        <h1><a href="ClassFinder.html" title="See companion class">ClassFinder</a><span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        <h3><span class="morelinks"><div>
+            Companion <a href="ClassFinder.html" title="See companion class">class ClassFinder</a>
+          </div></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
@@ -38,43 +223,54 @@
         <span class="name">ClassFinder</span>
       </span>
       </h4>
+
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>The entrance to the factory floor, providing methods for finding and
 filtering classes.
 </p></div><div class="toggleContainer block">
-          <span class="toggle">Linear Supertypes</span>
+          <span class="toggle">
+            Linear Supertypes
+          </span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
       <div id="mbrsel">
-        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
-        <div id="order">
-              <span class="filtertype">Ordering</span>
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
+            <ol>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
+            </ol>
+          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="org.clapper.classutil.ClassFinder"><span>ClassFinder</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
               <ol>
-                
-                <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
               </ol>
             </div>
-        <div id="ancestors">
-                <span class="filtertype">Inherited<br />
-                </span>
-                <ol id="linearization">
-                  <li class="in" name="org.clapper.classutil.ClassFinder"><span>ClassFinder</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
-                </ol>
-              </div><div id="ancestors">
-            <span class="filtertype"></span>
-            <ol>
-              <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
-            </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
-          </div>
-        <div id="visbl">
-            <span class="filtertype">Visibility</span>
-            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
-          </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
       </div>
 
       <div id="template">
@@ -85,25 +281,16 @@ filtering classes.
 
         
 
-        <div id="values" class="values members">
+        <div class="values members">
               <h3>Value Members</h3>
-              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:AnyRef):Boolean"></a>
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:Any):Boolean"></a>
-      <a id="!=(Any):Boolean"></a>
-      <h4 class="signature">
+              <ol>
+                <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#!=(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -111,12 +298,15 @@ filtering classes.
       <span class="symbol">
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
-      <a id="##():Int"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html###():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -124,25 +314,15 @@ filtering classes.
       <span class="symbol">
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:AnyRef):Boolean"></a>
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:Any):Boolean"></a>
-      <a id="==(Any):Boolean"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#==(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -150,12 +330,15 @@ filtering classes.
       <span class="symbol">
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.clapper.classutil.ClassFinder#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(path:Seq[java.io.File]):org.clapper.classutil.ClassFinder"></a>
-      <a id="apply(Seq[File]):ClassFinder"></a>
-      <h4 class="signature">
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.clapper.classutil.ClassFinder#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(path:Seq[java.io.File]):org.clapper.classutil.ClassFinder"></a><a id="apply(Seq[File]):ClassFinder"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#apply(path:Seq[java.io.File]):org.clapper.classutil.ClassFinder" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -163,19 +346,20 @@ filtering classes.
       <span class="symbol">
         <span class="name">apply</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="java.io.File">File</span>] = <span class="symbol">Seq.empty[File]</span></span>)</span><span class="result">: <a href="ClassFinder.html" class="extype" name="org.clapper.classutil.ClassFinder">ClassFinder</a></span>
       </span>
-      </h4>
+      
       <p class="shortcomment cmt">Instantiate a new <code>ClassFinder</code> that will search the specified
 classpath, or the default classpath, if no classpath is defined.</p><div class="fullcomment"><div class="comment cmt"><p>Instantiate a new <code>ClassFinder</code> that will search the specified
 classpath, or the default classpath, if no classpath is defined.
 </p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>the classpath, which is a sequence of <code>File</code>
               objects representing directories, jars and zip files
-              to search. Defaults to <code>classpath</code>.
-</p></dd><dt>returns</dt><dd class="cmt"><p>a new <code>ClassFinder</code> object
-</p></dd></dl></div>
-    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+              to search. Defaults to <code>classpath</code> if empty.</p></dd><dt>returns</dt><dd class="cmt"><p>a new <code>ClassFinder</code> object</p></dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
-      <a id="asInstanceOf[T0]:T0"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#asInstanceOf[T0]:T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -183,12 +367,33 @@ classpath, or the default classpath, if no classpath is defined.
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.clapper.classutil.ClassFinder#classInfoMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="classInfoMap(iterator:Iterator[org.clapper.classutil.ClassInfo]):Map[String,org.clapper.classutil.ClassInfo]"></a>
-      <a id="classInfoMap(Iterator[ClassInfo]):Map[String,ClassInfo]"></a>
-      <h4 class="signature">
+    </li><li name="org.clapper.classutil.ClassFinder#classInfoMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="classInfoMap(stream:Stream[org.clapper.classutil.ClassInfo]):Map[String,org.clapper.classutil.ClassInfo]"></a><a id="classInfoMap(Stream[ClassInfo]):Map[String,ClassInfo]"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#classInfoMap(stream:Stream[org.clapper.classutil.ClassInfo]):Map[String,org.clapper.classutil.ClassInfo]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">classInfoMap</span><span class="params">(<span name="stream">stream: <span class="extype" name="scala.Stream">Stream</span>[<a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Create a map from a Stream of ClassInfo objects.</p><div class="fullcomment"><div class="comment cmt"><p>Create a map from a Stream of ClassInfo objects. The resulting map is
+indexed by class name.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a map of (classname, <code>ClassInfo</code>) pairs</p></dd></dl></div>
+    </li><li name="org.clapper.classutil.ClassFinder#classInfoMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="classInfoMap(iterator:Iterator[org.clapper.classutil.ClassInfo]):Map[String,org.clapper.classutil.ClassInfo]"></a><a id="classInfoMap(Iterator[ClassInfo]):Map[String,ClassInfo]"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#classInfoMap(iterator:Iterator[org.clapper.classutil.ClassInfo]):Map[String,org.clapper.classutil.ClassInfo]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -196,14 +401,17 @@ classpath, or the default classpath, if no classpath is defined.
       <span class="symbol">
         <span class="name">classInfoMap</span><span class="params">(<span name="iterator">iterator: <span class="extype" name="scala.Iterator">Iterator</span>[<a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>
       </span>
-      </h4>
+      
       <p class="shortcomment cmt">Create a map from an Iterator of ClassInfo objects.</p><div class="fullcomment"><div class="comment cmt"><p>Create a map from an Iterator of ClassInfo objects. The resulting
 map is indexed by class name.
-</p></div></div>
-    </li><li name="org.clapper.classutil.ClassFinder#classpath" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="classpath:List[java.io.File]"></a>
-      <a id="classpath:List[File]"></a>
-      <h4 class="signature">
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a map of (classname, <code>ClassInfo</code>) pairs</p></dd></dl></div>
+    </li><li name="org.clapper.classutil.ClassFinder#classpath" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="classpath:List[java.io.File]"></a><a id="classpath:List[File]"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#classpath:List[java.io.File]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -211,16 +419,18 @@ map is indexed by class name.
       <span class="symbol">
         <span class="name">classpath</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="java.io.File">File</span>]</span>
       </span>
-      </h4>
+      
       <p class="shortcomment cmt">Convenient method for getting the standard JVM classpath, into a
 variable suitable for use with the <code>find()</code> method.</p><div class="fullcomment"><div class="comment cmt"><p>Convenient method for getting the standard JVM classpath, into a
 variable suitable for use with the <code>find()</code> method.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the classpath, as a list of <code>File</code> objects
-</p></dd></dl></div>
-    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="clone():Object"></a>
-      <a id="clone():AnyRef"></a>
-      <h4 class="signature">
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the classpath, as a list of <code>File</code> objects</p></dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#clone():Object" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -228,7 +438,7 @@ variable suitable for use with the <code>find()</code> method.
       <span class="symbol">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -236,10 +446,13 @@ variable suitable for use with the <code>find()</code> method.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="org.clapper.classutil.ClassFinder#concreteSubclasses" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="concreteSubclasses(ancestor:String,classes:Map[String,org.clapper.classutil.ClassInfo]):Iterator[org.clapper.classutil.ClassInfo]"></a>
-      <a id="concreteSubclasses(String,Map[String,ClassInfo]):Iterator[ClassInfo]"></a>
-      <h4 class="signature">
+    </li><li name="org.clapper.classutil.ClassFinder#concreteSubclasses" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="concreteSubclasses(ancestor:String,classes:Map[String,org.clapper.classutil.ClassInfo]):Iterator[org.clapper.classutil.ClassInfo]"></a><a id="concreteSubclasses(String,Map[String,ClassInfo]):Iterator[ClassInfo]"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#concreteSubclasses(ancestor:String,classes:Map[String,org.clapper.classutil.ClassInfo]):Iterator[org.clapper.classutil.ClassInfo]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -247,26 +460,43 @@ variable suitable for use with the <code>find()</code> method.
       <span class="symbol">
         <span class="name">concreteSubclasses</span><span class="params">(<span name="ancestor">ancestor: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="classes">classes: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Iterator">Iterator</span>[<a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Convenience method that scans the specified classes for all concrete
-classes that are subclasses of the named class.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience method that scans the specified classes for all concrete
-classes that are subclasses of the named class. A subclass, in this
-definition, is a class that directly or indirectly (a) implements an
-interface (if the named class is an interface) or (b) extends a
-subclass (if the named class is a class). The class must be
-concrete, so intermediate abstract classes are not returned, though
-any children of such abstract classes will be.</p><p>WARNING: This method can chew up a lot of temporary heap space, if
-called with a large classpath.
+      
+      <p class="shortcomment cmt">Variant of <code>concreteSubclasses()</code> that takes a string class name and
+a map, rather than a <code>Class</code> and a map.</p><div class="fullcomment"><div class="comment cmt"><p>Variant of <code>concreteSubclasses()</code> that takes a string class name and
+a map, rather than a <code>Class</code> and a map.
 </p></div><dl class="paramcmts block"><dt class="param">ancestor</dt><dd class="cmt"><p>the name of the class for which to find descendent
-                concrete subclasses</p></dd><dt class="param">classes</dt><dd class="cmt"><p>the iterator of <code>ClassInfo</code> objects to search
-</p></dd><dt>returns</dt><dd class="cmt"><p>an iterator of <code>ClassInfo</code> objects that are concrete subclasses
+                concrete subclasses</p></dd><dt class="param">classes</dt><dd class="cmt"><p>the iterator of <code>ClassInfo</code> objects to search</p></dd><dt>returns</dt><dd class="cmt"><p>an iterator of <code>ClassInfo</code> objects that are concrete subclasses
         of <code>ancestor</code>. The iterator will be empty if no matching classes
-        could be found.
-</p></dd></dl></div>
-    </li><li name="org.clapper.classutil.ClassFinder#concreteSubclasses" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="concreteSubclasses(ancestor:String,classes:Iterator[org.clapper.classutil.ClassInfo]):Iterator[org.clapper.classutil.ClassInfo]"></a>
-      <a id="concreteSubclasses(String,Iterator[ClassInfo]):Iterator[ClassInfo]"></a>
-      <h4 class="signature">
+        could be found.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><code>concreteSubclasses(String, Iterator[ClassInfo])</code></p></span><span class="cmt"><p><code>concreteSubclasses(String, Stream[ClassInfo])</code></p></span><span class="cmt"><p><code>concreteSubclasses(Class[_], Map[String, ClassInfo])</code></p></span></dd></dl></div>
+    </li><li name="org.clapper.classutil.ClassFinder#concreteSubclasses" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="concreteSubclasses(ancestor:Class[_],classes:Map[String,org.clapper.classutil.ClassInfo]):Iterator[org.clapper.classutil.ClassInfo]"></a><a id="concreteSubclasses(Class[_],Map[String,ClassInfo]):Iterator[ClassInfo]"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#concreteSubclasses(ancestor:Class[_],classes:Map[String,org.clapper.classutil.ClassInfo]):Iterator[org.clapper.classutil.ClassInfo]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">concreteSubclasses</span><span class="params">(<span name="ancestor">ancestor: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>, <span name="classes">classes: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Iterator">Iterator</span>[<a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Variant of <code>concreteSubclasses()</code> that takes a class and a <code>Map</code>
+<code>ClassInfo</code> objects.</p><div class="fullcomment"><div class="comment cmt"><p>Variant of <code>concreteSubclasses()</code> that takes a class and a <code>Map</code>
+<code>ClassInfo</code> objects.
+</p></div><dl class="paramcmts block"><dt class="param">ancestor</dt><dd class="cmt"><p>the <code>Class</code> object of the superclass or trait for which
+                to find descendent concrete subclasses</p></dd><dt class="param">classes</dt><dd class="cmt"><p>the iterator of <code>ClassInfo</code> objects to search</p></dd><dt>returns</dt><dd class="cmt"><p>an iterator of <code>ClassInfo</code> objects that are concrete subclasses
+        of <code>ancestor</code>. The iterator will be empty if no matching classes
+        could be found.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><code>concreteSubclasses(Class[_], Iterator[ClassInfo])</code></p></span><span class="cmt"><p><code>concreteSubclasses(Class[_], Stream[ClassInfo])</code></p></span></dd></dl></div>
+    </li><li name="org.clapper.classutil.ClassFinder#concreteSubclasses" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="concreteSubclasses(ancestor:String,classes:Iterator[org.clapper.classutil.ClassInfo]):Iterator[org.clapper.classutil.ClassInfo]"></a><a id="concreteSubclasses(String,Iterator[ClassInfo]):Iterator[ClassInfo]"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#concreteSubclasses(ancestor:String,classes:Iterator[org.clapper.classutil.ClassInfo]):Iterator[org.clapper.classutil.ClassInfo]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -274,34 +504,115 @@ called with a large classpath.
       <span class="symbol">
         <span class="name">concreteSubclasses</span><span class="params">(<span name="ancestor">ancestor: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="classes">classes: <span class="extype" name="scala.Iterator">Iterator</span>[<a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Iterator">Iterator</span>[<a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>
       </span>
-      </h4>
+      
+      <p class="shortcomment cmt">Variant of <code>concreteSubclasses()</code> that takes a string class name and
+an <code>Iterator</code> of <code>ClassInfo</code> objects, rather than a <code>Class</code> and an
+<code>Iterator</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Variant of <code>concreteSubclasses()</code> that takes a string class name and
+an <code>Iterator</code> of <code>ClassInfo</code> objects, rather than a <code>Class</code> and an
+<code>Iterator</code>.
+</p></div><dl class="paramcmts block"><dt class="param">ancestor</dt><dd class="cmt"><p>the name of the class for which to find descendent
+                concrete subclasses</p></dd><dt class="param">classes</dt><dd class="cmt"><p>the stream of <code>ClassInfo</code> objects to search</p></dd><dt>returns</dt><dd class="cmt"><p>an iterator of <code>ClassInfo</code> objects that are concrete subclasses
+        of <code>ancestor</code>. The iterator will be empty if no matching classes
+        could be found.</p></dd></dl><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="kw">val</span> finder = ClassFinder(myPath)
+<span class="kw">val</span> classes = finder.getClasses  <span class="cmt">// classes is an Stream[ClassInfo]</span>
+<span class="cmt">// Of course, it's easier just to call the version that takes a</span>
+<span class="cmt">// Stream...</span>
+ClassFinder.concreteSubclasses(<span class="lit">"org.example.Foo"</span>, classes.toIterator)</pre></li></ol>
+            </div><dt>See also</dt><dd><span class="cmt"><p><code>concreteSubclasses(Class[_], Iterator[ClassInfo])</code></p></span><span class="cmt"><p><code>concreteSubclasses(String, Stream[ClassInfo])</code></p></span></dd></dl></div>
+    </li><li name="org.clapper.classutil.ClassFinder#concreteSubclasses" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="concreteSubclasses(ancestor:Class[_],classes:Iterator[org.clapper.classutil.ClassInfo]):Iterator[org.clapper.classutil.ClassInfo]"></a><a id="concreteSubclasses(Class[_],Iterator[ClassInfo]):Iterator[ClassInfo]"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#concreteSubclasses(ancestor:Class[_],classes:Iterator[org.clapper.classutil.ClassInfo]):Iterator[org.clapper.classutil.ClassInfo]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">concreteSubclasses</span><span class="params">(<span name="ancestor">ancestor: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>, <span name="classes">classes: <span class="extype" name="scala.Iterator">Iterator</span>[<a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Iterator">Iterator</span>[<a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Variant of <code>concreteSubclasses()</code> that takes a class and an <code>Iterator</code>
+of <code>ClassInfo</code> objects, rather than a <code>Class</code> and a <code>Stream</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Variant of <code>concreteSubclasses()</code> that takes a class and an <code>Iterator</code>
+of <code>ClassInfo</code> objects, rather than a <code>Class</code> and a <code>Stream</code>.
+</p></div><dl class="paramcmts block"><dt class="param">ancestor</dt><dd class="cmt"><p>the <code>Class</code> object of the superclass or trait for which
+                to find descendent concrete subclasses</p></dd><dt class="param">classes</dt><dd class="cmt"><p>the iterator of <code>ClassInfo</code> objects to search</p></dd><dt>returns</dt><dd class="cmt"><p>an iterator of <code>ClassInfo</code> objects that are concrete subclasses
+        of <code>ancestor</code>. The iterator will be empty if no matching classes
+        could be found.</p></dd></dl><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="kw">val</span> finder = ClassFinder(myPath)
+<span class="kw">val</span> classes = finder.getClasses  <span class="cmt">// classes is an Stream[ClassInfo]</span>
+<span class="cmt">// Of course, it's easier just to call the version that takes a</span>
+<span class="cmt">// Stream...</span>
+ClassFinder.concreteSubclasses(classOf[Baz], classes.toIterator)</pre></li></ol>
+            </div><dt>See also</dt><dd><span class="cmt"><p><code>concreteSubclasses(Class[_], Stream[ClassInfo])</code></p></span></dd></dl></div>
+    </li><li name="org.clapper.classutil.ClassFinder#concreteSubclasses" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="concreteSubclasses(ancestor:String,classes:Stream[org.clapper.classutil.ClassInfo]):Iterator[org.clapper.classutil.ClassInfo]"></a><a id="concreteSubclasses(String,Stream[ClassInfo]):Iterator[ClassInfo]"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#concreteSubclasses(ancestor:String,classes:Stream[org.clapper.classutil.ClassInfo]):Iterator[org.clapper.classutil.ClassInfo]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">concreteSubclasses</span><span class="params">(<span name="ancestor">ancestor: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="classes">classes: <span class="extype" name="scala.Stream">Stream</span>[<a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Iterator">Iterator</span>[<a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Variant of <code>concreteSubclasses()</code> that takes a string class name and
+a <code>Stream</code> of <code>ClassInfo</code> objects, rather than a <code>Class</code> and a <code>Stream</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Variant of <code>concreteSubclasses()</code> that takes a string class name and
+a <code>Stream</code> of <code>ClassInfo</code> objects, rather than a <code>Class</code> and a <code>Stream</code>.
+</p></div><dl class="paramcmts block"><dt class="param">ancestor</dt><dd class="cmt"><p>the name of the class for which to find descendent
+                concrete subclasses</p></dd><dt class="param">classes</dt><dd class="cmt"><p>the stream of <code>ClassInfo</code> objects to search</p></dd><dt>returns</dt><dd class="cmt"><p>an iterator of <code>ClassInfo</code> objects that are concrete subclasses
+        of <code>ancestor</code>. The iterator will be empty if no matching classes
+        could be found.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><code>concreteSubclasses(Class[_], Stream[ClassInfo])</code></p></span></dd></dl></div>
+    </li><li name="org.clapper.classutil.ClassFinder#concreteSubclasses" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="concreteSubclasses(ancestor:Class[_],classes:Stream[org.clapper.classutil.ClassInfo]):Iterator[org.clapper.classutil.ClassInfo]"></a><a id="concreteSubclasses(Class[_],Stream[ClassInfo]):Iterator[ClassInfo]"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#concreteSubclasses(ancestor:Class[_],classes:Stream[org.clapper.classutil.ClassInfo]):Iterator[org.clapper.classutil.ClassInfo]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">concreteSubclasses</span><span class="params">(<span name="ancestor">ancestor: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>, <span name="classes">classes: <span class="extype" name="scala.Stream">Stream</span>[<a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Iterator">Iterator</span>[<a href="ClassInfo.html" class="extype" name="org.clapper.classutil.ClassInfo">ClassInfo</a>]</span>
+      </span>
+      
       <p class="shortcomment cmt">Convenience method that scans the specified classes for all concrete
-classes that are subclasses of the named class.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience method that scans the specified classes for all concrete
-classes that are subclasses of the named class. A subclass, in this
+classes that are subclasses of a superclass or trait.</p><div class="fullcomment"><div class="comment cmt"><p>Convenience method that scans the specified classes for all concrete
+classes that are subclasses of a superclass or trait. A subclass, in this
 definition, is a class that directly or indirectly (a) implements an
 interface (if the named class is an interface) or (b) extends a
 subclass (if the named class is a class). The class must be
 concrete, so intermediate abstract classes are not returned, though
-any children of such abstract classes will be.</p><p><b>WARNINGS</b></p><p>This method converts the iterator to a map of classes, for easier
-lookup. Thus, upon its return, the iterator will be empty. You can
-certainly recreate the iterator, but at a cost. If you need to make
+any children of such abstract classes will be.</p><p><b>WARNINGS</b></p><p>This method converts the stream to a map of classes, for easier
+lookup. Thus, upon its return, the stream will be empty. You can
+certainly recreate the stream, but at a cost. If you need to make
 multiple calls to this method with the same classpath, consider
-converting the iterator to a map first, as shown below:</p><pre><span class="kw">val</span> finder = ClassFinder(myPath)
-<span class="kw">val</span> classes = finder.getClasses  <span class="cmt">// classes is an Iterator[ClassInfo]</span>
-<span class="kw">val</span> classMap = ClassFinder.classInfoMap <span class="cmt">// runs the iterator out, once</span>
-<span class="kw">val</span> foos = ClassFinder.concreteSubclasses(<span class="lit">"org.example.Foo"</span>, classMap)
-<span class="kw">val</span> bars = ClassFinder.concreteSubclasses(<span class="lit">"org.example.Bar"</span>, classMap)</pre><p>This method can chew up a lot of temporary heap space, if called
+converting the stream to a map first, as shown below:</p><pre><span class="kw">val</span> finder = ClassFinder(myPath)
+<span class="kw">val</span> classes = finder.getClasses  <span class="cmt">// classes is an Stream[ClassInfo]</span>
+<span class="kw">val</span> classMap = ClassFinder.classInfoMap <span class="cmt">// runs the stream out, once</span>
+<span class="kw">val</span> foos = ClassFinder.concreteSubclasses(classOf[org.example.Foo], classMap)
+<span class="kw">val</span> bars = ClassFinder.concreteSubclasses(classOf[Bar], classMap)</pre><p>This method can chew up a lot of temporary heap space, if called
 with a large classpath.
-</p></div><dl class="paramcmts block"><dt class="param">ancestor</dt><dd class="cmt"><p>the name of the class for which to find descendent
-                concrete subclasses</p></dd><dt class="param">classes</dt><dd class="cmt"><p>the iterator of <code>ClassInfo</code> objects to search
-</p></dd><dt>returns</dt><dd class="cmt"><p>an iterator of <code>ClassInfo</code> objects that are concrete subclasses
+</p></div><dl class="paramcmts block"><dt class="param">ancestor</dt><dd class="cmt"><p>the <code>Class</code> object of the superclass or trait for which
+                to find descendent concrete subclasses</p></dd><dt class="param">classes</dt><dd class="cmt"><p>the stream of <code>ClassInfo</code> objects to search</p></dd><dt>returns</dt><dd class="cmt"><p>an iterator of <code>ClassInfo</code> objects that are concrete subclasses
         of <code>ancestor</code>. The iterator will be empty if no matching classes
-        could be found.
-</p></dd></dl></div>
-    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="eq(x$1:AnyRef):Boolean"></a>
-      <a id="eq(AnyRef):Boolean"></a>
-      <h4 class="signature">
+        could be found.</p></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -309,12 +620,15 @@ with a large classpath.
       <span class="symbol">
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="equals(x$1:Any):Boolean"></a>
-      <a id="equals(Any):Boolean"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#equals(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -322,12 +636,15 @@ with a large classpath.
       <span class="symbol">
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
-      <a id="finalize():Unit"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -335,7 +652,7 @@ with a large classpath.
       <span class="symbol">
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -343,10 +660,13 @@ with a large classpath.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
-      <a id="getClass():Class[_]"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#getClass():Class[_]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -354,12 +674,15 @@ with a large classpath.
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
-      <a id="hashCode():Int"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#hashCode():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -367,12 +690,15 @@ with a large classpath.
       <span class="symbol">
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
-      <a id="isInstanceOf[T0]:Boolean"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#isInstanceOf[T0]:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -380,12 +706,15 @@ with a large classpath.
       <span class="symbol">
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ne(x$1:AnyRef):Boolean"></a>
-      <a id="ne(AnyRef):Boolean"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -393,12 +722,15 @@ with a large classpath.
       <span class="symbol">
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
-      <a id="notify():Unit"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#notify():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -406,12 +738,15 @@ with a large classpath.
       <span class="symbol">
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
-      <a id="notifyAll():Unit"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#notifyAll():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -419,12 +754,15 @@ with a large classpath.
       <span class="symbol">
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
-      <a id="synchronized[T0](⇒T0):T0"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -432,12 +770,15 @@ with a large classpath.
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
-      <a id="toString():String"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#toString():String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
@@ -445,12 +786,15 @@ with a large classpath.
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
-      <a id="wait():Unit"></a>
-      <h4 class="signature">
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -458,7 +802,7 @@ with a large classpath.
       <span class="symbol">
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -466,10 +810,13 @@ with a large classpath.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
-      <a id="wait(Long,Int):Unit"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -477,7 +824,7 @@ with a large classpath.
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -485,10 +832,13 @@ with a large classpath.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="wait(x$1:Long):Unit"></a>
-      <a id="wait(Long):Unit"></a>
-      <h4 class="signature">
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
+      <span class="permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#wait(x$1:Long):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
@@ -496,7 +846,7 @@ with a large classpath.
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -504,7 +854,8 @@ with a large classpath.
     </span>)</span>
               
         </dd></dl></div>
-    </li></ol>
+    </li>
+              </ol>
             </div>
 
         
@@ -533,6 +884,9 @@ with a large classpath.
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
+    </body>
+          </div>
+        </div>
+      </div>
     </body>
       </html>
