@@ -51,7 +51,7 @@ ClassUtil is published to my [Bintray Maven repository][], which is
 automatically linked to Bintray's [JCenter][] repository. It's also sync'd
 to Maven Central.
 
-* Version 1.0.13 supports Scala 2.10, 2.11, and 2.12-RC1.
+* Versions 1.1.1, 1.1.0 and 1.0.13 support Scala 2.10, 2.11, and 2.12.
 * Versions 1.0.7 through 1.0.12 support Scala 2.10, 2.11, and 2.12-Mx.
 * Version 1.0.5 supports Scala 2.10 and 2.11.
 * Versions 1.0.1 through 1.0.4 support Scala 2.10.
@@ -66,7 +66,7 @@ Specify the `classutil` artifact:
     <dependency>
       <groupId>org.clapper</groupId>
       <artifactId>classutil_2.11</artifactId>
-      <version>1.0.13</version>
+      <version>1.1.1</version>
     </dependency>
 
 For more information on using Maven and Scala, see Josh Suereth's
@@ -76,7 +76,7 @@ For more information on using Maven and Scala, see Josh Suereth's
 
 With SBT 0.13.x, use:
 
-    libraryDependencies += "org.clapper" %% "classutil" % "1.0.13"
+    libraryDependencies += "org.clapper" %% "classutil" % "1.1.1"
 
 to get the latest version of ClassUtil.
 
