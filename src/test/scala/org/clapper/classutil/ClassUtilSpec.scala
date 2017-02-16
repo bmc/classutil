@@ -39,8 +39,8 @@ package org.clapper.classutil
 
 import org.scalatest.{FunSuite, Assertions}
 
-class ClassUtilTest extends FunSuite {
-  test("isPrimitive, Scala values") {
+class ClassUtilSpec extends BaseSpec {
+  "isPrimitive" should "handle Scala values" in {
     val data = List(
       (1,          true),
       (1.0f,       true),
@@ -54,13 +54,11 @@ class ClassUtilTest extends FunSuite {
 
     for ((value, expected) <- data) {
       val valueClass = value.asInstanceOf[AnyRef].getClass
-      assertResult(expected, "isPrimitive(" + valueClass + ")=" + expected) {
-        ClassUtil.isPrimitive(valueClass)
-      }
+      ClassUtil.isPrimitive(valueClass) shouldBe expected
     }
   }
 
-  test("isPrimitive, Scala classes") {
+  it should "handle Scala classes" in {
     import scala.language.existentials
 
     val data = List[(Class[_], Boolean)](
@@ -76,14 +74,11 @@ class ClassUtilTest extends FunSuite {
       (this.getClass,   false)
     )
 
-    for ((cls, expected) <- data) {
-      assertResult(expected, "isPrimitive(" + cls + ")=" + expected) {
-        ClassUtil.isPrimitive(cls)
-      }
-    }
+    for ((cls, expected) <- data)
+      ClassUtil.isPrimitive(cls) shouldBe expected
   }
 
-  test("isPrimitive, Java classes") {
+  it should "handle Java classes" in {
     val data = List(
       (java.lang.Integer.valueOf(1),                    true),
       (java.lang.Float.valueOf(1.0f),                   true),
@@ -95,13 +90,11 @@ class ClassUtilTest extends FunSuite {
 
     for ((value, expected) <- data) {
       val valueClass = value.asInstanceOf[AnyRef].getClass
-      assertResult(expected, "isPrimitive(" + valueClass + ")=" + expected) {
-        ClassUtil.isPrimitive(valueClass)
-      }
+      ClassUtil.isPrimitive(valueClass) shouldBe expected
     }
   }
 
-  test("classSignature") {
+  "classSignature" should "produce a valid signature" in {
     import scala.language.existentials
 
     val Primitives = List[Class[_]](
@@ -116,29 +109,20 @@ class ClassUtilTest extends FunSuite {
       classOf[Unit]
     )
 
-    val PrimitivesToTest = Primitives.map {
-      cls => (cls, ClassUtil.PrimitiveSigMap(cls.getName))
-    }.toSeq
+    val PrimitivesToTest = Primitives.map { cls =>
+      (cls, ClassUtil.PrimitiveSigMap(cls.getName))
+    }
 
     val ClassesToTest = Seq[(Class[_], String)](
-      (getClass,        "Lorg/clapper/classutil/ClassUtilTest;"),
+      (getClass,        "Lorg/clapper/classutil/ClassUtilSpec;"),
       (classOf[String], "Ljava/lang/String;")
     )
 
-    for ((cls, signature) <- PrimitivesToTest) {
-      assertResult(signature, cls.getCanonicalName + " -> " + signature) {
-        ClassUtil.classSignature(cls)
-      }
-    }
-
-    for ((cls: Class[_], signature: String) <- ClassesToTest) {
-      assertResult(signature, cls.getCanonicalName + " -> " + signature) {
-        ClassUtil.classSignature(cls)
-      }
-    }
+    for ((cls, signature) <- PrimitivesToTest ++ ClassesToTest)
+      ClassUtil.classSignature(cls) shouldBe signature
   }
 
-  test("methodSignature") {
+  "methodSignature" should "produce a valid method signature" in {
     class Foo {
       def a: Unit = {}
       def b: String = {""}
@@ -161,15 +145,11 @@ class ClassUtilTest extends FunSuite {
     )
 
     def methodToString(m: java.lang.reflect.Method): String = {
-      m.getName + "(" + 
-      m.getParameterTypes.map(c => c.getCanonicalName).mkString(", ") +
-      ")"
+      val params = m.getParameterTypes.map(_.getCanonicalName).mkString(", ")
+      s"${m.getName}($params)"
     }
 
-    for ((method, signature) <- data) {
-      assertResult(signature, methodToString(method) + " -> " + signature) {
-        ClassUtil.methodSignature(method)
-      }
-    }
+    for ((method, signature) <- data)
+      ClassUtil.methodSignature(method) shouldBe signature
   }
 }

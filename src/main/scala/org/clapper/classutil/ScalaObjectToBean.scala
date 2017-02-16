@@ -1,39 +1,3 @@
-/*
-  ---------------------------------------------------------------------------
-  This software is released under a BSD license, adapted from
-  http://opensource.org/licenses/bsd-license.php
-
-  Copyright (c) 2010, Brian M. Clapper
-  All rights reserved.
-
-  Redistribution and use in source and binary forms, with or without
-  modification, are permitted provided that the following conditions are
-  met:
-
-   * Redistributions of source code must retain the above copyright notice,
-    this list of conditions and the following disclaimer.
-
-   * Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in the
-    documentation and/or other materials provided with the distribution.
-
-   * Neither the names "clapper.org", "ClassUtil", nor the names of its
-    contributors may be used to endorse or promote products derived from
-    this software without specific prior written permission.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-  IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
-  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  ---------------------------------------------------------------------------
-*/
 
 package org.clapper.classutil
 import scala.language.existentials
@@ -44,7 +8,6 @@ import scala.language.existentials
   */
 private[classutil] class ScalaObjectToBeanMapper {
   import java.lang.reflect.{InvocationHandler,
-                            InvocationTargetException,
                             Modifier,
                             Method,
                             Proxy}
@@ -92,7 +55,7 @@ private[classutil] class ScalaObjectToBeanMapper {
     *         subject to the restrictions listed in the class documentation.
     */
   def wrapInBean(obj: Any, className: String, recurse: Boolean): AnyRef = {
-    def skip(name: String) = SkipMethods.exists(_.findFirstIn(name) != None)
+    def skip(name: String) = SkipMethods.exists(_.findFirstIn(name).isDefined)
 
     def isGetter(m: Method) = {
       (m.getReturnType.getName != "void") &&
@@ -102,7 +65,7 @@ private[classutil] class ScalaObjectToBeanMapper {
     def isSetter(m: Method) = {
       (m.getReturnType.getName == "void") &&
       (m.getParameterTypes.length == 1) &&
-      (SetterPattern.findFirstIn(m.getName) != None)
+      SetterPattern.findFirstIn(m.getName).isDefined
     }
 
     def isBeanable(m: Method) = {
@@ -133,12 +96,12 @@ private[classutil] class ScalaObjectToBeanMapper {
     val candidateMethods = obj.asInstanceOf[AnyRef].
                                getClass.
                                getMethods.
-                               filter(canCopyMethod _)
-    val beanMethodMap = candidateMethods.filter(isBeanable _).
+                               filter(canCopyMethod)
+    val beanMethodMap = candidateMethods.filter(isBeanable).
                                          map(m => beanName(m) -> m).
                                          toMap
 
-    if (beanMethodMap.size == 0) {
+    if (beanMethodMap.isEmpty) {
       // No mappable methods. Just use the original object.
       obj.asInstanceOf[AnyRef]
     }
@@ -190,7 +153,7 @@ private[classutil] class ScalaObjectToBeanMapper {
         // Option of arguments, will call the method, wrapping the
         // result in a bean wrapper.
         (a: Option[Array[Object]]) =>
-          wrapInBean(call(o, method, a), true)
+          wrapInBean(call(o, method, a), recurse = true)
       }
       else {
         // Return a partial function which, when invoked with an
@@ -211,8 +174,7 @@ private[classutil] class ScalaObjectToBeanMapper {
       (kv._1, kv._2.getParameterTypes, returnTypeFor(kv._2))
     }.toSeq
 
-    val interfaceBytes = InterfaceMaker.makeInterface(methodSeq,
-                                                      className).toArray
+    val interfaceBytes = InterfaceMaker.makeInterface(methodSeq, className)
 
     // Load the class we just generated.
 
@@ -223,7 +185,7 @@ private[classutil] class ScalaObjectToBeanMapper {
     // Create a proxy that satisfies its calls from the original
     // object's set of methods.
 
-    makeProxy(methodMap.map(kv => (kv._1 -> functionFor(kv._2))).toMap,
+    makeProxy(methodMap.map { case (name, meth) => name -> functionFor(meth) },
               obj,
               interface,
               classLoader)
@@ -337,7 +299,7 @@ private[classutil] class ScalaObjectToBeanMapper {
 object ScalaObjectToBean {
   private val mapper = new ScalaObjectToBeanMapper
 
-  /** Transform a map into an object. The class name will be generated,
+  /** Transform an object into an object. The class name will be generated,
     * will be in the `org.clapper.classutil` package, and will have
     * a class name prefix of `ScalaObjectBean_`.
     *
@@ -349,7 +311,7 @@ object ScalaObjectToBean {
   def apply(obj: Any, recurse: Boolean = true): AnyRef =
     mapper.wrapInBean(obj, recurse)
 
-  /** Transform a map into an object. The class name will be generated,
+  /** Transform an object into an object. The class name will be generated,
     * will be in the `org.clapper.classutil` package, and will have
     * a class name prefix of `ScalaObjectToBean_`.
     *
@@ -364,4 +326,4 @@ object ScalaObjectToBean {
   def apply(obj: Any, className: String, recurse: Boolean): AnyRef =
     mapper.wrapInBean(obj, className, recurse)
 }
-                                     
+

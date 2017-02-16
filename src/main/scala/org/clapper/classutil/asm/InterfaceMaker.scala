@@ -42,12 +42,7 @@ import org.clapper.classutil._
 import org.objectweb.asm.{ClassWriter, Type}
 import org.objectweb.asm.Opcodes._
 
-import java.lang.reflect.{Method, Proxy, InvocationHandler}
-
-import scala.reflect.Manifest
-
-/**
-  * Uses ASM to create an interface from a map. The map is keyed by method
+/** Uses ASM to create an interface from a map. The map is keyed by method
   * names, each of which maps to a return type.
   */
 private[classutil] object InterfaceMaker {

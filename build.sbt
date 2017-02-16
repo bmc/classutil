@@ -5,7 +5,7 @@ name := "classutil"
 
 organization := "org.clapper"
 
-version := "1.1.1"
+version := "1.1.2"
 
 licenses := Seq(
   "BSD New" -> url("http://software.clapper.org/classutil/license.html")
@@ -29,21 +29,10 @@ autoCompilerPlugins := true
 // ---------------------------------------------------------------------------
 // Helpers
 
-// Take a dependency and map its cross-compiled version, creating a new
-// dependency. Temporary, until Scala 2.12 is for real.
-/*
-def mappedDep(dep: sbt.ModuleID): sbt.ModuleID = {
-  dep cross CrossVersion.binaryMapped {
-    case v if v startsWith "2.12" => "2.11"
-    case v => v.split("""\.""").take(2).mkString(".")
-  }
-}
-*/
-
 // ---------------------------------------------------------------------------
 // ScalaTest dependendency
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 
 // ---------------------------------------------------------------------------
 // Other dependendencies

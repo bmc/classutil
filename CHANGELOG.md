@@ -1,5 +1,11 @@
 # Change log for ClassUtil library
 
+Version 1.1.2
+
+* Added more tests and converted all remaining tests to ScalaTest's
+  `FlatSpec`.
+* Made miscellaneous mostly cosmetic code cleanups.
+
 Version 1.1.1
 
 * Now builds against Scala 2.12.1.

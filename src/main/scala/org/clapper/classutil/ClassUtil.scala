@@ -124,8 +124,8 @@ object ClassUtil {
     * assert(isOfType[Map[String,Int]](value))
     * }}}
     *
-    * @tparam T     the type against which to check the value
-    * @param  value the value to check
+    * @tparam T  the type against which to check the value
+    * @param  v  the value to check
     *
     * @return whether or not `value` conforms to type `T`
     */
@@ -173,7 +173,7 @@ object ClassUtil {
 
     else if (cls.isPrimitive) {
       val s = PrimitiveSigMap.get(cls.getName)
-      if (s == None)
+      if (s.isEmpty)
         throw new Exception("Can't map class \"" + cls.getName + "\" " +
                             "to signature.")
       s.get
@@ -192,7 +192,8 @@ object ClassUtil {
     *
     * @return its string signature
     */
-  def methodSignature(returnType: Class[_], paramTypes: Array[Class[_]]) = {
+  def methodSignature(returnType: Class[_],
+                      paramTypes: Array[Class[_]]): String = {
     val paramSig =
       if ((paramTypes == null) || (paramTypes.length == 0))
         ""
