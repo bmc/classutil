@@ -1,9 +1,16 @@
 # Change log for ClassUtil library
 
+Version 1.2.0
+
+* Refactored some internal methods to the `ClassUtil` object, resulting in
+  some new public methods, including `isSetter()`, `isGetter()`,
+  `beanName()` and `scalaAccessorMethods()`.
+* Updated list of methods that should be skipped (i.e., methods that look like
+  getters or setters, but aren't).
+
 Version 1.1.2
 
-* Added more tests and converted all remaining tests to ScalaTest's
-  `FlatSpec`.
+* Added more tests and converted all remaining tests to ScalaTest's `FlatSpec`.
 * Made miscellaneous mostly cosmetic code cleanups.
 
 Version 1.1.1

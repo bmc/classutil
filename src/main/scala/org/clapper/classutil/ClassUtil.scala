@@ -37,12 +37,35 @@
 
 package org.clapper.classutil
 
+import java.lang.reflect.{Method, Modifier => JModifier}
+
 import scala.reflect.{ClassTag, classTag}
-import grizzled.reflect
+
+import grizzled.{reflect => grizzledReflect}
 
 /** Some general-purpose class-related utility functions.
   */
 object ClassUtil {
+
+  // Matches setter methods.
+  private val SetterPattern = """_\$eq$""".r
+  private val SetterRemove  = SetterPattern
+
+  // In addition to skipping methods with non-beanable signatures, the
+  // bean-generation logic will also skip any methods that match these
+  // regular expressions.
+  private val SkipMethods = List("""^toString$""".r,
+                                 """^productArity$""".r,
+                                 """^productIterator$""".r,
+                                 """^productElements$""".r,
+                                 """^productPrefix$""".r,
+                                 """^hashCode$""".r,
+                                 """^get""".r,
+                                 """^set""".r,
+                                 """^copy.*""".r,
+                                 """\$outer$""".r,
+                                 """^readResolve$""".r)
+
   private lazy val JavaPrimitives = Set(
     classOf[java.lang.Boolean].   asInstanceOf[Any],
     java.lang.Boolean.TYPE.       asInstanceOf[Any],
@@ -129,8 +152,9 @@ object ClassUtil {
     *
     * @return whether or not `value` conforms to type `T`
     */
-  def isOfType[T: ClassTag](v: Any): Boolean =
-    reflect.isOfType[T](v)
+  def isOfType[T: ClassTag](v: Any): Boolean = {
+    grizzledReflect.isOfType[T](v)
+  }
 
   /** Convenience method to load a class from an array of class bytes.
     *
@@ -212,6 +236,94 @@ object ClassUtil {
     */
   def methodSignature(method: java.lang.reflect.Method): String =
     methodSignature(method.getReturnType, method.getParameterTypes)
+
+
+  /** Get a list of all public getters and setters in a Scala class.
+    *
+    * @param cls  the class
+    *
+    * @return The sequence of methods
+    */
+  def scalaAccessorMethods(cls: Class[_]): Seq[Method] = {
+    cls
+      .getMethods
+      .filter { m =>
+        val modifiers = m.getModifiers
+
+        ((modifiers & JModifier.PUBLIC) != 0) &&
+        ((modifiers & JModifier.FINAL) == 0) &&
+        (! ignoreMethod(m.getName)) &&
+        (accessorIsSetter(m) || accessorIsGetter(m))
+      }
+  }
+
+  /** Given a method, produce its Java Bean name. Assumes that the method
+    * is already known to be a valid Scala accessor method.
+    *
+    * @param m  the method
+    *
+    * @return the bean name
+    *
+    * @see [[scalaAccessorMethods]]
+    */
+  def beanName(m: Method): String = {
+    val name = m.getName
+
+    def prefix(s: String) = s.take(1).toUpperCase + s.drop(1)
+
+    if (isGetter(m))
+      "get" + prefix(name)
+    else
+      "set" + prefix(SetterRemove.replaceFirstIn(name, ""))
+  }
+
+  /** Determine if a method is a getter. A getter is defined as any method
+    * that has no parameters, returns a value, and isn't in one of the
+    * methods to be ignored (like `toString`).
+    *
+    * @param m the method
+    *
+    * @return `true` or `false`
+    */
+  def isGetter(m: Method): Boolean = {
+    (! ignoreMethod(m.getName)) && accessorIsGetter(m)
+  }
+
+  /** Determine if a method is a setter. A getter is defined as any method
+    * that has a single parameter, returns no value, and isn't in one of the
+    * methods to be ignored.
+    *
+    * @param m the method
+    *
+    * @return `true` or `false`
+    */
+  def isSetter(m: Method): Boolean = {
+    (! ignoreMethod(m.getName)) && accessorIsSetter(m)
+  }
+
+  // --------------------------------------------------------------------------
+  // Private methods
+  // --------------------------------------------------------------------------
+
+  private def ignoreMethod(name: String) = {
+    SkipMethods.exists(_.findFirstIn(name).isDefined)
+  }
+
+  /** Internal version of isGetter() that assumes the method is already
+    * known not to be one of the ignored nethods.
+    */
+  private def accessorIsGetter(m: Method) = {
+    (m.getReturnType.getName != "void") && (m.getParameterTypes.length == 0)
+  }
+
+  /** Internal version of isSetter() that assumes the method is already
+    * known not to be one of the ignored nethods.
+    */
+  private def accessorIsSetter(m: Method) = {
+    (m.getReturnType.getName == "void") &&
+    (m.getParameterTypes.length == 1) &&
+    SetterPattern.findFirstIn(m.getName).isDefined
+  }
 
   /** Convert a class name (e.g., "java.lang.String") into its binary
     * form (e.g., "java/lang/String").

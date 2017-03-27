@@ -70,6 +70,7 @@ class ScalaObjectToBeanSpec extends BaseSpec {
       getterMethod.invoke(bean) shouldBe newVal
     }
   }
+
   it should "handle class getters in recursive mode" in {
     case class Foo(name: String, value: Int)
     case class Bar(name: String, myFoo: Foo)

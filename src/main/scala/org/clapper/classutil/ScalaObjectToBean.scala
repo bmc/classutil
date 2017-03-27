@@ -1,5 +1,6 @@
 
 package org.clapper.classutil
+
 import scala.language.existentials
 
 /** Contains the actual logic that maps a Scala object to a Java bean.
@@ -11,22 +12,6 @@ private[classutil] class ScalaObjectToBeanMapper {
                             Modifier,
                             Method,
                             Proxy}
-
-  // In addition to skipping methods with non-beanable signatures, the
-  // bean-generation logic will also skip any methods that match these
-  // regular expressions.
-  private val SkipMethods = List("""^toString$""".r,
-                                 """^productArity$""".r,
-                                 """^productIterator$""".r,
-                                 """^productElements$""".r,
-                                 """^productPrefix$""".r,
-                                 """^hashCode$""".r,
-                                 """^get""".r,
-                                 """^set""".r,
-                                 """^readResolve$""".r)
-  // Matches setter methods.
-  private val SetterPattern = """_\$eq$""".r
-  private val SetterRemove  = SetterPattern
 
   private val NameGenerator = new ClassNameGenerator {
     val ClassNamePrefix = "org.clapper.classutil.ScalaObjectBean"
@@ -55,51 +40,14 @@ private[classutil] class ScalaObjectToBeanMapper {
     *         subject to the restrictions listed in the class documentation.
     */
   def wrapInBean(obj: Any, className: String, recurse: Boolean): AnyRef = {
-    def skip(name: String) = SkipMethods.exists(_.findFirstIn(name).isDefined)
-
-    def isGetter(m: Method) = {
-      (m.getReturnType.getName != "void") &&
-      (m.getParameterTypes.length == 0)
-    }
-
-    def isSetter(m: Method) = {
-      (m.getReturnType.getName == "void") &&
-      (m.getParameterTypes.length == 1) &&
-      SetterPattern.findFirstIn(m.getName).isDefined
-    }
-
-    def isBeanable(m: Method) = {
-      ((m.getModifiers & Modifier.PUBLIC) != 0) &&
-      (! skip(m.getName)) &&
-      (isSetter(m) || isGetter(m))
-    }
-
-    def canCopyMethod(m: Method) = {
-      val modifiers = m.getModifiers
-      ((modifiers & Modifier.PUBLIC) != 0) &&
-      ((modifiers & Modifier.FINAL) == 0)
-    }
-
-    def beanName(m: Method) = {
-      val name = m.getName
-
-      def prefix(s: String) = s.take(1).toUpperCase + s.drop(1)
-
-      if (isGetter(m))
-        "get" + prefix(name)
-      else
-        "set" + prefix(SetterRemove.replaceFirstIn(name, ""))
-    }
 
     // Get the set of bean methods, and create a map of names to methods.
 
-    val candidateMethods = obj.asInstanceOf[AnyRef].
-                               getClass.
-                               getMethods.
-                               filter(canCopyMethod)
-    val beanMethodMap = candidateMethods.filter(isBeanable).
-                                         map(m => beanName(m) -> m).
-                                         toMap
+    val cls = obj.asInstanceOf[AnyRef].getClass
+    val candidateMethods = ClassUtil.scalaAccessorMethods(cls)
+    val beanMethodMap = candidateMethods
+      .map(m => ClassUtil.beanName(m) -> m)
+      .toMap
 
     if (beanMethodMap.isEmpty) {
       // No mappable methods. Just use the original object.

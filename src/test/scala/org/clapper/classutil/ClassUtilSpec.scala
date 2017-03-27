@@ -152,4 +152,113 @@ class ClassUtilSpec extends BaseSpec {
     for ((method, signature) <- data)
       ClassUtil.methodSignature(method) shouldBe signature
   }
+
+  "isGetter" should "properly identify a getter" in {
+    case class Foo(i: Int)
+    val methods = classOf[Foo].getMethods.filter(_.getName == "i")
+    methods should have length 1
+    ClassUtil.isGetter(methods.head) shouldBe true
+  }
+
+  it should "properly identify a non-getter" in {
+    case class Foo(i: Int)
+    val methods = classOf[Foo].getMethods.filter(_.getName == "toString")
+    methods should have length 1
+    ClassUtil.isGetter(methods.head) shouldBe false
+  }
+
+  it should "not confuse a setter with a getter" in {
+    class Foo(var i: Int)
+    val methods = classOf[Foo].getMethods.filter(_.getName == "i_$eq")
+    methods should have length 1
+    ClassUtil.isGetter(methods.head) shouldBe false
+  }
+
+  "isSetter" should "properly identify a setter" in {
+    class Foo(var i: Int)
+    val methods = classOf[Foo].getMethods.filter(_.getName == "i_$eq")
+    methods should have length 1
+    ClassUtil.isSetter(methods.head) shouldBe true
+  }
+
+  it should "properly identify a non-setter" in {
+    case class Foo(i: Int)
+    val methods = classOf[Foo].getMethods.filter(_.getName == "toString")
+    methods should have length 1
+    ClassUtil.isSetter(methods.head) shouldBe false
+  }
+
+  it should "not confuse a getter with a setter" in {
+    class Foo(var i: Int)
+    val methods = classOf[Foo].getMethods.filter(_.getName == "i")
+    methods should have length 1
+    ClassUtil.isSetter(methods.head) shouldBe false
+  }
+
+  "beanName" should "produce valid getter and setter names" in {
+    case class Foo(fieldA: String, fieldB: Int)
+
+    val methods = ClassUtil.scalaAccessorMethods(classOf[Foo])
+    methods.length should be > 0
+    for (m <- methods) {
+      if (ClassUtil.isGetter(m))
+        ClassUtil.beanName(m) should startWith ("get")
+      else
+        ClassUtil.beanName(m) should startWith ("set")
+    }
+  }
+
+  "scalaAccessorMethods" should "find all getters" in {
+    case class Foo(fieldA: String, fieldB: Int, i: BigInt, s: String)
+    val methodNames = ClassUtil.scalaAccessorMethods(classOf[Foo]).map(_.getName)
+    methodNames should have length 4
+    methodNames.toSet should be (Set("fieldA", "fieldB", "i", "s"))
+  }
+
+  it should "find all setters" in {
+    class Foo(fieldA: String, var fieldB: Int, var i: BigInt, var s: String)
+    val methodNames = ClassUtil
+      .scalaAccessorMethods(classOf[Foo])
+      .filter(ClassUtil.isSetter)
+      .map(_.getName)
+    methodNames should have length 3
+    methodNames.toSet should be (Set("fieldB_$eq", "i_$eq", "s_$eq"))
+  }
+
+  it should "handle a trait with a getter" in {
+    trait Foo { def foo: Int = 10 }
+    val methodNames = ClassUtil
+      .scalaAccessorMethods(classOf[Foo])
+      .map(_.getName)
+    methodNames should have length 1
+    methodNames.head shouldBe "foo"
+  }
+
+  it should "handle a trait with a setter" in {
+    trait Foo { var i: Int }
+    val methodNames = ClassUtil
+      .scalaAccessorMethods(classOf[Foo])
+      .filter(ClassUtil.isSetter)
+      .map(_.getName)
+    methodNames should have length 1
+    methodNames.head shouldBe "i_$eq"
+  }
+
+  it should "handle an empty trait" in {
+    trait Foo
+    val methodNames = ClassUtil.scalaAccessorMethods(classOf[Foo])
+    methodNames should have length 0
+  }
+
+  it should "handle an abstract class" in {
+    abstract class Bar
+    val methodNames = ClassUtil.scalaAccessorMethods(classOf[Bar])
+    methodNames should have length 0
+  }
+
+  it should "handle an empty class" in {
+    class Bar
+    val methodNames = ClassUtil.scalaAccessorMethods(classOf[Bar])
+    methodNames should have length 0
+  }
 }
