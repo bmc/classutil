@@ -1,11 +1,19 @@
 package org.clapper.classutil
 
-import java.lang.reflect.Proxy
+import java.lang.reflect.{Method, Proxy}
 
 import scala.util.Try
 import scala.util.control.NonFatal
 
 class ScalaObjectToBeanSpec extends BaseSpec {
+  implicit class EnrichedClass(cls: Class[_]) {
+    def methodForName(name: String): Option[Method] = {
+      cls.getMethods.find(_.getName == name)
+    }
+
+    def hasMethod(name: String): Boolean = methodForName(name).isDefined
+  }
+
   "apply" should "handle class getters and setters in non-recursive mode" in {
     class Foo(var name: String, var iValue: Int, var fValue: Float) {
       var k: Int = 0
@@ -28,15 +36,15 @@ class ScalaObjectToBeanSpec extends BaseSpec {
     )
 
     for ((name, cls, value) <- expectedGetters) {
-      val methods = bean.getClass.getMethods.filter(_.getName == name)
-      methods.length shouldBe 1
+      val oMethod = bean.getClass.methodForName(name)
+      oMethod shouldBe defined
 
-      val firstMethod = methods.head
-      cls.isAssignableFrom(firstMethod.getReturnType) shouldBe true
+      val method = oMethod.get
+      cls.isAssignableFrom(method.getReturnType) shouldBe true
 
-      firstMethod.invoke(bean) shouldBe value
+      method.invoke(bean) shouldBe value
 
-      Proxy.isProxyClass(firstMethod.invoke(bean).getClass) shouldBe false
+      Proxy.isProxyClass(method.invoke(bean).getClass) shouldBe false
     }
 
     val expectedSetters = List(
@@ -45,17 +53,16 @@ class ScalaObjectToBeanSpec extends BaseSpec {
       ("setFValue", "getFValue", java.lang.Float.TYPE, OldFloat, NewFloat)
     )
 
-    val allMethods = bean.getClass.getMethods
-
+    val beanClass = bean.getClass
     for ((setterName, getterName, cls, oldVal, newVal) <- expectedSetters) {
-      val setterMethods = allMethods.filter(_.getName == setterName)
-      val getterMethods = allMethods.filter(_.getName == getterName)
+      val oSetterMethod = beanClass.methodForName(setterName)
+      val oGetterMethod = beanClass.methodForName(getterName)
 
-      setterMethods.length shouldBe 1
-      getterMethods.length shouldBe 1
+      oSetterMethod shouldBe defined
+      oGetterMethod shouldBe defined
 
-      val setterMethod = setterMethods.head
-      val getterMethod = getterMethods.head
+      val setterMethod = oSetterMethod.get
+      val getterMethod = oGetterMethod.get
 
       cls.isAssignableFrom(getterMethod.getReturnType) shouldBe true
       getterMethod.invoke(bean) shouldBe oldVal
@@ -81,17 +88,6 @@ class ScalaObjectToBeanSpec extends BaseSpec {
     val beanFoo = ScalaObjectToBean(foo)
     val beanBar = ScalaObjectToBean(bar)
 
-    def hasMethod(obj: AnyRef, methodName: String) = {
-      Try {
-        obj.getClass.getMethod(methodName)
-        true
-      }
-      .recover {
-        case NonFatal(_) => false
-      }
-      .get
-    }
-
     // Ensure that all the methods are present.
 
     val hasMethods = List(
@@ -109,7 +105,7 @@ class ScalaObjectToBeanSpec extends BaseSpec {
     )
 
     for ((methodName, obj, expected) <- hasMethods)
-      hasMethod(obj, methodName) shouldBe expected
+      obj.getClass.hasMethod(methodName) shouldBe expected
 
     // Ensure that nest methods are proxies.
 
@@ -121,7 +117,9 @@ class ScalaObjectToBeanSpec extends BaseSpec {
     )
 
     for ((methodName, obj, expected) <- isProxy) {
-      val value = obj.getClass.getMethod(methodName).invoke(obj)
+      val oMethod = obj.getClass.methodForName(methodName)
+      oMethod shouldBe defined
+      val value = oMethod.get.invoke(obj)
       Proxy.isProxyClass(value.getClass) shouldBe expected
     }
 
@@ -141,6 +139,23 @@ class ScalaObjectToBeanSpec extends BaseSpec {
     for ((obj, methodName, expected) <- values) {
       obj.getClass.getMethod(methodName).invoke(obj) shouldBe expected
     }
+  }
+
+  it should "allow existing methods on the generated proxy" in {
+    class PassThrough(val x: Int) {
+      def mult(y: Int): Int = x * y
+    }
+
+    val obj = ScalaObjectToBean(new PassThrough(10))
+    val cls = obj.getClass
+
+    val oGetX = cls.methodForName("getX")
+    oGetX shouldBe defined
+    oGetX.map { _.invoke(obj) } shouldBe Some(10)
+
+    val oMult = cls.methodForName("mult")
+    oMult shouldBe defined
+    oMult.map { _.invoke(obj, 2.asInstanceOf[AnyRef]) } shouldBe Some(20)
   }
 
   "generateBeanInterface" should "generate all getters/setters" in {
