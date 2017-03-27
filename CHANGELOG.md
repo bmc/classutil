@@ -7,6 +7,8 @@ Version 1.2.0
   `beanName()` and `scalaAccessorMethods()`.
 * Updated list of methods that should be skipped (i.e., methods that look like
   getters or setters, but aren't).
+* Added `ClassUtil.nonFinalPublicMethods()` convenience helper.
+* Added `ScalaObjectToBean.generateBeanInterface()` method.
 
 Version 1.1.2
 

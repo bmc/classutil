@@ -261,4 +261,30 @@ class ClassUtilSpec extends BaseSpec {
     val methodNames = ClassUtil.scalaAccessorMethods(classOf[Bar])
     methodNames should have length 0
   }
+
+  "nonFinalPublicMethods" should "skip non-public and final methods" in {
+    class Baz(val name: String, val age: Int) {
+      final val upperClassName = name.toUpperCase
+    }
+
+    val cls = classOf[Baz]
+    val nonPublicOrFinalMethods = cls
+      .getMethods
+      .filter { m =>
+        import java.lang.reflect.{Modifier => JModifier}
+        val modifiers = m.getModifiers
+
+        ((modifiers & JModifier.PUBLIC) == 0) ||
+         ((modifiers & JModifier.FINAL) != 0)
+      }
+      .map(_.getName)
+      .toSet
+
+    val publicNonFinalMethods = ClassUtil
+      .nonFinalPublicMethods(cls)
+      .map(_.getName)
+      .toSet
+
+    (nonPublicOrFinalMethods & publicNonFinalMethods) shouldBe Set.empty[String]
+  }
 }

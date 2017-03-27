@@ -257,6 +257,23 @@ object ClassUtil {
       }
   }
 
+  /** Get a sequence of all public, non-final methods in a class.
+    *
+    * @param cls  the class
+    *
+    * @return the sequence of methods
+    */
+  def nonFinalPublicMethods(cls: Class[_]): Seq[Method] = {
+    cls
+      .getMethods
+      .filter { m =>
+        val modifiers = m.getModifiers
+
+        ((modifiers & JModifier.PUBLIC) != 0) &&
+         ((modifiers & JModifier.FINAL) == 0)
+      }
+  }
+
   /** Given a method, produce its Java Bean name. Assumes that the method
     * is already known to be a valid Scala accessor method.
     *

@@ -6,7 +6,7 @@ import scala.util.Try
 import scala.util.control.NonFatal
 
 class ScalaObjectToBeanSpec extends BaseSpec {
-  "ScalaObjectToBean" should "handle class getters and setters in non-recursive mode" in {
+  "apply" should "handle class getters and setters in non-recursive mode" in {
     class Foo(var name: String, var iValue: Int, var fValue: Float) {
       var k: Int = 0
       def setK(i: Int): Unit = {}
@@ -18,8 +18,8 @@ class ScalaObjectToBeanSpec extends BaseSpec {
     val NewName  = "bar"
     val NewInt   = 234621
     val NewFloat = 123.3f
-    val foo = new Foo(OldName, OldInt, OldFloat)
-    val bean = ScalaObjectToBean(foo)
+    val foo      = new Foo(OldName, OldInt, OldFloat)
+    val bean     = ScalaObjectToBean(foo)
 
     val expectedGetters = List(
       ("getName",   classOf[java.lang.String], foo.name),
@@ -141,5 +141,20 @@ class ScalaObjectToBeanSpec extends BaseSpec {
     for ((obj, methodName, expected) <- values) {
       obj.getClass.getMethod(methodName).invoke(obj) shouldBe expected
     }
+  }
+
+  "generateBeanInterface" should "generate all getters/setters" in {
+    class Foobar(i: Int, name: String, var address: String)
+
+    val cls = classOf[Foobar]
+    val settersGetters = ClassUtil.scalaAccessorMethods(cls)
+    val beanNames = settersGetters.map(ClassUtil.beanName)
+    val expectedMethods = (
+      ClassUtil.nonFinalPublicMethods(cls).map(_.getName) ++ beanNames
+    ).toSet
+
+    val interface = ScalaObjectToBean.generateBeanInterface(cls)
+    val generatedMethods = interface.getMethods.map(_.getName).toSet
+    generatedMethods shouldBe expectedMethods
   }
 }
