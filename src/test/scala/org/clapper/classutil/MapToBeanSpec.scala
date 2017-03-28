@@ -57,4 +57,18 @@ class MapToBeanSpec extends BaseSpec {
     System.gc()
     ()
   }
+
+  it should "generate both Java and Scala getters" in {
+    val bean = MapToBean(map)
+    val expected = map.keySet ++
+                   map.keySet.map(MapToBeanUtil.keyToBeanMethodName)
+
+    // The bean class will have more methods than the map, because of standard
+    // JVM methods like notify(), wait(), etc. But subtracting the generated
+    // methods from the expected methods should yield an empty set (meaning
+    // all expected methods were generated).
+    val methods = bean.getClass.getMethods.map(_.getName).toSet
+
+    (expected -- methods) shouldBe empty
+  }
 }

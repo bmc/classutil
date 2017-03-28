@@ -73,9 +73,9 @@ private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper {
    *
    * @return an instantiated object representing the map
    */
-  def makeBean(map: Map[String, Any],
+  def makeBean(map:       Map[String, Any],
                className: String,
-               recurse: Boolean = true): AnyRef = {
+               recurse:   Boolean = true): AnyRef = {
     // Strategy: Create an interface, load it, and generate a proxy that
     // implements the interface dynamically. The proxy handler resolves
     // references from the map.
@@ -91,40 +91,37 @@ private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper {
         value
     }
 
-    def keyToMethodName(key: String) = {
-      if (! key.forall(Character.isJavaIdentifierPart(_)))
-        throw new IllegalArgumentException(
-          "Map key \"" + key + "\" is not a valid Java identifier.")
-
-      "get" + key.take(1).toUpperCase + key.drop(1)
-    }
-
     // If we're recursing, then first map any value that is, itself, a
     // Map[String,Any].
 
-    val tuples1 = map.map(kv => (kv._1 -> transformValueIfMap(kv._2)))
+    val tuples1 = map.map { case (k, v) => k -> transformValueIfMap(v) }
     val newMap = Map(tuples1.toList: _*)
 
     // Map the keys to method names, with the same values as the existing
     // map.
-    val tuples2 = newMap.keys.map(k => (keyToMethodName(k) -> newMap(k)))
-    val methodNameMap = Map(tuples2.toList: _*)
+    val beanGetters = newMap.keys.map { k =>
+      MapToBeanUtil.keyToBeanMethodName(k) -> newMap(k)
+    }
+
+    // Generate both bean-style getters and Scala-style getters.
+    val methodNameMap = Map((beanGetters ++ newMap).toArray: _*)
 
     // Create the interface bytes. We need a map of names to return types
     // here.
+    val methodSpecs = methodNameMap.map { case (k, v) =>
+      (k, InterfaceMaker.NoParams, v.asInstanceOf[AnyRef].getClass)
+    }
+
     val interfaceBytes = InterfaceMaker.makeInterface(
-      methodNameMap.map(kv => (kv._1, 
-                               InterfaceMaker.NoParams,
-                               kv._2.asInstanceOf[AnyRef].getClass)).toSeq,
-      className
+      methodSpecs.toSeq, className
     )
 
     // Load the class we just generated.
 
     val classLoader = map.getClass.getClassLoader
-    val interface = ClassUtil.loadClass(classLoader,
-                                        className,
-                                        interfaceBytes)
+    val interface = ClassUtil.loadClass(
+      classLoader, className, interfaceBytes
+    )
 
     makeProxy(methodNameMap, map, interface, classLoader)
   }
@@ -134,9 +131,9 @@ private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper {
   // ----------------------------------------------------------------------
 
   private def makeProxy(methodNameMap: Map[String, Any],
-                        originalMap: Map[String, Any],
-                        interface: Class[_],
-                        classLoader: ClassLoader): AnyRef = {
+                        originalMap:   Map[String, Any],
+                        interface:     Class[_],
+                        classLoader:   ClassLoader): AnyRef = {
     val handler = new InvocationHandler {
       def invoke(proxy: Object,
                  method: Method,

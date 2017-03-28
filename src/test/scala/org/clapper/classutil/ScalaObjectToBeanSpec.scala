@@ -3,17 +3,6 @@ package org.clapper.classutil
 import java.lang.reflect.{Method, Proxy}
 
 class ScalaObjectToBeanSpec extends BaseSpec {
-  implicit class EnrichedClass(cls: Class[_]) {
-    def methodForName(name: String): Option[Method] = {
-      cls.getMethods.find(_.getName == name)
-    }
-
-    def hasMethod(name: String): Boolean = methodForName(name).isDefined
-
-    def invokeOn(obj: AnyRef, method: String, args: AnyRef*): Option[AnyRef] = {
-      methodForName(method).map { _.invoke(obj, args: _*) }
-    }
-  }
 
   "apply" should "handle class getters and setters in non-recursive mode" in {
     class Foo(var name: String, var iValue: Int, var fValue: Float) {

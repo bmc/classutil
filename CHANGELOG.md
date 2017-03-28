@@ -10,6 +10,7 @@ Version 1.2.0
 * Added `ClassUtil.nonFinalPublicMethods()` convenience helper.
 * Added `ScalaObjectToBean.withResultMapper()`, allowing caller to trap,
   examine, and manipulate any methods called in the generated bean.
+* `MapToBean` also generates Scala-style getters, not just bean-style getters.  
 
 Version 1.1.2
 
