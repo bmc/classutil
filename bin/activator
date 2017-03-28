@@ -7,6 +7,7 @@
 realpath () {
 (
   TARGET_FILE="$1"
+  FIX_CYGPATH="$2"
 
   cd "$(dirname "$TARGET_FILE")"
   TARGET_FILE=$(basename "$TARGET_FILE")
@@ -20,23 +21,15 @@ realpath () {
       COUNT=$(($COUNT + 1))
   done
 
-  if [ "$TARGET_FILE" == "." -o "$TARGET_FILE" == ".." ]; then
-    cd "$TARGET_FILE"
-    TARGET_FILEPATH=
-  else
-    TARGET_FILEPATH=/$TARGET_FILE
-  fi
-
   # make sure we grab the actual windows path, instead of cygwin's path.
-  if ! is_cygwin; then
-    echo "$(pwd -P)/$TARGET_FILE"
+  if [[ "x$FIX_CYGPATH" != "x" ]]; then
+    echo "$(cygwinpath "$(pwd -P)/$TARGET_FILE")"
   else
-    echo $(cygwinpath "$(pwd -P)/$TARGET_FILE")
+    echo "$(pwd -P)/$TARGET_FILE"
   fi
 )
 }
 
-# TODO - Do we need to detect msys?
 
 # Uses uname to detect if we're in the odd cygwin environment.
 is_cygwin() {
@@ -47,11 +40,15 @@ is_cygwin() {
   esac
 }
 
+# TODO - Use nicer bash-isms here.
+CYGWIN_FLAG=$(if is_cygwin; then echo true; else echo false; fi)
+
+
 # This can fix cygwin style /cygdrive paths so we get the
 # windows style paths.
 cygwinpath() {
   local file="$1"
-  if is_cygwin; then
+  if [[ "$CYGWIN_FLAG" == "true" ]]; then
     echo $(cygpath -w $file)
   else
     echo $file
@@ -69,14 +66,27 @@ make_url() {
   fi
 }
 
-# Detect if we should use JAVA_HOME or just try PATH.
-get_java_cmd() {
-  if [[ -n "$JAVA_HOME" ]] && [[ -x "$JAVA_HOME/bin/java" ]];  then
-    echo "$JAVA_HOME/bin/java"
-  else
-    echo "java"
-  fi
-}
+declare -a residual_args
+declare -a java_args
+declare -a scalac_args
+declare -a sbt_commands
+declare java_cmd=java
+declare java_version
+declare -r real_script_path="$(realpath "$0")"
+declare -r sbt_home="$(realpath "$(dirname "$(dirname "$real_script_path")")")"
+declare -r sbt_bin_dir="$(dirname "$real_script_path")"
+declare -r app_version="1.3.12"
+
+declare -r script_name=activator
+declare -r java_opts=( "${ACTIVATOR_OPTS[@]}" "${SBT_OPTS[@]}" "${JAVA_OPTS[@]}" "${java_opts[@]}" )
+userhome="$HOME"
+if is_cygwin; then
+  # cygwin sets home to something f-d up, set to real windows homedir
+  userhome="$USERPROFILE"
+fi
+declare -r activator_user_home_dir="${userhome}/.activator"
+declare -r java_opts_config_home="${activator_user_home_dir}/activatorconfig.txt"
+declare -r java_opts_config_version="${activator_user_home_dir}/${app_version}/activatorconfig.txt"
 
 echoerr () {
   echo 1>&2 "$@"
@@ -87,6 +97,20 @@ vlog () {
 dlog () {
   [[ $debug ]] && echoerr "$@"
 }
+
+jar_file () {
+  echo "$(cygwinpath "${sbt_home}/libexec/activator-launch-${app_version}.jar")"
+}
+
+acquire_sbt_jar () {
+  sbt_jar="$(jar_file)"
+
+  if [[ ! -f "$sbt_jar" ]]; then
+    echoerr "Could not find launcher jar: $sbt_jar"
+    exit 2
+  fi
+}
+
 execRunner () {
   # print the arguments one to a line, quoting any containing spaces
   [[ $verbose || $debug ]] && echo "# Executing command line:" && {
@@ -100,22 +124,25 @@ execRunner () {
     echo ""
   }
 
-  exec "$@"
+  # THis used to be exec, but we loose the ability to re-hook stty then
+  # for cygwin...  Maybe we should flag the feature here...
+  "$@"
 }
+
 addJava () {
   dlog "[addJava] arg = '$1'"
   java_args=( "${java_args[@]}" "$1" )
 }
-addApp () {
-  dlog "[addApp] arg = '$1'"
-  sbt_commands=( "${app_commands[@]}" "$1" )
+addSbt () {
+  dlog "[addSbt] arg = '$1'"
+  sbt_commands=( "${sbt_commands[@]}" "$1" )
 }
 addResidual () {
   dlog "[residual] arg = '$1'"
   residual_args=( "${residual_args[@]}" "$1" )
 }
 addDebugger () {
-  addJava "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$1"
+  addJava "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=$1"
 }
 addConfigOpts () {
   dlog "[addConfigOpts] arg = '$*'"
@@ -124,39 +151,36 @@ addConfigOpts () {
     addJava "$item"
   done
 }
-# a ham-fisted attempt to move some memory settings in concert
-# so they need not be messed around with individually.
+
 get_mem_opts () {
-  local mem=${1:-1024}
-  local meta=$(( $mem / 4 ))
-  (( $meta > 256 )) || meta=256
-  (( $meta < 1024 )) || meta=1024
-
-  # default is to set memory options but this can be overridden by code section below
-  memopts="-Xms${mem}m -Xmx${mem}m"
-  if [[ "${java_version}" > "1.8" ]]; then
-    extmemopts="-XX:MetaspaceSize=64m -XX:MaxMetaspaceSize=${meta}m"
+  # if we detect any of these settings in ${JAVA_OPTS} we need to NOT output our settings.
+  # The reason is the Xms/Xmx, if they don't line up, cause errors.
+  if [[ "${JAVA_OPTS}" == *-Xmx* ]] || [[ "${JAVA_OPTS}" == *-Xms* ]] || [[ "${JAVA_OPTS}" == *-XX:MaxPermSize* ]] || [[ "${JAVA_OPTS}" == *-XX:MaxMetaspaceSize* ]] || [[ "${JAVA_OPTS}" == *-XX:ReservedCodeCacheSize* ]]; then
+     echo ""
   else
-    extmemopts="-XX:PermSize=64m -XX:MaxPermSize=${meta}m"
-  fi
+    # a ham-fisted attempt to move some memory settings in concert
+    # so they need not be messed around with individually.
+    local mem=${1:-1024}
+    local codecache=$(( $mem / 8 ))
+    (( $codecache > 128 )) || codecache=128
+    (( $codecache < 512 )) || codecache=512
+    local class_metadata_size=$(( $codecache * 2 ))
+    local class_metadata_opt=$([[ "$java_version" < "1.8" ]] && echo "MaxPermSize" || echo "MaxMetaspaceSize")
 
-  if [[ "${java_opts}" == *-Xmx* ]] || [[ "${java_opts}" == *-Xms* ]] || [[ "${java_opts}" == *-XX:MaxPermSize* ]] || [[ "${java_opts}" == *-XX:ReservedCodeCacheSize* ]] || [[ "${java_opts}" == *-XX:MaxMetaspaceSize* ]]; then
-    # if we detect any of these settings in ${java_opts} we need to NOT output our settings.
-    # The reason is the Xms/Xmx, if they don't line up, cause errors.
-    memopts=""
-    extmemopts=""
+    echo "-Xms${mem}m -Xmx${mem}m -XX:ReservedCodeCacheSize=${codecache}m -XX:${class_metadata_opt}=${class_metadata_size}m"
   fi
-
-  echo "${memopts} ${extmemopts}"
 }
+
 require_arg () {
   local type="$1"
   local opt="$2"
   local arg="$3"
   if [[ -z "$arg" ]] || [[ "${arg:0:1}" == "-" ]]; then
-    die "$opt requires <$type> argument"
+    echo "$opt requires <$type> argument"
+    exit 1
   fi
 }
+
 is_function_defined() {
   declare -f "$1" > /dev/null
 }
@@ -174,22 +198,22 @@ detect_terminal_for_ui() {
   }
 }
 
-# Processes incoming arguments and places them in appropriate global variables.  called by the run method.
 process_args () {
   while [[ $# -gt 0 ]]; do
     case "$1" in
        -h|-help) usage; exit 1 ;;
     -v|-verbose) verbose=1 && shift ;;
       -d|-debug) debug=1 && shift ;;
-           -mem) require_arg integer "$1" "$2" && app_mem="$2" && shift 2 ;;
-     -jvm-debug) 
-        if echo "$2" | grep -E ^[0-9]+$ > /dev/null; then 
-            addDebugger "$2" && shift 
-        else
-            addDebugger 9999
-        fi 
-        shift ;;
+
+           -ivy) require_arg path "$1" "$2" && addJava "-Dsbt.ivy.home=$2" && shift 2 ;;
+           -mem) require_arg integer "$1" "$2" && sbt_mem="$2" && shift 2 ;;
+     -jvm-debug) require_arg port "$1" "$2" && addDebugger $2 && shift 2 ;;
+         -batch) exec </dev/null && shift ;;
+
+       -sbt-jar) require_arg path "$1" "$2" && sbt_jar="$2" && shift 2 ;;
+   -sbt-version) require_arg version "$1" "$2" && sbt_version="$2" && shift 2 ;;
      -java-home) require_arg path "$1" "$2" && java_cmd="$2/bin/java" && shift 2 ;;
+
             -D*) addJava "$1" && shift ;;
             -J*) addJava "${1:2}" && shift ;;
               *) addResidual "$1" && shift ;;
@@ -201,11 +225,42 @@ process_args () {
     residual_args=()
     process_my_args "${myargs[@]}"
   }
+
+  java_version=$("$java_cmd" -Xmx512M -version 2>&1 | awk -F '"' '/version/ {print $2}')
+  vlog "[process_args] java_version = '$java_version'"
 }
 
-# Actually runs the script.
+# Detect that we have java installed.
+checkJava() {
+  local required_version="$1"
+  # Now check to see if it's a good enough version
+  if [[ "$java_version" == "" ]]; then
+    echo
+    echo No java installations was detected.
+    echo Please go to http://www.java.com/getjava/ and download
+    echo
+    exit 1
+  elif [[ ! "$java_version" > "$required_version" ]]; then
+    echo
+    echo The java installation you have is not up to date
+    echo $script_name requires at least version $required_version+, you have
+    echo version $java_version
+    echo
+    echo Please go to http://www.java.com/getjava/ and download
+    echo a valid Java Runtime and install before running $script_name.
+    echo
+    exit 1
+  fi
+}
+
+
 run() {
-  # TODO - check for sane environment
+  # no jar? download it.
+  [[ -f "$sbt_jar" ]] || acquire_sbt_jar "$sbt_version" || {
+    # still no jar? uh-oh.
+    echo "Download failed. Obtain the sbt-launch.jar manually and place it at $sbt_jar"
+    exit 1
+  }
 
   # process the combined args, then reset "$@" to the residuals
   process_args "$@"
@@ -213,8 +268,11 @@ run() {
   set -- "${residual_args[@]}"
   argumentCount=$#
 
-  #check for jline terminal fixes on cygwin
-  if is_cygwin; then
+  # TODO - java check should be configurable...
+  checkJava "1.6"
+
+  #If we're in cygwin, we should use the windows config, and terminal hacks
+  if [[ "$CYGWIN_FLAG" == "true" ]]; then
     stty -icanon min 1 -echo > /dev/null 2>&1
     addJava "-Djline.terminal=jline.UnixTerminal"
     addJava "-Dsbt.cygwin=true"
@@ -222,106 +280,118 @@ run() {
 
   # run sbt
   execRunner "$java_cmd" \
-    "-Dactivator.home=$(make_url "$activator_home")" \
-    $(get_mem_opts $app_mem) \
-    ${java_opts[@]} \
+    "-Dactivator.home=$(make_url "$sbt_home")" \
+    ${SBT_OPTS:-$default_sbt_opts} \
+    $(get_mem_opts $sbt_mem) \
+      ${JAVA_OPTS} \
     ${java_args[@]} \
-    -jar "$app_launcher" \
-    "${app_commands[@]}" \
+    -jar "$sbt_jar" \
+    "${sbt_commands[@]}" \
     "${residual_args[@]}"
-    
-  local exit_code=$?
-  if is_cygwin; then
+
+  exit_code=$?
+
+  # Clean up the terminal from cygwin hacks.
+  if [[ "$CYGWIN_FLAG" == "true" ]]; then
     stty icanon echo > /dev/null 2>&1
   fi
   exit $exit_code
 }
 
-# Loads a configuration file full of default command line options for this script.
-loadConfigFile() {
-  cat "$1" | sed '/^\#/d'
-}
 
-###  ------------------------------- ###
-###  Start of customized settings    ###
-###  ------------------------------- ###
+declare -r noshare_opts="-Dsbt.global.base=project/.sbtboot -Dsbt.boot.directory=project/.boot -Dsbt.ivy.home=project/.ivy"
+declare -r sbt_opts_file=".sbtopts"
+declare -r etc_sbt_opts_file="${sbt_home}/conf/sbtopts"
+declare -r win_sbt_opts_file="${sbt_home}/conf/sbtconfig.txt"
+
 usage() {
  cat <<EOM
-Usage: $script_name <command> [options]
+Usage: $script_name [options]
 
   Command:
   ui                 Start the Activator UI
   new [name] [template-id]  Create a new project with [name] using template [template-id]
   list-templates     Print all available template names
-  -h | -help         Print this message
 
   Options:
-  -v | -verbose      Make this runner chattier
-  -d | -debug        Set sbt log level to debug
-  -mem <integer>     Set memory options (default: $sbt_mem, which is $(get_mem_opts $sbt_mem))
+  -h | -help         print this message
+  -v | -verbose      this runner is chattier
+  -d | -debug        set sbt log level to debug
+  -no-colors         disable ANSI color codes
+  -sbt-create        start sbt even if current directory contains no sbt project
+  -sbt-dir   <path>  path to global settings/plugins directory (default: ~/.sbt)
+  -sbt-boot  <path>  path to shared boot directory (default: ~/.sbt/boot in 0.11 series)
+  -ivy       <path>  path to local Ivy repository (default: ~/.ivy2)
+  -mem    <integer>  set memory options (default: $sbt_mem, which is $(get_mem_opts $sbt_mem))
+  -no-share          use all local caches; no sharing
+  -no-global         uses global caches, but does not use global ~/.sbt directory.
   -jvm-debug <port>  Turn on JVM debugging, open at the given port.
+  -batch             Disable interactive mode
+
+  # sbt version (default: from project/build.properties if present, else latest release)
+  -sbt-version  <version>   use the specified version of sbt
+  -sbt-jar      <path>      use the specified jar as the sbt launcher
+  -sbt-rc                   use an RC version of sbt
+  -sbt-snapshot             use a snapshot version of sbt
 
   # java version (default: java from PATH, currently $(java -version 2>&1 | grep version))
-  -java-home <path>  Alternate JAVA_HOME
+  -java-home <path>         alternate JAVA_HOME
 
   # jvm options and output control
-  -Dkey=val          Pass -Dkey=val directly to the java runtime
-  -J-X               Pass option -X directly to the java runtime
-                     (-J is stripped)
-
-  # environment variables (read from context)
-  JAVA_OPTS          Environment variable, if unset uses ""
-  SBT_OPTS           Environment variable, if unset uses ""
+  JAVA_OPTS          environment variable, if unset uses "$java_opts"
+  SBT_OPTS           environment variable, if unset uses "$default_sbt_opts"
   ACTIVATOR_OPTS     Environment variable, if unset uses ""
+  .sbtopts           if this file exists in the current directory, it is
+                     prepended to the runner args
+  /etc/sbt/sbtopts   if this file exists, it is prepended to the runner args
+  -Dkey=val          pass -Dkey=val directly to the java runtime
+  -J-X               pass option -X directly to the java runtime
+                     (-J is stripped)
+  -S-X               add -X to sbt's scalacOptions (-S is stripped)
 
 In the case of duplicated or conflicting options, the order above
-shows precedence: environment variables lowest, command line options highest.
+shows precedence: JAVA_OPTS lowest, command line options highest.
 EOM
 }
 
-###  ------------------------------- ###
-###  Main script                     ###
-###  ------------------------------- ###
 
-declare -a residual_args
-declare -a java_args
-declare -a app_commands
-declare -r real_script_path="$(realpath "$0")"
-declare -r activator_home="$(realpath "$(dirname "$(dirname "$real_script_path")")")"
-declare -r app_version="1.3.9"
 
-declare -r app_launcher="${activator_home}/libexec/activator-launch-${app_version}.jar"
-declare -r script_name=activator
-java_cmd=$(get_java_cmd)
-declare -r java_opts=( "${ACTIVATOR_OPTS[@]}" "${SBT_OPTS[@]}" "${JAVA_OPTS[@]}" "${java_opts[@]}" )
-userhome="$HOME"
-if is_cygwin; then
-  # cygwin sets home to something f-d up, set to real windows homedir
-  userhome="$USERPROFILE"
-fi
-declare -r activator_user_home_dir="${userhome}/.activator"
-declare -r java_opts_config_home="${activator_user_home_dir}/activatorconfig.txt"
-declare -r java_opts_config_version="${activator_user_home_dir}/${app_version}/activatorconfig.txt"
+process_my_args () {
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+     -no-colors) addJava "-Dsbt.log.noformat=true" && shift ;;
+      -no-share) addJava "$noshare_opts" && shift ;;
+     -no-global) addJava "-Dsbt.global.base=$(pwd)/project/.sbtboot" && shift ;;
+      -sbt-boot) require_arg path "$1" "$2" && addJava "-Dsbt.boot.directory=$2" && shift 2 ;;
+       -sbt-dir) require_arg path "$1" "$2" && addJava "-Dsbt.global.base=$2" && shift 2 ;;
+     -debug-inc) addJava "-Dxsbt.inc.debug=true" && shift ;;
+         -batch) exec </dev/null && shift ;;
 
-# Now check to see if it's a good enough version
-declare -r java_version=$("$java_cmd" -version 2>&1 | awk -F '"' '/version/ {print $2}')
-if [[ "$java_version" == "" ]]; then
-  echo
-  echo No java installations was detected.
-  echo Please go to http://www.java.com/getjava/ and download
-  echo
-  exit 1
-elif [[ ! "$java_version" > "1.6" ]]; then
-  echo
-  echo The java installation you have is not up to date
-  echo Activator requires at least version 1.6+, you have
-  echo version $java_version
-  echo
-  echo Please go to http://www.java.com/getjava/ and download
-  echo a valid Java Runtime and install before running Activator.
-  echo
-  exit 1
-fi
+    -sbt-create) sbt_create=true && shift ;;
+
+              *) addResidual "$1" && shift ;;
+    esac
+  done
+
+  # Now, ensure sbt version is used.
+  [[ "${sbt_version}XXX" != "XXX" ]] && addJava "-Dsbt.version=$sbt_version"
+}
+
+loadConfigFile() {
+  cat "$1" | sed '/^\#/d' | while read line; do
+    eval echo $line
+  done
+}
+
+# TODO - Pull in config based on operating system... (MSYS + cygwin should pull in txt file).
+# Here we pull in the global settings configuration.
+[[ -f "$etc_sbt_opts_file" ]] && set -- $(loadConfigFile "$etc_sbt_opts_file") "$@"
+# -- Windows behavior stub'd
+# JAVA_OPTS=$(cat "$WDIR/sbtconfig.txt" | sed -e 's/\r//g' -e 's/^#.*$//g' | sed ':a;N;$!ba;s/\n/ /g')
+
+
+#  Pull in the project-level config file, if it exists.
+[[ -f "$sbt_opts_file" ]] && set -- $(loadConfigFile "$sbt_opts_file") "$@"
 
 # if configuration files exist, prepend their contents to the java args so it can be processed by this runner
 # a "versioned" config trumps one on the top level
