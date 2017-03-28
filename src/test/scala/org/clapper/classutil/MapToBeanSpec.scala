@@ -23,11 +23,13 @@ class MapToBeanSpec extends BaseSpec {
       isAssignable shouldBe true
     }
 
-    val getFiveMap = bean.getClass.getMethod("getFiveMap")
-    val obj = getFiveMap.invoke(bean)
-    val getOne = obj.getClass.getMethod("getOne")
+    val cls = bean.getClass
+    val res = for { getFiveMap <- cls.methodForName("getFiveMap")
+                    obj         = getFiveMap.invoke(bean)
+                    getOne     <- obj.getClass.methodForName("getOne") }
+      yield getOne.invoke(obj)
 
-    getOne.invoke(obj) shouldBe 1
+    res shouldBe Some(1)
   }
 
   it should "behave properly when non-recursive" in {
