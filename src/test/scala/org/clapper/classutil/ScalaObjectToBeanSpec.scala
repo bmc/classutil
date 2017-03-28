@@ -2,9 +2,6 @@ package org.clapper.classutil
 
 import java.lang.reflect.{Method, Proxy}
 
-import scala.util.Try
-import scala.util.control.NonFatal
-
 class ScalaObjectToBeanSpec extends BaseSpec {
   implicit class EnrichedClass(cls: Class[_]) {
     def methodForName(name: String): Option[Method] = {
@@ -12,6 +9,10 @@ class ScalaObjectToBeanSpec extends BaseSpec {
     }
 
     def hasMethod(name: String): Boolean = methodForName(name).isDefined
+
+    def invokeOn(obj: AnyRef, method: String, args: AnyRef*): Option[AnyRef] = {
+      methodForName(method).map { _.invoke(obj, args: _*) }
+    }
   }
 
   "apply" should "handle class getters and setters in non-recursive mode" in {
@@ -107,7 +108,8 @@ class ScalaObjectToBeanSpec extends BaseSpec {
     for ((methodName, obj, expected) <- hasMethods)
       obj.getClass.hasMethod(methodName) shouldBe expected
 
-    // Ensure that nest methods are proxies.
+    // Ensure that returned nested objects are of type Proxy, where
+    // appropriate.
 
     val isProxy = List(
       ("getName", beanFoo, false),
@@ -117,10 +119,9 @@ class ScalaObjectToBeanSpec extends BaseSpec {
     )
 
     for ((methodName, obj, expected) <- isProxy) {
-      val oMethod = obj.getClass.methodForName(methodName)
-      oMethod shouldBe defined
-      val value = oMethod.get.invoke(obj)
-      Proxy.isProxyClass(value.getClass) shouldBe expected
+      val oValue = obj.getClass.methodForName(methodName).map(_.invoke(obj))
+      oValue shouldBe defined
+      oValue.map(v => Proxy.isProxyClass(v.getClass)) shouldBe Some(expected)
     }
 
     // Ensure that the nest proxies return the right values.
@@ -137,7 +138,7 @@ class ScalaObjectToBeanSpec extends BaseSpec {
     )
 
     for ((obj, methodName, expected) <- values) {
-      obj.getClass.getMethod(methodName).invoke(obj) shouldBe expected
+      obj.getClass.methodForName(methodName).map(_.invoke(obj)) shouldBe Some(expected)
     }
   }
 
@@ -158,18 +159,99 @@ class ScalaObjectToBeanSpec extends BaseSpec {
     oMult.map { _.invoke(obj, 2.asInstanceOf[AnyRef]) } shouldBe Some(20)
   }
 
-  "generateBeanInterface" should "generate all getters/setters" in {
-    class Foobar(i: Int, name: String, var address: String)
+  "withResultMapper" should "permit a result mapper" in {
+    class Baz(val x: Int, val y: Double, var z: Int)
 
-    val cls = classOf[Foobar]
-    val settersGetters = ClassUtil.scalaAccessorMethods(cls)
-    val beanNames = settersGetters.map(ClassUtil.beanName)
-    val expectedMethods = (
-      ClassUtil.nonFinalPublicMethods(cls).map(_.getName) ++ beanNames
-    ).toSet
+    val baseObj = new Baz(10, 20.0, 30)
+    val XMult = 10
+    val YMult = 20
 
-    val interface = ScalaObjectToBean.generateBeanInterface(cls)
-    val generatedMethods = interface.getMethods.map(_.getName).toSet
-    generatedMethods shouldBe expectedMethods
+    var interceptorCalled = false
+    val bean = ScalaObjectToBean.withResultMapper(baseObj) { (name, res) =>
+      interceptorCalled = true
+      (name, res) match {
+        case ("getX", n: java.lang.Integer) => new Integer(n * XMult)
+        case ("getY", n: java.lang.Double)  => new java.lang.Double(n * YMult)
+        case ("getZ", n: java.lang.Integer) => res
+        case _                              => res
+      }
+    }
+
+    val cls = bean.getClass
+    cls.invokeOn(bean, "getX") shouldBe Some(baseObj.x * XMult)
+    interceptorCalled shouldBe true
+
+    interceptorCalled = false
+    cls.invokeOn(bean, "getY") shouldBe Some(baseObj.y * YMult)
+    interceptorCalled shouldBe true
+
+    interceptorCalled = false
+    cls.invokeOn(bean, "getZ") shouldBe Some(baseObj.z)
+    interceptorCalled shouldBe true
+  }
+
+  it should "permit a mapper with nested objects recursively mapped" in {
+    case class Address(street: String, city: String, state: String, zip: String)
+    case class Person(name: String, age: Int, address: Address)
+
+    val addr = Address("123 Main St", "Anytown", "PA", "19999")
+    val person = Person("James Foobar", 62, addr)
+    val bean = ScalaObjectToBean.withResultMapper(person) { (name, res) =>
+      (name, res) match {
+        case ("getAddress", addr1) =>
+          // Should be a proxy.
+          Proxy.isProxyClass(addr1.getClass) shouldBe true
+          addr1
+
+        case ("address", addr2) =>
+          // should be a proxy. Swap it out for the real thing.
+          Proxy.isProxyClass(addr2.getClass) shouldBe true
+          addr
+
+        case _ => res
+      }
+    }
+
+    val cls = bean.getClass
+    val oAddrProxy1 = cls.invokeOn(bean, "getAddress")
+    oAddrProxy1.map { v => Proxy.isProxyClass(v.getClass) } shouldBe Some(true)
+
+    val oAddrProxy2 = cls.invokeOn(bean, "address")
+    // The post-call callback should've changed the result to an Address
+    oAddrProxy2.map { v => Proxy.isProxyClass(v.getClass) } shouldBe Some(false)
+    oAddrProxy2.get should be theSameInstanceAs addr
+  }
+
+  it should "permit a mapper with nested objects not recursively mapped" in {
+    case class Address(street: String, city: String, state: String, zip: String)
+    case class Person(name: String, age: Int, address: Address)
+
+    val addr = Address("123 Main St", "Anytown", "PA", "19999")
+    val person = Person("James Foobar", 62, addr)
+    val bean = ScalaObjectToBean.withResultMapper(person, recurse=false) { (name, res) =>
+      (name, res) match {
+        case ("getAddress", addr1) =>
+          // Should not be a proxy.
+          Proxy.isProxyClass(addr1.getClass) shouldBe false
+          addr1
+
+        case ("address", addr2) =>
+          // Should not be a proxy.
+          Proxy.isProxyClass(addr2.getClass) shouldBe false
+          addr2
+
+        case _ => res
+      }
+    }
+
+    val cls = bean.getClass
+    val oAddrProxy1 = cls.invokeOn(bean, "getAddress")
+    oAddrProxy1.map { v => Proxy.isProxyClass(v.getClass) } shouldBe Some(false)
+    oAddrProxy1.get should be theSameInstanceAs addr
+
+    val oAddrProxy2 = cls.invokeOn(bean, "address")
+    // The post-call callback should've changed the result to an Address
+    oAddrProxy2.map { v => Proxy.isProxyClass(v.getClass) } shouldBe Some(false)
+    oAddrProxy2.get should be theSameInstanceAs addr
   }
 }

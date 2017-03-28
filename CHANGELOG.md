@@ -8,7 +8,8 @@ Version 1.2.0
 * Updated list of methods that should be skipped (i.e., methods that look like
   getters or setters, but aren't).
 * Added `ClassUtil.nonFinalPublicMethods()` convenience helper.
-* Added `ScalaObjectToBean.generateBeanInterface()` method.
+* Added `ScalaObjectToBean.withResultMapper()`, allowing caller to trap,
+  examine, and manipulate any methods called in the generated bean.
 
 Version 1.1.2
 

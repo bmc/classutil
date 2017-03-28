@@ -1,11 +1,8 @@
-
 package org.clapper.classutil
 
-import java.security.SecureRandom
 import java.lang.reflect.{InvocationHandler, Method, Proxy}
 
 import scala.language.existentials
-import scala.util.Random
 
 /** Contains the actual logic that maps a Scala object to a Java bean.
   *
@@ -34,9 +31,10 @@ private[classutil] class ScalaObjectToBeanMapper {
     * @param className  the name to give the class
     * @param recurse    `true` to recursively map nested Scala objects,
     *                   `false` otherwise
-    * @param postCall    If defined, this parameter is a function that is
-    *                    invoked with the result of any method call. It can
-    *                    transform the result before the result is returned.
+    * @param cb         If defined, this parameter is a function that is
+    *                   invoked with the result of any method call, along with
+    *                   the called method's name. It can be used to transform
+    *                   the result before the result is returned.
     *
     * @return an instantiated bean representing the augmented Scala object,
     *         subject to the restrictions listed in the class documentation.
@@ -44,7 +42,7 @@ private[classutil] class ScalaObjectToBeanMapper {
   def wrapInBean(obj:       Any,
                  className: String,
                  recurse:   Boolean,
-                 postCall:  Option[AnyRef => AnyRef]): AnyRef = {
+                 cb:        Option[(String, AnyRef) => AnyRef]): AnyRef = {
 
     // Get the set of bean methods, and create a map of names to methods.
 
@@ -65,7 +63,7 @@ private[classutil] class ScalaObjectToBeanMapper {
                    className   = className,
                    classLoader = this.getClass.getClassLoader,
                    recurse     = recurse,
-                   postCall    = postCall)
+                   cb          = cb)
     }
   }
 
@@ -172,24 +170,26 @@ private[classutil] class ScalaObjectToBeanMapper {
     *                    class loader is used.
     * @param recurse     Whether or not method results should also be wrapped
     *                    as beans. Defaults to `true`.
-    * @param postCall    If defined, this parameter is a function that is
-    *                    invoked with the result of any method call. It can
-    *                    transform the result before the result is returned.
+    * @param cb          If defined, this parameter is a function that is
+    *                    invoked with the result of any method call, along with
+    *                    the called method's name. It can be used to transform
+    *                    the result before the result is returned.
     *
     * @return the generated bean
     */
-  def generateBean(obj:         Any,
-                   methodMap:   Map[String, Method],
-                   className:   String = "",
-                   classLoader: ClassLoader = getClass.getClassLoader,
-                   recurse:     Boolean = true,
-                   postCall:    Option[AnyRef => AnyRef] = None): AnyRef = {
+  def generateBean(
+    obj:         Any,
+    methodMap:   Map[String, Method],
+    className:   String = "",
+    classLoader: ClassLoader = getClass.getClassLoader,
+    recurse:     Boolean = true,
+    cb:    Option[(String, AnyRef) => AnyRef] = None): AnyRef = {
 
     def functionFor(method: Method): (Array[Object] => AnyRef) = {
       val o = obj.asInstanceOf[AnyRef]
       if (recurse && shouldWrapReturnType(method.getReturnType)) {
-        // Return a function which, when invoked with an Option of arguments,
-        // will call the method, wrapping the result in a bean wrapper.
+        // Return a function which, when invoked, will call the method and
+        // wrap the result in a bean wrapper.
         a: Array[Object] =>
           wrapInBean(call(o, method, a), recurse = true)
       }
@@ -217,7 +217,7 @@ private[classutil] class ScalaObjectToBeanMapper {
               obj         = obj,
               interface   = interface,
               classLoader = classLoader,
-              postCall    = postCall)
+              cb          = cb)
   }
 
   //--------------------------------------------------------------------------
@@ -252,17 +252,20 @@ private[classutil] class ScalaObjectToBeanMapper {
     * @param obj         The object to which to delegate the method calls
     * @param interface   The generated interface class to be implemented
     * @param classLoader The class loader to use
-    * @param postCall    If defined, this parameter is a function that is
-    *                    invoked with the result of any method call. It can
-    *                    transform the result before the result is returned.
+    * @param cb          If defined, this parameter is a function that is
+    *                    invoked with the result of any method call, along with
+    *                    the called method's name. It can be used to transform
+    *                    the result before the result is returned.
     *
     * @return the proxy instance
     */
-  private def makeProxy(methods:     Map[String, Array[Object] => AnyRef],
-                        obj:         Any,
-                        interface:   Class[_],
-                        classLoader: ClassLoader,
-                        postCall:    Option[AnyRef => AnyRef] = None): AnyRef = {
+  private def makeProxy(
+    methods:     Map[String, Array[Object] => AnyRef],
+    obj:         Any,
+    interface:   Class[_],
+    classLoader: ClassLoader,
+    cb:    Option[(String, AnyRef) => AnyRef] = None): AnyRef = {
+
     val handler = new InvocationHandler {
       def invoke(proxy: Object,
                  method: Method,
@@ -274,13 +277,14 @@ private[classutil] class ScalaObjectToBeanMapper {
         def delegate(args: Array[Object]): AnyRef =
           call(obj.asInstanceOf[AnyRef], method, args)
 
-        val func = methods.getOrElse(method.getName, delegate _)
+        val methodName = method.getName
+        val func = methods.getOrElse(methodName, delegate _)
         val res = if (method.getParameterTypes.isEmpty)
           func(Array.empty[AnyRef])
         else
           func(args)
 
-        postCall.map { f => f(res) }.getOrElse(res)
+        cb.map { f => f(methodName, res) }.getOrElse(res)
       }
     }
 
@@ -383,50 +387,80 @@ object ScalaObjectToBean {
     * allows you to intercept each method call and possibly transform the
     * results.
     *
+    * Note that the `cb` parameter will be receiving an `AnyRef` result
+    * (i.e., `java.lang.Object`). That means any Scala primitives are really
+    * boxed Java values. In addition, it's important that the method return an
+    * object. For instance, consider wrapping the following class in a bean:
+    *
+    * {{{
+    * case class Foo(x: Int, y: Double)
+    * }}}
+    *
+    * To post-process a bean generated from that class, you might use code
+    * like the following:
+    *
+    * {{{
+    * val bean = ScalaObjectToBean.withResultMapper(Foo(10, 20.0)) { (name, res) =>
+    *   (name, res) match {
+    *     case ("getX", n: java.lang.Integer) => new Integer(n * 100)
+    *     case ("getY", d: java.lang.Double)  => new java.lang.Double(d / 10.0)
+    *     case _                              => res
+    *   }
+    * }
+    * }}}
+    *
+    * By contrast, the following will not compile, because (a) it attempts to
+    * pattern match against `Int`, and (b) it attempts to return a Scala
+    * `Double`.
+    *
+    * {{{
+    * val bean = ScalaObjectToBean.withResultMapper(Foo(10, 20.0)) { (name, res) =>
+    *   (name, res) match {
+    *     case ("getX", n: Int) => new Integer(n * 100)
+    *     //               ^ pattern type is incompatible with expected type
+    *
+    *     case ("getY", d: java.lang.Double) => d / 10.0
+    *     //                                      ^ the result type of an
+    *     //                                        implicit conversaion must
+    *     //                                        be more specific than AnyRef
+    *     case _ => res
+    *   }
+    * }
+    * }}}
+    *
+    * Note, too, that if `recurse` is `true` (the default), the result value
+    * passed to your post-call function will be a `java.lang.reflect.Proxy` for
+    * any non-primitive, non-String object.
+    *
+    * {{{
+    * case class Foo(i: Int)
+    * case class Bar(name: String, foo: Foo)
+    * val bean = ScalaObjectToBean(Bar("quux", Foo(10)) { (name, res) =>
+    *   (name, res) match {
+    *     case ("getName", n) => // n will be a String
+    *     case ("getFoo", f)  => // f will be a java.lang.reflect.Proxy
+    *     case ("name",   n)  => // n will be a String
+    *     case ("foo",    f)  => // f will be a java.lang.reflect.Proxy
+    *   }
+    * }
+    * }}}
+    *
+    *
     * @param obj       the Scala object
-    * @param className the desired class name
+    * @param className the desired class name, or an empty string to generate
+    *                  a default. (Empty string is the default.)
     * @param recurse   `true` to recursively map nested maps, `false`
     *                  otherwise. Recursively mapped maps will have generated
-    *                  class names.
+    *                  class names. Defaults to `false`.
+    * @param cb        If defined, this parameter is a function that is
+    *                  invoked with the result of any method call, along with
+    *                  the called method's name. It can be used to transform
+    *                  the result before the result is returned.
     *
     * @return an instantiated object representing the map
     */
-  def apply(obj: Any, className: String, recurse: Boolean)
-           (postCall: AnyRef => AnyRef): AnyRef = {
-    mapper.wrapInBean(obj, className, recurse, Some(postCall))
+  def withResultMapper(obj: Any, className: String = "", recurse: Boolean = true)
+                      (cb: (String, AnyRef) => AnyRef): AnyRef = {
+    mapper.wrapInBean(obj, className, recurse, Some(cb))
   }
-
-  /** Generate a Java Bean-compliant interface for a class.w
-    *
-    * Generating an implementation for the interface (e.g., by using a
-    * `java.lang.reflect.Proxy`) is the responsibility of the caller.
-    *
-    * @param cls         the class for which to generate the interface
-    * @param ifaceName   the name to give the interface. If not specified,
-    *                    one is generated.
-    * @param classLoader The class loader to use. Defaults to the class
-    *                    loader for this class.
-    * @param recurse     Whether or not method results should also be wrapped
-    *                    as beans. Defaults to true.
-    *
-    * @return the generated interface, which is loaded using the specified
-    *         class loader.
-    */
-  def generateBeanInterface(
-    cls:         Class[_],
-    ifaceName:   String = "",
-    classLoader: ClassLoader = getClass.getClassLoader,
-    recurse:     Boolean = true
-  ): Class[_] = {
-    val mapper = new ScalaObjectToBeanMapper()
-    mapper.generateBeanInterface(
-      cls         = cls,
-      ifaceName   = ifaceName,
-      methodMap   = mapper.methodsForBean(cls),
-      classLoader = classLoader,
-      recurse     = recurse
-    )
-  }
-
 }
-
