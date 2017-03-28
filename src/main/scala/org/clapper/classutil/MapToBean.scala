@@ -74,83 +74,51 @@ trait MapToBeanMapper {
                recurse: Boolean = true): AnyRef
 }
 
-/**
- * Takes a Scala `Map`, with `String` keys and object values, and generates
- * a Java Bean object, with fields for each map value. Field that are,
- * themselves, `Map[String,Any]` objects can be recursively mapped, as
- * well. The map's keys are mapped to Java Bean `get` accessors. For
- * instance, a key name "foo" is mapped to a method called `getFoo()`.
- *
- * The transformation results in an object that can only really be used
- * via reflection; however, that fits fine with some APIs that want to receive
- * Java Beans as parameters.
- *
- * There are some restrictions imposed on any map that is to be converted.
- *
- * - Only maps with string keys can be converted.
- * - The string keys must be valid Java identifiers.
- *
- * Here's a simple example:
- *
- * {{{
- * import org.clapper.classutil._
- *
- * val charList = List('1', '2', '3')
- *
- * val subMap = Map("sub1" -> 1, "sub2" -> 2)
- * val m =  Map("oneInt" -> 1,
- *              "twoFloat" -> 2f,
- *              "threeString" -> "three",
- *              "fourIntClass" -> classOf[Int],
- *              "fiveMap" -> subMap,
- *              "sixList" -> charList)
- * val obj = MapToBean(m)
- *
- * def showName(name: String) = (name startsWith "get")
- *
- * obj.getClass.getMethods.filter(m => showName(m.getName)).foreach(println _)
- *
- * def call(methodName: String) = {
- *   val method = obj.getClass.getMethod(methodName)
- *   method.invoke(obj)
- * }
- *
- * println
- * println("getFiveMap returns " + call("getFiveMap"))
- * }}}
- *
- * That Scala script will produce output like the following:
- *
- * {{{
- * public final boolean com.sun.proxy.$Proxy70063.equals(java.lang.Object)
- * public final com.sun.proxy.$Proxy70062 com.sun.proxy.$Proxy70063.fiveMap()
- * public final java.lang.Class com.sun.proxy.$Proxy70063.fourIntClass()
- * public final native java.lang.Class java.lang.Object.getClass()
- * public final com.sun.proxy.$Proxy70062 com.sun.proxy.$Proxy70063.getFiveMap()
- * public final java.lang.Class com.sun.proxy.$Proxy70063.getFourIntClass()
- * public static java.lang.reflect.InvocationHandler java.lang.reflect.Proxy.getInvocationHandler(java.lang.Object) throws java.lang.IllegalArgumentException
- * public final java.lang.Integer com.sun.proxy.$Proxy70063.getOneInt()
- * public static java.lang.Class java.lang.reflect.Proxy.getProxyClass(java.lang.ClassLoader,java.lang.Class[]) throws java.lang.IllegalArgumentException
- * public final scala.collection.immutable.$colon$colon com.sun.proxy.$Proxy70063.getSixList()
- * public final java.lang.String com.sun.proxy.$Proxy70063.getThreeString()
- * public final java.lang.Float com.sun.proxy.$Proxy70063.getTwoFloat()
- * public final int com.sun.proxy.$Proxy70063.hashCode()
- * public static boolean java.lang.reflect.Proxy.isProxyClass(java.lang.Class)
- * public static java.lang.Object java.lang.reflect.Proxy.newProxyInstance(java.lang.ClassLoader,java.lang.Class[],java.lang.reflect.InvocationHandler) throws java.lang.IllegalArgumentException
- * public final native void java.lang.Object.notify()
- * public final native void java.lang.Object.notifyAll()
- * public final java.lang.Integer com.sun.proxy.$Proxy70063.oneInt()
- * public final scala.collection.immutable.$colon$colon com.sun.proxy.$Proxy70063.sixList()
- * public final java.lang.String com.sun.proxy.$Proxy70063.threeString()
- * public final java.lang.String com.sun.proxy.$Proxy70063.toString()
- * public final java.lang.Float com.sun.proxy.$Proxy70063.twoFloat()
- * public final void java.lang.Object.wait(long,int) throws java.lang.InterruptedException
- * public final native void java.lang.Object.wait(long) throws java.lang.InterruptedException
- * public final void java.lang.Object.wait() throws java.lang.InterruptedException
- *
- * getFiveMap returns Map(getSub1 -> 1, getSub2 -> 2, sub1 -> 1, sub2 -> 2)
- * }}}
- */
+/** Takes a Scala `Map`, with `String` keys and object values, and generates
+  * a Java Bean object, with fields for each map value. Field that are,
+  * themselves, `Map[String,Any]` objects can be recursively mapped, as
+  * well. The map's keys are mapped to Java Bean `get` accessors. For
+  * instance, a scalaGetter name "foo" is mapped to a method called `getFoo()`.
+  *
+  * The transformation results in an object that can only really be used
+  * via reflection; however, that fits fine with some APIs that want to receive
+  * Java Beans as parameters.
+  *
+  * There are some restrictions imposed on any map that is to be converted.
+  *
+  * - Only maps with string keys can be converted.
+  * - The string keys must be valid Java identifiers.
+  *
+  * Here's a simple example:
+  *
+  * {{{
+  * import org.clapper.classutil._
+  *
+  * val charList = List('1', '2', '3')
+  *
+  * val subMap = Map("sub1" -> 1, "sub2" -> 2)
+  * val m =  Map("oneInt" -> 1,
+  *              "twoFloat" -> 2f,
+  *              "threeString" -> "three",
+  *              "fourIntClass" -> classOf[Int],
+  *              "fiveMap" -> subMap,
+  *              "sixList" -> charList)
+  * val obj = MapToBean(m)
+  *
+  * def call(methodName: String) = {
+  *   val method = obj.getClass.getMethod(methodName)
+  *   method.invoke(obj)
+  * }
+  *
+  * val five = obj.getClass.getMethod("getFiveMap").invoke(obj)
+  * println("getFiveMap returns " + five)
+  * }}}
+  *
+  * That code will produce output like the following:
+  * {{{
+  * getFiveMap returns Map(getSub1 -> 1, getSub2 -> 2, sub1 -> 1, sub2 -> 2)
+  * }}}
+  */
 object MapToBean extends ClassNameGenerator {
   val ClassNamePrefix = "org.clapper.classutil.MapBean"
 
@@ -182,16 +150,4 @@ object MapToBean extends ClassNameGenerator {
    */
   def apply(map: Map[String, Any], className: String, recurse: Boolean): AnyRef =
     mapper.makeBean(map, className, recurse)
-}
-
-private[classutil] object MapToBeanUtil {
-
-  def keyToBeanMethodName(key: String): String = {
-    if (! key.forall(Character.isJavaIdentifierPart))
-      throw new IllegalArgumentException(
-        "Map key \"" + key + "\" is not a valid Java identifier.")
-
-    "get" + key.take(1).toUpperCase + key.drop(1)
-  }
-
 }

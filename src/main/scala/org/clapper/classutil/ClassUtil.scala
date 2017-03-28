@@ -51,21 +51,6 @@ object ClassUtil {
   private val SetterPattern = """_\$eq$""".r
   private val SetterRemove  = SetterPattern
 
-  // In addition to skipping methods with non-beanable signatures, the
-  // bean-generation logic will also skip any methods that match these
-  // regular expressions.
-  private val SkipMethods = List("""^toString$""".r,
-                                 """^productArity$""".r,
-                                 """^productIterator$""".r,
-                                 """^productElements$""".r,
-                                 """^productPrefix$""".r,
-                                 """^hashCode$""".r,
-                                 """^get""".r,
-                                 """^set""".r,
-                                 """^copy.*""".r,
-                                 """\$outer$""".r,
-                                 """^readResolve$""".r)
-
   private lazy val JavaPrimitives = Set(
     classOf[java.lang.Boolean].   asInstanceOf[Any],
     java.lang.Boolean.TYPE.       asInstanceOf[Any],
@@ -252,7 +237,7 @@ object ClassUtil {
 
         ((modifiers & JModifier.PUBLIC) != 0) &&
         ((modifiers & JModifier.FINAL) == 0) &&
-        (! ignoreMethod(m.getName)) &&
+        (! Util.skipMethod(m.getName)) &&
         (accessorIsSetter(m) || accessorIsGetter(m))
       }
   }
@@ -303,7 +288,7 @@ object ClassUtil {
     * @return `true` or `false`
     */
   def isGetter(m: Method): Boolean = {
-    (! ignoreMethod(m.getName)) && accessorIsGetter(m)
+    (! Util.skipMethod(m.getName)) && accessorIsGetter(m)
   }
 
   /** Determine if a method is a setter. A getter is defined as any method
@@ -315,16 +300,12 @@ object ClassUtil {
     * @return `true` or `false`
     */
   def isSetter(m: Method): Boolean = {
-    (! ignoreMethod(m.getName)) && accessorIsSetter(m)
+    (! Util.skipMethod(m.getName)) && accessorIsSetter(m)
   }
 
   // --------------------------------------------------------------------------
   // Private methods
   // --------------------------------------------------------------------------
-
-  private def ignoreMethod(name: String) = {
-    SkipMethods.exists(_.findFirstIn(name).isDefined)
-  }
 
   /** Internal version of isGetter() that assumes the method is already
     * known not to be one of the ignored nethods.
