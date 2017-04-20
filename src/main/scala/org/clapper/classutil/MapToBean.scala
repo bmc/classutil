@@ -43,32 +43,30 @@ package org.clapper.classutil
  * `Map[String,Any]` objects can be recursively mapped, as well.
  */
 trait MapToBeanMapper {
-  /**
-   * Transform a map into a bean.
-   *
-   * @param map       the map
-   * @param className the name to give the class
-   * @param recurse   `true` to recursively map nested maps, `false` otherwise
-   *
-   * @return an instantiated object representing the map
-   *
-   * @deprecated Use makeBean() instead.
-   */
+  /** Transform a map into a bean.
+    *
+    * @param map       the map
+    * @param className name of the generated interface used to create a proxy
+    * @param recurse   `true` to recursively map nested maps, `false` otherwise
+    *
+    * @return an instantiated object representing the map
+    *
+    * @deprecated Use makeBean() instead.
+    */
   def makeObject(map: Map[String, Any],
                  className: String,
                  recurse: Boolean = true): AnyRef = {
     makeBean(map, className, recurse)
   }
 
-  /**
-   * Transform a map into a bean.
-   *
-   * @param map       the map
-   * @param className the name to give the class
-   * @param recurse   `true` to recursively map nested maps, `false` otherwise
-   *
-   * @return an instantiated object representing the map
-   */
+  /** Transform a map into a bean.
+    *
+    * @param map       the map
+    * @param className name of the generated interface used to create a proxy
+    * @param recurse   `true` to recursively map nested maps, `false` otherwise
+    *
+    * @return an instantiated object representing the map
+    */
   def makeBean(map: Map[String, Any],
                className: String,
                recurse: Boolean = true): AnyRef

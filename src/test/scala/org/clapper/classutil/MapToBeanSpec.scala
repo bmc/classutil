@@ -1,35 +1,37 @@
 package org.clapper.classutil
 
+import java.lang.reflect.{Method, Proxy}
+
+import scala.annotation.tailrec
+
 class MapToBeanSpec extends BaseSpec {
   val map =  Map("oneInt" -> 1,
                  "twoFloat" -> 2f,
                  "threeString" -> "three",
                  "fourIntClass" -> classOf[Int],
-                 "fiveMap" -> Map("one" -> 1, "two" -> 2))
+                 "fiveMap" -> Map("one" -> 1, "two" -> 2.0))
 
   "MapToBean" should "recursively map values" in {
     val bean = MapToBean(map)
-    val methodNames = bean.getClass.getMethods.map(_.getName).toSet
-    val expectedNames = List(("getOneInt", classOf[java.lang.Integer]),
-                             ("getTwoFloat", classOf[java.lang.Float]),
-                             ("getThreeString", classOf[String]),
-                             ("getFourIntClass", classOf[Class[Int]]),
-                             ("getFiveMap", classOf[Object]))
-    for ((name, cls) <- expectedNames) {
-      val isAssignable = cls.isAssignableFrom(
-        bean.getClass.getMethod(name).getReturnType
-      )
-      methodNames.contains(name) shouldBe true
+
+    val expectedNames = List(
+      ("getOneInt", classOf[java.lang.Integer], false),
+      ("getTwoFloat", classOf[java.lang.Float], false),
+      ("getThreeString", classOf[String], false),
+      ("getFourIntClass", classOf[Class[Int]], false),
+      ("getFiveMap", classOf[Object], true),
+      ("getFiveMap.getOne", classOf[Integer], false),
+      ("getFiveMap.getTwo", classOf[java.lang.Double], false)
+    )
+
+    for ((name, cls, isProxy) <- expectedNames) {
+      val method = resolveMethod(name, bean)
+      val methodReturnType = method.getReturnType
+      val isAssignable = cls.isAssignableFrom(methodReturnType)
       isAssignable shouldBe true
+      if (isProxy)
+        Proxy.isProxyClass(methodReturnType) shouldBe true
     }
-
-    val cls = bean.getClass
-    val res = for { getFiveMap <- cls.methodForName("getFiveMap")
-                    obj         = getFiveMap.invoke(bean)
-                    getOne     <- obj.getClass.methodForName("getOne") }
-      yield getOne.invoke(obj)
-
-    res shouldBe Some(1)
   }
 
   it should "behave properly when non-recursive" in {
@@ -72,5 +74,18 @@ class MapToBeanSpec extends BaseSpec {
     val methods = bean.getClass.getMethods.map(_.getName).toSet
 
     (expected -- methods) shouldBe empty
+  }
+
+  private def resolveMethod(methodPath: String, obj: AnyRef): Method = {
+    @tailrec
+    def resolve(parts: List[String], o: AnyRef): Method = {
+      parts match {
+        case Nil => throw new Exception("unexpected Nil")
+        case part :: Nil => o.getClass.getMethod(part)
+        case part :: rest => resolve(rest, o.getClass.getMethod(part).invoke(o))
+      }
+    }
+
+    resolve(methodPath.split("""\.""").toList, obj)
   }
 }

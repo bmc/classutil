@@ -27,7 +27,7 @@ private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper {
    * Transform a map into a bean.
    *
    * @param map       the map
-   * @param className name of generated class
+   * @param className name of the generated interface used to create a proxy
    * @param recurse   `true` to recursively map nested maps, `false` otherwise
    *
    * @return an instantiated object representing the map
@@ -40,7 +40,6 @@ private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper {
     // references from the map.
 
     // Methods for each field, including bean methods.
-
     def transformValueIfMap(value: Any) = {
       if (recurse && ClassUtil.isOfType[Map[String,Any]](value))
         makeObject(value.asInstanceOf[Map[String,Any]],
@@ -108,6 +107,6 @@ private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper {
       }
     }
 
-    Proxy.newProxyInstance(classLoader, List(interface).toArray, handler)
+    Proxy.newProxyInstance(classLoader, Array(interface), handler)
   }
 }

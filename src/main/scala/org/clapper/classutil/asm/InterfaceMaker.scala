@@ -83,10 +83,10 @@ private[classutil] object InterfaceMaker {
                      ClassUtil.methodSignature(returnClass, paramClasses),
                      null,
                      null).
-      visitEnd
+      visitEnd()
     }
 
-    cw.visitEnd
+    cw.visitEnd()
     cw.toByteArray
   }
 
