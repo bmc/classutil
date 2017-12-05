@@ -17,7 +17,7 @@ description := "A library for fast runtime class-querying, and more"
 
 scalaVersion := "2.11.8"
 
-crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.4")
+crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.4")
 
 // ---------------------------------------------------------------------------
 // Additional compiler options and plugins
@@ -32,7 +32,7 @@ autoCompilerPlugins := true
 // ---------------------------------------------------------------------------
 // ScalaTest dependendency
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 
 // ---------------------------------------------------------------------------
 // Other dependendencies
@@ -41,7 +41,7 @@ libraryDependencies ++= Seq(
     "org.ow2.asm" % "asm" % "5.1",
     "org.ow2.asm" % "asm-commons" % "5.1",
     "org.ow2.asm" % "asm-util" % "5.1",
-    "org.clapper" %% "grizzled-scala" % "4.2.0"
+    "org.clapper" %% "grizzled-scala" % "4.4.2"
 )
 
 // ---------------------------------------------------------------------------
