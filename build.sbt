@@ -15,9 +15,9 @@ homepage := Some(url("http://software.clapper.org/classutil/"))
 
 description := "A library for fast runtime class-querying, and more"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.12"
 
-crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.4")
+crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.6")
 
 // ---------------------------------------------------------------------------
 // Additional compiler options and plugins
@@ -32,7 +32,7 @@ autoCompilerPlugins := true
 // ---------------------------------------------------------------------------
 // ScalaTest dependendency
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 
 // ---------------------------------------------------------------------------
 // Other dependendencies

@@ -6,7 +6,7 @@ https://opensource.org/licenses/BSD-3-Clause
 
 ---
 
-Copyright &copy; 2010-2016, Brian M. Clapper.
+Copyright &copy; 2010-2018, Brian M. Clapper.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
