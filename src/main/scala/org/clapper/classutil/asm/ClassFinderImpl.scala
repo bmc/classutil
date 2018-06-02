@@ -142,7 +142,7 @@ extends ASMEmptyVisitor with ASMBitmapMapper {
                      name: String,
                      signature: String,
                      superName: String,
-                     interfaces: Array[String]) {
+                     interfaces: Array[String]): Unit = {
     val sig = if (signature != null) signature else ""
     val classInfo = new ClassInfoImpl(mapClassName(name),
                                       mapClassName(superName),
