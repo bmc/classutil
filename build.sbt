@@ -5,7 +5,7 @@ name := "classutil"
 
 organization := "org.clapper"
 
-version := "1.2.0"
+version := "1.3.0"
 
 licenses := Seq(
   "BSD New" -> url("http://software.clapper.org/classutil/license.html")
@@ -26,8 +26,36 @@ scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
 
 autoCompilerPlugins := true
 
-// ---------------------------------------------------------------------------
-// Helpers
+wartremoverErrors in (Compile, compile) ++= Seq(
+  Wart.ArrayEquals,
+  // Wart.Any,
+  // Wart.AnyVal,
+  // This library is loaded with casting, because of how it has to interface
+  // with ASM. AsInstanceOf cannot be enabled.
+  // Wart.AsInstanceOf
+  Wart.EitherProjectionPartial,
+  Wart.Enumeration,
+  Wart.ExplicitImplicitTypes,
+  Wart.FinalCaseClass,
+  Wart.FinalVal,
+  // Wart.IsInstanceOf,
+  Wart.JavaConversions,
+  Wart.LeakingSealed,
+  Wart.MutableDataStructures,
+  // Wart.NonUnitStatements,
+  // Wart.Nothing,
+  Wart.Null,
+  Wart.Option2Iterable,
+  Wart.OptionPartial,
+  Wart.PublicInference,
+  Wart.Return,
+  Wart.StringPlusAny,
+  Wart.Throw,
+  Wart.TraversableOps,
+  Wart.TryPartial,
+  Wart.Var,
+  Wart.While
+)
 
 // ---------------------------------------------------------------------------
 // ScalaTest dependendency

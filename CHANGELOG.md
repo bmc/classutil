@@ -1,5 +1,18 @@
 # Change log for ClassUtil library
 
+Version 1.3.0
+
+* Merged [PR #25](https://github.com/bmc/classutil/pull/25), from @ElfoLiNk,
+  which updates [ASM][] to version 6 and upgrades SBT to 1.x.
+* Merged [PR #27](https://github.com/bmc/classutil/pull/27), from @xuwei-k,
+  which fixes an old-style procedure syntax issue.
+* Rolled in changes from @SethTisue to update the `sbt-bintray` version,
+  as well as the Scala and ScalaTest versions.
+* Converted `org.clapper.classutil.Modifier` from an `Enumeration` to a
+  set of sealed case objects. The interface remains the same.
+* Enabled [Wart Remover](http://www.wartremover.org) and many, but not all,
+  of its errors. Cleaned up offending code.
+  
 Version 1.2.0
 
 * Refactored some internal methods to the `ClassUtil` object, resulting in

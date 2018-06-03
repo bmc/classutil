@@ -172,24 +172,31 @@ object ClassUtil {
     * int               ->  I
     * }}}
     *
+    * Throws an exception (`Exception`) if it can't map the class name to
+    * a signature.
+    *
     * @param cls  The class (type)
     *
     * @return its string signature
     */
+  @SuppressWarnings(Array("org.wartremover.warts.Throw"))
   def classSignature(cls: Class[_]): String = {
-    if (cls.isArray)
+    if (cls.isArray) {
       "[" + classSignature(cls.getComponentType)
+    }
 
     else if (cls.isPrimitive) {
       val s = PrimitiveSigMap.get(cls.getName)
-      if (s.isEmpty)
-        throw new Exception("Can't map class \"" + cls.getName + "\" " +
-                            "to signature.")
-      s.get
+      s.getOrElse {
+        throw new Exception(
+          s"""Can't map class "${cls.getName}" to a signature."""
+        )
+      }
     }
 
-      else
-        "L" + binaryClassName(cls.getName) + ";"
+    else {
+      "L" + binaryClassName(cls.getName) + ";"
+    }
   }
 
   /** Generate a runtime signature for a method. See, for instance:
@@ -203,11 +210,14 @@ object ClassUtil {
     */
   def methodSignature(returnType: Class[_],
                       paramTypes: Array[Class[_]]): String = {
-    val paramSig =
-      if ((paramTypes == null) || (paramTypes.length == 0))
-        ""
-      else
-        paramTypes.map(pt => classSignature(pt)).mkString("")
+    val paramSig = Option(paramTypes)
+      .map { array =>
+        if (array.length == 0)
+          ""
+        else
+          array.map(pt => classSignature(pt)).mkString("")
+      }
+      .getOrElse("")
 
     "(" + paramSig + ")" + classSignature(returnType)
   }

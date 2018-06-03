@@ -48,7 +48,7 @@ import org.objectweb.asm.Opcodes._
 private[classutil] object InterfaceMaker {
   /** Convenience constant for "no parameters"
     */
-  final val NoParams = List[Class[_]]().toArray
+  val NoParams = List[Class[_]]().toArray
 
   // ----------------------------------------------------------------------
   // Public Methods
@@ -64,6 +64,7 @@ private[classutil] object InterfaceMaker {
     *
     * @return an array of bytes representing the compiled interface
     */
+  @SuppressWarnings(Array("org.wartremover.warts.Null"))
   def makeInterface(methods: Seq[(String, Array[Class[_]], Class[_])],
                     className: String): Array[Byte] = {
     val cw = new ClassWriter(0)

@@ -42,18 +42,16 @@ package org.clapper.classutil.asm
 import org.clapper.classutil._
 
 import scala.collection.mutable.{Set => MutableSet, ArrayBuilder}
-import scala.collection.mutable.HashMap
 
 import org.objectweb.asm._
 
-import java.io.{File, InputStream, IOException}
-import scala.Some
+import java.io.{File, InputStream}
 
-
+@SuppressWarnings(Array("org.wartremover.warts.MutableDataStructures"))
 private[classutil] object ASMBitmapMapper {
   import java.lang.reflect.{Modifier => JModifier}
 
-  val AccessMap = HashMap(
+  val AccessMap = Map(
     Opcodes.ACC_ABSTRACT     -> Modifier.Abstract,
     Opcodes.ACC_FINAL        -> Modifier.Final,
     Opcodes.ACC_INTERFACE    -> Modifier.Interface,
@@ -70,8 +68,9 @@ private[classutil] object ASMBitmapMapper {
   )
 }
 
+@SuppressWarnings(Array("org.wartremover.warts.MutableDataStructures"))
 private[classutil] trait ASMBitmapMapper {
-  def mapModifiers(bitmap: Int, map: HashMap[Int, Modifier.Modifier]):
+  def mapModifiers(bitmap: Int, map: Map[Int, Modifier.Modifier]):
   Set[Modifier.Modifier] = {
     // Map the class's modifiers integer bitmap into a set of Modifier
     // enumeration values by filtering and keeping only the ones that
@@ -88,6 +87,8 @@ private[classutil] trait ASMBitmapMapper {
   }
 }
 
+@SuppressWarnings(Array("org.wartremover.warts.MutableDataStructures",
+                        "org.wartremover.warts.Var"))
 private[classutil] class ClassInfoImpl(val name: String,
                                        val superClassName: String,
                                        val interfaces: List[String],
@@ -123,14 +124,17 @@ extends FieldInfo with ASMBitmapMapper {
   val modifiers = mapModifiers(access, ASMBitmapMapper.AccessMap)
 }
 
+@SuppressWarnings(Array("org.wartremover.warts.Var"))
 private[classutil] class AnnotationInfoImpl(val descriptor: String,
                                             val visible: Boolean)
 extends AnnotationInfo {
   def params = Map.empty[String, Any] ++ paramMap
 
-  var paramMap = HashMap.empty[String, Any]
+  var paramMap = Map.empty[String, Any]
 }
 
+@SuppressWarnings(Array("org.wartremover.warts.MutableDataStructures",
+                        "org.wartremover.warts.Var"))
 private[classutil] class ClassVisitor(location: File)
 extends ASMEmptyVisitor with ASMBitmapMapper {
 
@@ -154,64 +158,70 @@ extends ASMEmptyVisitor with ASMBitmapMapper {
     currentClass = Some(classInfo)
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.Null"))
   override def visitMethod(access: Int,
                            name: String,
                            descriptor: String,
                            signature: String,
                            exceptions: Array[String]): MethodVisitor = {
-    assert(currentClass != None)
+    assert(currentClass.isDefined)
     val sig = if (signature != null) signature else ""
-    val excList = if (exceptions == null) Nil else exceptions.toList
-    currentClass.get.methodSet += new MethodInfoImpl(name,
-                                                     sig,
-                                                     descriptor,
-                                                     excList,
-                                                     access)
+    val excList = Option(exceptions).map(_.toList).getOrElse(Nil)
+    currentClass.foreach { c =>
+      c.methodSet += new MethodInfoImpl(name, sig, descriptor, excList, access)
+    }
+
     null
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.Null"))
   override def visitField(access: Int,
                           name: String,
                           descriptor: String,
                           signature: String,
                           value: java.lang.Object): FieldVisitor = {
-    assert(currentClass != None)
+    assert(currentClass.isDefined)
     val sig = if (signature != null) signature else ""
     val initialVal = Option(value)
-    currentClass.get.fieldSet += new FieldInfoImpl(name,
-                                                   sig,
-                                                   descriptor,
-                                                   initialVal,
-                                                   access)
+    currentClass.foreach { c =>
+      c.fieldSet += new FieldInfoImpl(name, sig, descriptor, initialVal, access)
+    }
+
     null
   }
 
   class AnnotationVisitor(annotationInfo: AnnotationInfoImpl)
     extends org.objectweb.asm.AnnotationVisitor(api) {
 
-    override def visit(name: String, value: Any) =
+    override def visit(name: String, value: Any): Unit =
       annotationInfo.paramMap += (name -> value)
 
-    override def visitEnum(name: String, desc: String, value: String) =
+    override def visitEnum(name: String, desc: String, value: String): Unit =
       annotationInfo.paramMap += (name -> value)
 
-    override def visitAnnotation(name: String, desc: String) = {
+    override def visitAnnotation(name: String, desc: String): AnnotationVisitor = {
       val innerAnnInfo = new AnnotationInfoImpl(desc, annotationInfo.visible)
       annotationInfo.paramMap += (name -> innerAnnInfo)
       new AnnotationVisitor(innerAnnInfo)
     }
 
-    override def visitArray(name: String) = new AnnotationArrayVisitor {
-      override def visitEnd(): Unit = annotationInfo.paramMap += (name -> arrBuilder.result)
+    override def visitArray(name: String): AnnotationArrayVisitor = {
+      new AnnotationArrayVisitor {
+        override def visitEnd(): Unit = {
+          annotationInfo.paramMap += (name -> arrBuilder.result)
+        }
+      }
     }
   }
 
   class AnnotationArrayVisitor extends org.objectweb.asm.AnnotationVisitor(api) {
-    protected val arrBuilder = ArrayBuilder.make[Any]
+    protected val arrBuilder: ArrayBuilder[Any] = ArrayBuilder.make[Any]
 
-    override def visit(name: String, value: Any) = arrBuilder += value
+    override def visit(name: String, value: Any): Unit = arrBuilder += value
 
-    override def visitEnum(name: String, desc: String, value: String) = arrBuilder += value
+    override def visitEnum(name: String, desc: String, value: String): Unit = {
+      arrBuilder += value
+    }
 
     override def visitAnnotation(name: String, desc: String) = {
       val innerAnnInfo = new AnnotationInfoImpl(desc, false)
@@ -229,9 +239,9 @@ extends ASMEmptyVisitor with ASMBitmapMapper {
 
   override def visitAnnotation(descriptor: String,
                                visible: Boolean): AnnotationVisitor = {
-    assert(currentClass != None)
+    assert(currentClass.isDefined)
     val annotationInfo = new AnnotationInfoImpl(descriptor, visible)
-    currentClass.get.annotationSet += annotationInfo
+    currentClass.foreach { c => c.annotationSet += annotationInfo }
 
     new AnnotationVisitor(annotationInfo)
   }

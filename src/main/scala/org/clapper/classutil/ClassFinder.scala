@@ -55,22 +55,26 @@ import java.io.{File, InputStream}
 /** An enumerated high-level view of the modifiers that can be attached
   * to a method, class or field.
   */
-object Modifier extends Enumeration {
-  type Modifier = Value
+object Modifier {
+  abstract sealed class Modifier(val name: String, val id: Int)
+    extends Product with Serializable {
+    override def hashCode: Int = id.hashCode
+  }
 
-  val Abstract     = Value("abstract")
-  val Final        = Value("final")
-  val Interface    = Value("interface")
-  val Native       = Value("native")
-  val Private      = Value("private")
-  val Protected    = Value("protected")
-  val Public       = Value("public")
-  val Static       = Value("static")
-  val Strict       = Value("strict")
-  val Synchronized = Value("synchronized")
-  val Synthetic    = Value("synthetic")
-  val Transient    = Value("transient")
-  val Volatile     = Value("volatile")
+  case object Abstract extends Modifier(name = "abstract", id = 1)
+  case object Final extends Modifier(name = "final", id = 2)
+  case object Interface extends Modifier(name = "interface", id = 3)
+  case object Native extends Modifier(name = "native", id = 4)
+  case object Private extends Modifier(name = "private", id = 5)
+  case object Protected extends Modifier(name = "protected", id = 6)
+  case object Public extends Modifier(name = "public", id = 7)
+  case object Static extends Modifier(name = "static", id = 8)
+  case object Strict extends Modifier(name = "strict", id = 0)
+  case object Synchronized extends Modifier(name = "synchronized", id = 10)
+  case object Synthetic extends Modifier(name = "synthetic", id = 11)
+  case object Transient extends Modifier(name = "transient", id = 12)
+  case object Volatile extends Modifier(name = "volatile", id = 13)
+
 }
 
 /** Base trait for method, field and class info.
@@ -289,7 +293,7 @@ trait ClassInfo extends BaseInfo {
     *
     * @return whether the class implements the interface
     */
-  def implements(interface: String) = interfaces contains interface
+  def implements(interface: String): Boolean = interfaces contains interface
 }
 
 /** A `ClassFinder` finds classes in a class path, returning the result in a
@@ -299,7 +303,7 @@ trait ClassInfo extends BaseInfo {
   * @param path  a sequence of directories, jars and zips to search
   */
 class ClassFinder(path: Seq[File]) {
-  val classpath = path.toList
+  val classpath: List[File] = path.toList
 
   /** Find all classes in the specified path, which can contain directories,
     * zip files and jar files. Returns metadata about each class in a
@@ -339,22 +343,18 @@ class ClassFinder(path: Seq[File]) {
     val jar = new JarFile(file)
     val list1 = processOpenZip(file, jar)
 
-    var manifest = jar.getManifest
-    if (manifest == null)
-      list1
-
-    else {
-      val path = loadManifestPath(jar, file, manifest)
-      val list2 = find(path)
-      list1 ++ list2
-    }
+    Option(jar.getManifest)
+      .map { manifest =>
+        val path = loadManifestPath(jar, file, manifest)
+        val list2 = find(path)
+        list1 ++ list2
+      }
+      .getOrElse(list1)
   }
 
   private def loadManifestPath(jar: JarFile,
                                jarFile: File,
                                manifest: JarManifest): List[File] = {
-    import scala.collection.JavaConversions._
-
     val attrs = manifest.getMainAttributes
     val value = attrs.get("Class-Path").asInstanceOf[String]
 
@@ -438,11 +438,12 @@ object ClassFinder {
     *
     * @return the classpath, as a list of `File` objects
     */
-  def classpath = System.getProperty("java.class.path").
-                         split(File.pathSeparator).
-                         map(s => if (s.trim.length == 0) "." else s).
-                         map(new File(_)).
-                         toList
+  def classpath: List[File] = System
+    .getProperty("java.class.path")
+    .split(File.pathSeparator)
+    .map(s => if (s.trim.length == 0) "." else s)
+    .map(new File(_))
+    .toList
 
   /** Instantiate a new `ClassFinder` that will search the specified
     * classpath, or the default classpath, if no classpath is defined.
@@ -453,7 +454,7 @@ object ClassFinder {
     *
     * @return a new `ClassFinder` object
     */
-  def apply(path: Seq[File] = Seq.empty[File]) =
+  def apply(path: Seq[File] = Seq.empty[File]): ClassFinder =
     new ClassFinder(if (path.nonEmpty) path else classpath)
 
   /** Create a map from an Iterator of ClassInfo objects. The resulting
@@ -635,9 +636,10 @@ object ClassFinder {
 
     // Convert the set of classes to search into a map of ClassInfo objects
     // indexed by class name.
-
-     @tailrec def classMatches(targetClassInfo: ClassInfo,
-                              classesToCheck:  Seq[ClassInfo]): Boolean = {
+     @SuppressWarnings(Array("org.wartremover.warts.Option2Iterable"))
+     @tailrec
+    def classMatches(targetClassInfo: ClassInfo,
+                     classesToCheck:  Seq[ClassInfo]): Boolean = {
       val targetName = targetClassInfo.name // could use ancestor, but, yuck.
       val classNames = classesToCheck.map(_.name)
       val interfaceNamesToCheck = classesToCheck.flatMap(_.interfaces)
