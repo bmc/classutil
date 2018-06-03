@@ -51,7 +51,7 @@ ClassUtil is published to my [Bintray Maven repository][], which is
 automatically linked to Bintray's [JCenter][] repository. It's also sync'd
 to Maven Central.
 
-* Versions 1.1.2, 1.1.1, 1.1.0 and 1.0.13 support Scala 2.10, 2.11, and 2.12.
+* Versions 1.0.13 and newer support Scala 2.10, 2.11, and 2.12.
 * Versions 1.0.7 through 1.0.12 support Scala 2.10, 2.11, and 2.12-Mx.
 * Version 1.0.5 supports Scala 2.10 and 2.11.
 * Versions 1.0.1 through 1.0.4 support Scala 2.10.
@@ -66,7 +66,7 @@ Specify the `classutil` artifact:
     <dependency>
       <groupId>org.clapper</groupId>
       <artifactId>classutil_2.11</artifactId>
-      <version>1.1.2</version>
+      <version>1.3.0</version>
     </dependency>
 
 For more information on using Maven and Scala, see Josh Suereth's
@@ -74,9 +74,9 @@ For more information on using Maven and Scala, see Josh Suereth's
 
 ## Using with SBT
 
-With SBT 0.13.x, use:
+With SBT 0.13.x or 1.x, use:
 
-    libraryDependencies += "org.clapper" %% "classutil" % "1.1.2"
+    libraryDependencies += "org.clapper" %% "classutil" % "1.3.0"
 
 to get the latest version of ClassUtil.
 
@@ -99,16 +99,11 @@ the repository, run this command:
 
 ## Building
 
-Building the library requires [SBT][] 0.13.x, but you don't have to
-install it (unless you're building on Windows). Instead, just use the
-`./activator` script at the top level of the repository. The script,
-part of [Lightbend Activator](https://www.lightbend.com/activator/download),
-automatically downloads the appropriate versions of SBT and Scala for
-you. (You _do_ need to have an installed Java JDK. I recommend 1.8.)
+Building the library requires [SBT][] 1.x and a 1.8 Java JDK.
 
 You can build with this one simple command:
 
-    ./activator +compile +package
+    sbt +compile +package
 
 The resulting jar files will be under the top-level `target` directory, in
 subdirectories specific to each Scala version.
