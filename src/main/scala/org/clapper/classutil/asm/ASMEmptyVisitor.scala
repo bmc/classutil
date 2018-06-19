@@ -7,7 +7,7 @@ private[classutil] class ASMEmptyVisitor(apiVersion: Int)
 
   import scala.language.existentials
 
-  def this() = this(Opcodes.ASM4)
+  def this() = this(Opcodes.ASM6)
 
   val annotationVisitor =
     new AnnotationVisitor(apiVersion) {
