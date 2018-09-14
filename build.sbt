@@ -26,6 +26,9 @@ scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
 
 autoCompilerPlugins := true
 
+//tests need to be forked since the classpath of sbt test only contains a jar file of sbt
+Test / fork := true
+
 wartremoverErrors in (Compile, compile) ++= Seq(
   Wart.ArrayEquals,
   // Wart.Any,

@@ -135,8 +135,8 @@ extends AnnotationInfo {
 
 @SuppressWarnings(Array("org.wartremover.warts.MutableDataStructures",
                         "org.wartremover.warts.Var"))
-private[classutil] class ClassVisitor(location: File)
-extends ASMEmptyVisitor with ASMBitmapMapper {
+private[classutil] class ClassVisitor(location: File, apiVersion: Int)
+extends ASMEmptyVisitor(apiVersion) with ASMBitmapMapper {
 
   var classes = MutableSet.empty[ClassInfo]
   var currentClass: Option[ClassInfoImpl] = None
@@ -255,9 +255,9 @@ extends ASMEmptyVisitor with ASMBitmapMapper {
 private[classutil] object ClassFile {
   val ASMAcceptCriteria = 0
 
-  def load(is: InputStream, location: File): Iterator[ClassInfo] = {
+  def load(is: InputStream, location: File, asmVersion: Int): Iterator[ClassInfo] = {
     val cr = new ClassReader(is)
-    val visitor = new ClassVisitor(location)
+    val visitor = new ClassVisitor(location, asmVersion)
     cr.accept(visitor, ASMAcceptCriteria)
     visitor.classes.toIterator
   }
