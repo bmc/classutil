@@ -63,31 +63,18 @@ object Modifier {
   }
 
   case object Abstract extends Modifier(name = "abstract", id = 1)
-
   case object Final extends Modifier(name = "final", id = 2)
-
   case object Interface extends Modifier(name = "interface", id = 3)
-
   case object Native extends Modifier(name = "native", id = 4)
-
   case object Private extends Modifier(name = "private", id = 5)
-
   case object Protected extends Modifier(name = "protected", id = 6)
-
   case object Public extends Modifier(name = "public", id = 7)
-
   case object Static extends Modifier(name = "static", id = 8)
-
   case object Strict extends Modifier(name = "strict", id = 0)
-
   case object Synchronized extends Modifier(name = "synchronized", id = 10)
-
   case object Synthetic extends Modifier(name = "synthetic", id = 11)
-
   case object Transient extends Modifier(name = "transient", id = 12)
-
   case object Volatile extends Modifier(name = "volatile", id = 13)
-
 }
 
 /** Base trait for method, field and class info.
@@ -394,15 +381,16 @@ class ClassFinder(path: Seq[File], maybeOverrideAsmVersion: Option[Int]) {
     import scala.collection.JavaConverters._
 
     val classInfoIterators =
-      zipFile.entries
+      zipFile
+        .entries
         .asScala
         .toStream
         .filter((e: ZipEntry) => isClass(e))
         .map((e: ZipEntry) => classData(zipFile.getInputStream(e), file))
 
-    for {it <- classInfoIterators
+    for {it   <- classInfoIterators
          data <- it}
-      yield data
+    yield data
   }
 
   // Structural type that matches both ZipEntry and File
@@ -432,9 +420,9 @@ class ClassFinder(path: Seq[File], maybeOverrideAsmVersion: Option[Int]) {
         }
       }
 
-    for {it <- iterators
+    for {it   <- iterators
          data <- it}
-      yield data
+    yield data
   }
 
   private def classData(is: InputStream,
@@ -525,7 +513,7 @@ object ClassFinder {
     *         could be found.
     */
   def concreteSubclasses(ancestor: Class[_], classes: Stream[ClassInfo]):
-  Iterator[ClassInfo] = {
+    Iterator[ClassInfo] = {
     findConcreteSubclasses(ancestor.getName, ClassFinder.classInfoMap(classes))
   }
 
@@ -541,7 +529,7 @@ object ClassFinder {
     * @see `concreteSubclasses(Class[_], Stream[ClassInfo])`
     */
   def concreteSubclasses(ancestor: String, classes: Stream[ClassInfo]):
-  Iterator[ClassInfo] = {
+    Iterator[ClassInfo] = {
     findConcreteSubclasses(ancestor, ClassFinder.classInfoMap(classes))
   }
 
@@ -565,7 +553,7 @@ object ClassFinder {
     * @see `concreteSubclasses(Class[_], Stream[ClassInfo])`
     */
   def concreteSubclasses(ancestor: Class[_], classes: Iterator[ClassInfo]):
-  Iterator[ClassInfo] = {
+    Iterator[ClassInfo] = {
     findConcreteSubclasses(ancestor.getName, ClassFinder.classInfoMap(classes))
   }
 
@@ -591,7 +579,7 @@ object ClassFinder {
     * @see `concreteSubclasses(Class[_], Iterator[ClassInfo])`
     */
   def concreteSubclasses(ancestor: String, classes: Iterator[ClassInfo]):
-  Iterator[ClassInfo] = {
+    Iterator[ClassInfo] = {
     findConcreteSubclasses(ancestor, ClassFinder.classInfoMap(classes))
   }
 
@@ -608,7 +596,7 @@ object ClassFinder {
     * @see `concreteSubclasses(Class[_], Iterator[ClassInfo])`
     */
   def concreteSubclasses(ancestor: Class[_], classes: Map[String, ClassInfo]):
-  Iterator[ClassInfo] = {
+    Iterator[ClassInfo] = {
     findConcreteSubclasses(ancestor.getName, classes)
   }
 
@@ -626,8 +614,7 @@ object ClassFinder {
     * @see `concreteSubclasses(String, Iterator[ClassInfo])`
     */
   def concreteSubclasses(ancestor: String, classes: Map[String, ClassInfo]):
-  Iterator[ClassInfo] = {
-
+    Iterator[ClassInfo] = {
     findConcreteSubclasses(ancestor, classes)
   }
 
@@ -637,8 +624,7 @@ object ClassFinder {
 
   private def findConcreteSubclasses(ancestor: String,
                                      classes: Map[String, ClassInfo]):
-  Iterator[ClassInfo] = {
-
+    Iterator[ClassInfo] = {
     // Convert the set of classes to search into a map of ClassInfo objects
     // indexed by class name.
     @SuppressWarnings(Array("org.wartremover.warts.Option2Iterable"))
@@ -678,12 +664,15 @@ object ClassFinder {
     }
 
     // Find the ancestor class
-    classes.get(ancestor).map { classInfo =>
-      classes.values
-        .toIterator
-        .filter(_.isConcrete)
-        .filter(c => classMatches(classInfo, Seq(c)))
-    }
+    classes
+      .get(ancestor)
+      .map { classInfo =>
+        classes
+          .values
+          .toIterator
+          .filter(_.isConcrete)
+          .filter(c => classMatches(classInfo, Seq(c)))
+      }
       .getOrElse(Iterator.empty)
   }
 }
