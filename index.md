@@ -66,7 +66,7 @@ Specify the `classutil` artifact:
     <dependency>
       <groupId>org.clapper</groupId>
       <artifactId>classutil_2.11</artifactId>
-      <version>1.3.0</version>
+      <version>1.4.0</version>
     </dependency>
 
 For more information on using Maven and Scala, see Josh Suereth's
@@ -76,7 +76,7 @@ For more information on using Maven and Scala, see Josh Suereth's
 
 With SBT 0.13.x or 1.x, use:
 
-    libraryDependencies += "org.clapper" %% "classutil" % "1.3.0"
+    libraryDependencies += "org.clapper" %% "classutil" % "1.4.0"
 
 to get the latest version of ClassUtil.
 
