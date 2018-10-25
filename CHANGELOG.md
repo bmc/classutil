@@ -1,5 +1,13 @@
 # Change log for ClassUtil library
 
+Version 1.4.0:
+
+* Build changes to allow test suite to work on non-release versions of
+  Scala, for the Scala Community Build (courtesy of @retronym).
+* ASM version is now configurable at run-time (courtesy of @FloWi). This
+  update changes the API in a backward-compatible way, but recompilation
+  of clients might be necessary.
+
 Version 1.3.0
 
 * Merged [PR #25](https://github.com/bmc/classutil/pull/25), from @ElfoLiNk,
@@ -12,7 +20,7 @@ Version 1.3.0
   set of sealed case objects. The interface remains the same.
 * Enabled [Wart Remover](http://www.wartremover.org) and many, but not all,
   of its errors. Cleaned up offending code.
-  
+
 Version 1.2.0
 
 * Refactored some internal methods to the `ClassUtil` object, resulting in
