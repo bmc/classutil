@@ -1,8 +1,10 @@
 package org.clapper.classutil
 
 import java.io.File
+
 import grizzled.file.Implicits._
 import grizzled.file.{util => fileutil}
+import org.objectweb.asm.ClassReader
 
 class ClassFinderSpec extends BaseSpec {
   "runtimeClassFinder.getClasses" should "find classes in a specified class path" in {
@@ -51,6 +53,10 @@ class ClassFinderSpec extends BaseSpec {
     val cs = ClassFinder.concreteSubclasses(classOf[A], classes).toVector
     cs.size should be > 0
     cs.map { _.name } should contain (classOf[B].getName)
+  }
+
+  it should "not throw an exception when calling ClassFinder().getClasses w/o classpath" in {
+    ClassFinder().getClasses()
   }
 
   it should "find indirect subclasses of a parent class" in {

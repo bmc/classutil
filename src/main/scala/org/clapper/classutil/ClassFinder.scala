@@ -45,40 +45,53 @@
   */
 package org.clapper.classutil
 
+import java.io.{File, InputStream}
+import java.util.jar.{JarFile, Manifest => JarManifest}
+import java.util.zip.{ZipEntry, ZipFile}
+
 import scala.annotation.tailrec
 import scala.language.reflectiveCalls
-
-import java.util.jar.{JarFile, Manifest => JarManifest}
-import java.util.zip.{ZipFile, ZipEntry}
-import java.io.{File, InputStream}
 
 /** An enumerated high-level view of the modifiers that can be attached
   * to a method, class or field.
   */
 object Modifier {
+
   abstract sealed class Modifier(val name: String, val id: Int)
     extends Product with Serializable {
     override def hashCode: Int = id.hashCode
   }
 
   case object Abstract extends Modifier(name = "abstract", id = 1)
+
   case object Final extends Modifier(name = "final", id = 2)
+
   case object Interface extends Modifier(name = "interface", id = 3)
+
   case object Native extends Modifier(name = "native", id = 4)
+
   case object Private extends Modifier(name = "private", id = 5)
+
   case object Protected extends Modifier(name = "protected", id = 6)
+
   case object Public extends Modifier(name = "public", id = 7)
+
   case object Static extends Modifier(name = "static", id = 8)
+
   case object Strict extends Modifier(name = "strict", id = 0)
+
   case object Synchronized extends Modifier(name = "synchronized", id = 10)
+
   case object Synthetic extends Modifier(name = "synthetic", id = 11)
+
   case object Transient extends Modifier(name = "transient", id = 12)
+
   case object Volatile extends Modifier(name = "volatile", id = 13)
 
 }
 
 /** Base trait for method, field and class info.
- */
+  */
 private[classutil] trait BaseInfo {
   /** The name of the entity.
     */
@@ -168,8 +181,8 @@ private[classutil] trait BaseInfo {
   /** Convenience method to determine whether the class is concrete (i.e.,
     * isn't abstract and isn't an interface).
     */
-  def isConcrete = ! ((modifiers contains Modifier.Abstract) ||
-                      (modifiers contains Modifier.Interface))
+  def isConcrete = !((modifiers contains Modifier.Abstract) ||
+    (modifiers contains Modifier.Interface))
 
 }
 
@@ -177,12 +190,12 @@ private[classutil] trait BaseInfo {
   */
 trait MethodInfo extends BaseInfo {
   /** The method's JVM signature (only available with generics).
-   *  Ex: java.util.List.iterator ()Ljava/util/Iterator<TE;>;
+    * Ex: java.util.List.iterator ()Ljava/util/Iterator<TE;>;
     */
   val signature: String
 
   /** The method's descriptor which describes it's arg types
-   *  and return type.
+    * and return type.
     * Ex: (ILjava/lang/String;)[I
     */
   val descriptor: String
@@ -201,7 +214,7 @@ trait MethodInfo extends BaseInfo {
 
   override def equals(o: Any) = o match {
     case m: MethodInfo => m.toString == toString
-    case _             => false
+    case _ => false
   }
 }
 
@@ -226,7 +239,7 @@ trait FieldInfo extends BaseInfo {
 
   override def equals(o: Any) = o match {
     case m: FieldInfo => m.name == name
-    case _            => false
+    case _ => false
   }
 }
 
@@ -247,7 +260,7 @@ trait AnnotationInfo {
 
   override def equals(o: Any) = o match {
     case m: AnnotationInfo => m.descriptor == descriptor && m.params == params
-    case _                 => false
+    case _ => false
   }
 }
 
@@ -290,7 +303,6 @@ trait ClassInfo extends BaseInfo {
     * is a higher-order operation.
     *
     * @param interface the name of the interface
-    *
     * @return whether the class implements the interface
     */
   def implements(interface: String): Boolean = interfaces contains interface
@@ -300,9 +312,12 @@ trait ClassInfo extends BaseInfo {
   * lazy iterator. The iterator can then be filtered, mapped, or passed to
   * the utility methods in the `ClassFinder` companion object.
   *
-  * @param path  a sequence of directories, jars and zips to search
+  * @param path                    a sequence of directories, jars and zips to search
+  * @param maybeOverrideAsmVersion the version of asm to be used. Defaults to v6.
+  *                                To override use one of the ASM-fields in [[org.objectweb.asm.Opcodes]].
+  *                                (e.g. [[org.objectweb.asm.Opcodes.ASM5]])
   */
-class ClassFinder(path: Seq[File]) {
+class ClassFinder(path: Seq[File], maybeOverrideAsmVersion: Option[Int]) {
   val classpath: List[File] = path.toList
 
   /** Find all classes in the specified path, which can contain directories,
@@ -320,8 +335,8 @@ class ClassFinder(path: Seq[File]) {
 
   private def find(path: Seq[File]): Stream[ClassInfo] = {
     path match {
-      case Nil          => Stream.empty[ClassInfo]
-      case item :: Nil  => findClassesIn(item)
+      case Nil => Stream.empty[ClassInfo]
+      case item :: Nil => findClassesIn(item)
       case item :: tail => findClassesIn(item) ++ find(tail)
     }
   }
@@ -380,13 +395,13 @@ class ClassFinder(path: Seq[File]) {
 
     val classInfoIterators =
       zipFile.entries
-             .asScala
-             .toStream
-             .filter((e: ZipEntry) => isClass(e))
-             .map((e: ZipEntry) => classData(zipFile.getInputStream(e), file))
+        .asScala
+        .toStream
+        .filter((e: ZipEntry) => isClass(e))
+        .map((e: ZipEntry) => classData(zipFile.getInputStream(e), file))
 
-    for { it   <- classInfoIterators
-          data <- it }
+    for {it <- classInfoIterators
+         data <- it}
       yield data
   }
 
@@ -397,14 +412,15 @@ class ClassFinder(path: Seq[File]) {
   }
 
   private def isClass(e: FileEntry): Boolean =
-    (! e.isDirectory) && e.getName.toLowerCase.endsWith(".class")
+    (!e.isDirectory) && e.getName.toLowerCase.endsWith(".class")
 
   private def processDirectory(dir: File): Stream[ClassInfo] = {
-    import grizzled.file.Implicits._
     import java.io.FileInputStream
 
+    import grizzled.file.Implicits._
+
     val inputStreams = dir.listRecursively().filter(isClass).
-                           map(f => new FileInputStream(f))
+      map(f => new FileInputStream(f))
 
     val iterators =
       for (fis <- inputStreams) yield {
@@ -416,8 +432,8 @@ class ClassFinder(path: Seq[File]) {
         }
       }
 
-    for { it <- iterators
-          data <- it }
+    for {it <- iterators
+         data <- it}
       yield data
   }
 
@@ -425,7 +441,7 @@ class ClassFinder(path: Seq[File]) {
                         location: File): Iterator[ClassInfo] = {
     import org.clapper.classutil.asm.ClassFile
 
-    ClassFile.load(is, location)
+    ClassFile.load(is, location, maybeOverrideAsmVersion.getOrElse(asm.DefaultAsmVersion))
   }
 }
 
@@ -448,14 +464,16 @@ object ClassFinder {
   /** Instantiate a new `ClassFinder` that will search the specified
     * classpath, or the default classpath, if no classpath is defined.
     *
-    * @param path  the classpath, which is a sequence of `File`
-    *               objects representing directories, jars and zip files
-    *               to search. Defaults to `classpath` if empty.
-    *
+    * @param path                    the classpath, which is a sequence of `File`
+    *                                objects representing directories, jars and zip files
+    *                                to search. Defaults to `classpath` if empty.
+    * @param maybeOverrideAsmVersion the version of asm to be used. Defaults to v6.
+    *                                To override use one of the ASM-fields in [[org.objectweb.asm.Opcodes]].
+    *                                (e.g. [[org.objectweb.asm.Opcodes.ASM5]])
     * @return a new `ClassFinder` object
     */
-  def apply(path: Seq[File] = Seq.empty[File]): ClassFinder =
-    new ClassFinder(if (path.nonEmpty) path else classpath)
+  def apply(path: Seq[File] = Seq.empty[File], maybeOverrideAsmVersion: Option[Int] = None): ClassFinder =
+    new ClassFinder(if (path.nonEmpty) path else classpath, maybeOverrideAsmVersion)
 
   /** Create a map from an Iterator of ClassInfo objects. The resulting
     * map is indexed by class name.
@@ -502,13 +520,12 @@ object ClassFinder {
     * @param ancestor the `Class` object of the superclass or trait for which
     *                 to find descendent concrete subclasses
     * @param classes  the stream of `ClassInfo` objects to search
-    *
     * @return an iterator of `ClassInfo` objects that are concrete subclasses
     *         of `ancestor`. The iterator will be empty if no matching classes
     *         could be found.
     */
   def concreteSubclasses(ancestor: Class[_], classes: Stream[ClassInfo]):
-    Iterator[ClassInfo] = {
+  Iterator[ClassInfo] = {
     findConcreteSubclasses(ancestor.getName, ClassFinder.classInfoMap(classes))
   }
 
@@ -518,15 +535,13 @@ object ClassFinder {
     * @param ancestor the name of the class for which to find descendent
     *                 concrete subclasses
     * @param classes  the stream of `ClassInfo` objects to search
-    *
     * @return an iterator of `ClassInfo` objects that are concrete subclasses
     *         of `ancestor`. The iterator will be empty if no matching classes
     *         could be found.
-    *
     * @see `concreteSubclasses(Class[_], Stream[ClassInfo])`
     */
   def concreteSubclasses(ancestor: String, classes: Stream[ClassInfo]):
-    Iterator[ClassInfo] = {
+  Iterator[ClassInfo] = {
     findConcreteSubclasses(ancestor, ClassFinder.classInfoMap(classes))
   }
 
@@ -541,19 +556,16 @@ object ClassFinder {
     *   // Stream...
     *   ClassFinder.concreteSubclasses(classOf[Baz], classes.toIterator)
     * }}}
-    *
     * @param ancestor the `Class` object of the superclass or trait for which
     *                 to find descendent concrete subclasses
     * @param classes  the iterator of `ClassInfo` objects to search
-    *
     * @return an iterator of `ClassInfo` objects that are concrete subclasses
     *         of `ancestor`. The iterator will be empty if no matching classes
     *         could be found.
-    *
     * @see `concreteSubclasses(Class[_], Stream[ClassInfo])`
     */
   def concreteSubclasses(ancestor: Class[_], classes: Iterator[ClassInfo]):
-    Iterator[ClassInfo] = {
+  Iterator[ClassInfo] = {
     findConcreteSubclasses(ancestor.getName, ClassFinder.classInfoMap(classes))
   }
 
@@ -569,20 +581,17 @@ object ClassFinder {
     *   // Stream...
     *   ClassFinder.concreteSubclasses("org.example.Foo", classes.toIterator)
     * }}}
-    *
     * @param ancestor the name of the class for which to find descendent
     *                 concrete subclasses
     * @param classes  the stream of `ClassInfo` objects to search
-    *
     * @return an iterator of `ClassInfo` objects that are concrete subclasses
     *         of `ancestor`. The iterator will be empty if no matching classes
     *         could be found.
-    *
     * @see `concreteSubclasses(String, Stream[ClassInfo])`
     * @see `concreteSubclasses(Class[_], Iterator[ClassInfo])`
     */
   def concreteSubclasses(ancestor: String, classes: Iterator[ClassInfo]):
-    Iterator[ClassInfo] = {
+  Iterator[ClassInfo] = {
     findConcreteSubclasses(ancestor, ClassFinder.classInfoMap(classes))
   }
 
@@ -592,16 +601,14 @@ object ClassFinder {
     * @param ancestor the `Class` object of the superclass or trait for which
     *                 to find descendent concrete subclasses
     * @param classes  the iterator of `ClassInfo` objects to search
-    *
     * @return an iterator of `ClassInfo` objects that are concrete subclasses
     *         of `ancestor`. The iterator will be empty if no matching classes
     *         could be found.
-    *
     * @see `concreteSubclasses(Class[_], Stream[ClassInfo])`
     * @see `concreteSubclasses(Class[_], Iterator[ClassInfo])`
     */
   def concreteSubclasses(ancestor: Class[_], classes: Map[String, ClassInfo]):
-    Iterator[ClassInfo] = {
+  Iterator[ClassInfo] = {
     findConcreteSubclasses(ancestor.getName, classes)
   }
 
@@ -611,17 +618,15 @@ object ClassFinder {
     * @param ancestor the name of the class for which to find descendent
     *                 concrete subclasses
     * @param classes  the iterator of `ClassInfo` objects to search
-    *
     * @return an iterator of `ClassInfo` objects that are concrete subclasses
     *         of `ancestor`. The iterator will be empty if no matching classes
     *         could be found.
-    *
     * @see `concreteSubclasses(Class[_], Map[String, ClassInfo])`
     * @see `concreteSubclasses(String, Stream[ClassInfo])`
     * @see `concreteSubclasses(String, Iterator[ClassInfo])`
     */
   def concreteSubclasses(ancestor: String, classes: Map[String, ClassInfo]):
-    Iterator[ClassInfo] = {
+  Iterator[ClassInfo] = {
 
     findConcreteSubclasses(ancestor, classes)
   }
@@ -631,15 +636,15 @@ object ClassFinder {
   // -------------------------------------------------------------------------
 
   private def findConcreteSubclasses(ancestor: String,
-                                     classes:  Map[String, ClassInfo]):
-    Iterator[ClassInfo] = {
+                                     classes: Map[String, ClassInfo]):
+  Iterator[ClassInfo] = {
 
     // Convert the set of classes to search into a map of ClassInfo objects
     // indexed by class name.
-     @SuppressWarnings(Array("org.wartremover.warts.Option2Iterable"))
-     @tailrec
+    @SuppressWarnings(Array("org.wartremover.warts.Option2Iterable"))
+    @tailrec
     def classMatches(targetClassInfo: ClassInfo,
-                     classesToCheck:  Seq[ClassInfo]): Boolean = {
+                     classesToCheck: Seq[ClassInfo]): Boolean = {
       val targetName = targetClassInfo.name // could use ancestor, but, yuck.
       val classNames = classesToCheck.map(_.name)
       val interfaceNamesToCheck = classesToCheck.flatMap(_.interfaces)
@@ -675,10 +680,10 @@ object ClassFinder {
     // Find the ancestor class
     classes.get(ancestor).map { classInfo =>
       classes.values
-             .toIterator
-             .filter(_.isConcrete)
-             .filter(c => classMatches(classInfo, Seq(c)))
+        .toIterator
+        .filter(_.isConcrete)
+        .filter(c => classMatches(classInfo, Seq(c)))
     }
-    .getOrElse(Iterator.empty)
+      .getOrElse(Iterator.empty)
   }
 }
