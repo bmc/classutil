@@ -242,9 +242,9 @@ the utility methods in the <code>ClassFinder</code> companion object.
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="org.clapper.classutil.ClassFinder#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(path:Seq[java.io.File]):org.clapper.classutil.ClassFinder"></a><a id="&lt;init&gt;:ClassFinder"></a>
+      <a id="&lt;init&gt;(path:Seq[java.io.File],maybeOverrideAsmVersion:Option[Int]):org.clapper.classutil.ClassFinder"></a><a id="&lt;init&gt;:ClassFinder"></a>
       <span class="permalink">
-      <a href="../../../org/clapper/classutil/ClassFinder.html#&lt;init&gt;(path:Seq[java.io.File]):org.clapper.classutil.ClassFinder" title="Permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder.html#&lt;init&gt;(path:Seq[java.io.File],maybeOverrideAsmVersion:Option[Int]):org.clapper.classutil.ClassFinder" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -253,10 +253,12 @@ the utility methods in the <code>ClassFinder</code> companion object.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ClassFinder</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="java.io.File">File</span>]</span>)</span>
+        <span class="name">ClassFinder</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="java.io.File">File</span>]</span>, <span name="maybeOverrideAsmVersion">maybeOverrideAsmVersion: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>]</span>)</span>
       </span>
       
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>a sequence of directories, jars and zips to search</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>a sequence of directories, jars and zips to search</p></dd><dt class="param">maybeOverrideAsmVersion</dt><dd class="cmt"><p>the version of asm to be used. Defaults to v6.
+                               To override use one of the ASM-fields in <span class="extype" name="org.objectweb.asm.Opcodes">org.objectweb.asm.Opcodes</span>.
+                               (e.g. <span class="extype" name="org.objectweb.asm.Opcodes.ASM5">org.objectweb.asm.Opcodes.ASM5</span>)</p></dd></dl></div>
     </li></ol>
             </div>
 

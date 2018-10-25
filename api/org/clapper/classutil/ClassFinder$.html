@@ -296,9 +296,9 @@ filtering classes.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="org.clapper.classutil.ClassFinder#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(path:Seq[java.io.File]):org.clapper.classutil.ClassFinder"></a><a id="apply(Seq[File]):ClassFinder"></a>
+      <a id="apply(path:Seq[java.io.File],maybeOverrideAsmVersion:Option[Int]):org.clapper.classutil.ClassFinder"></a><a id="apply(Seq[File],Option[Int]):ClassFinder"></a>
       <span class="permalink">
-      <a href="../../../org/clapper/classutil/ClassFinder$.html#apply(path:Seq[java.io.File]):org.clapper.classutil.ClassFinder" title="Permalink">
+      <a href="../../../org/clapper/classutil/ClassFinder$.html#apply(path:Seq[java.io.File],maybeOverrideAsmVersion:Option[Int]):org.clapper.classutil.ClassFinder" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -307,15 +307,17 @@ filtering classes.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="java.io.File">File</span>] = <span class="symbol">Seq.empty[File]</span></span>)</span><span class="result">: <a href="ClassFinder.html" class="extype" name="org.clapper.classutil.ClassFinder">ClassFinder</a></span>
+        <span class="name">apply</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="java.io.File">File</span>] = <span class="symbol">Seq.empty[File]</span></span>, <span name="maybeOverrideAsmVersion">maybeOverrideAsmVersion: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">None</span></span>)</span><span class="result">: <a href="ClassFinder.html" class="extype" name="org.clapper.classutil.ClassFinder">ClassFinder</a></span>
       </span>
       
       <p class="shortcomment cmt">Instantiate a new <code>ClassFinder</code> that will search the specified
 classpath, or the default classpath, if no classpath is defined.</p><div class="fullcomment"><div class="comment cmt"><p>Instantiate a new <code>ClassFinder</code> that will search the specified
 classpath, or the default classpath, if no classpath is defined.
 </p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>the classpath, which is a sequence of <code>File</code>
-              objects representing directories, jars and zip files
-              to search. Defaults to <code>classpath</code> if empty.</p></dd><dt>returns</dt><dd class="cmt"><p>a new <code>ClassFinder</code> object</p></dd></dl></div>
+                               objects representing directories, jars and zip files
+                               to search. Defaults to <code>classpath</code> if empty.</p></dd><dt class="param">maybeOverrideAsmVersion</dt><dd class="cmt"><p>the version of asm to be used. Defaults to v6.
+                               To override use one of the ASM-fields in <span class="extype" name="org.objectweb.asm.Opcodes">org.objectweb.asm.Opcodes</span>.
+                               (e.g. <span class="extype" name="org.objectweb.asm.Opcodes.ASM5">org.objectweb.asm.Opcodes.ASM5</span>)</p></dd><dt>returns</dt><dd class="cmt"><p>a new <code>ClassFinder</code> object</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
