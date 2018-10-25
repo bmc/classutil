@@ -66,7 +66,7 @@ class ClassFinderSpec extends BaseSpec {
 
   private val (runtimeClassFiles, runtimeClassFinder) = {
     import scala.util.Properties
-    val version = Properties.releaseVersion.get
+    val version = Properties.releaseVersion.orElse(Properties.developmentVersion).get
     val shortVersion = version.split("""\.""").take(2).mkString(".")
 
     val targetDirectory: Option[File] = Array(
