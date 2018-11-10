@@ -68,10 +68,12 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 // ---------------------------------------------------------------------------
 // Other dependendencies
 
+val asmVersion = "7.0"
+
 libraryDependencies ++= Seq(
-    "org.ow2.asm" % "asm" % "6.1.1",
-    "org.ow2.asm" % "asm-commons" % "6.1.1",
-    "org.ow2.asm" % "asm-util" % "6.1.1",
+    "org.ow2.asm" % "asm" % asmVersion,
+    "org.ow2.asm" % "asm-commons" % asmVersion,
+    "org.ow2.asm" % "asm-util" % asmVersion,
     "org.clapper" %% "grizzled-scala" % "4.4.2"
 )
 
