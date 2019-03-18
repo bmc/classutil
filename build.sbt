@@ -68,7 +68,7 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 // ---------------------------------------------------------------------------
 // Other dependendencies
 
-val asmVersion = "7.0"
+val asmVersion = "7.1"
 
 libraryDependencies ++= Seq(
     "org.ow2.asm" % "asm" % asmVersion,
