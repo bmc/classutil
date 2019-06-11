@@ -62,7 +62,7 @@ private[classutil] class MapToBeanMapperImpl extends MapToBeanMapper {
     }
 
     // Generate both bean-style getters and Scala-style getters.
-    val methodNameMap = Map((beanGetters ++ newMap).toArray: _*)
+    val methodNameMap = Map((beanGetters ++ newMap).toIndexedSeq: _*)
 
     // Create the interface bytes. We need a map of names to return types
     // here.

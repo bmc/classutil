@@ -1,5 +1,19 @@
 # Change log for ClassUtil library
 
+Version 1.5.0:
+
+* Now compiles against Scala 2.13.0, as well as 2.12.x and 2.11.x.
+  Supporting 2.13.0 required adding a compatibility layer for previous versions.
+  Some function type signatures now appear 2.13.0-biased. For instance, some
+  methods now return `LazyList[T]` instead of `Stream[T]`. For versions of
+  Scala prior to 2.13.0, there's an internal compatibility type alias that
+  maps `LazyList` to `Stream`.
+* Support for Scala 2.10 **has been dropped.**
+* Upgraded to ASM version 7.1 (courtesy of @sullis).
+* Now licensed under the [Apache License, version 2.0](https://www.apache.org/licenses/LICENSE-2.0),
+  instead of the [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause).
+  The previous license still applies to older versions.
+
 Version 1.4.0:
 
 * Build changes to allow test suite to work on non-release versions of

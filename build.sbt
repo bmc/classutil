@@ -5,7 +5,7 @@ name := "classutil"
 
 organization := "org.clapper"
 
-version := "1.4.0"
+version := "1.5.0"
 
 licenses := Seq(
   "BSD New" -> url("http://software.clapper.org/classutil/license.html")
@@ -15,11 +15,21 @@ homepage := Some(url("http://software.clapper.org/classutil/"))
 
 description := "A library for fast runtime class-querying, and more"
 
-scalaVersion := "2.11.12"
+scalaVersion := "2.13.0"
 
-crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.8")
+crossScalaVersions := Seq("2.11.12", "2.12.8", "2.13.0")
 
-// ---------------------------------------------------------------------------
+// For compatibility between 2.13.0 and prior versions, we need version-specific
+// compatibility code.
+unmanagedSourceDirectories in Compile += {
+  val sourceDir = (sourceDirectory in Compile).value
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, n)) if n >= 13 => sourceDir / "scala-2.13"
+    case _                       => sourceDir / "pre-scala-2.13"
+  }
+}
+
+// --------------------------------------------------------------------------
 // Additional compiler options and plugins
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature")
@@ -61,20 +71,17 @@ wartremoverErrors in (Compile, compile) ++= Seq(
 )
 
 // ---------------------------------------------------------------------------
-// ScalaTest dependendency
-
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
-
-// ---------------------------------------------------------------------------
-// Other dependendencies
+// Dependendencies
 
 val asmVersion = "7.1"
 
 libraryDependencies ++= Seq(
-    "org.ow2.asm" % "asm" % asmVersion,
-    "org.ow2.asm" % "asm-commons" % asmVersion,
-    "org.ow2.asm" % "asm-util" % asmVersion,
-    "org.clapper" %% "grizzled-scala" % "4.4.2"
+  "org.ow2.asm"             % "asm"                     % asmVersion,
+  "org.ow2.asm"             % "asm-commons"             % asmVersion,
+  "org.ow2.asm"             % "asm-util"                % asmVersion,
+  "org.clapper"            %% "grizzled-scala"          % "4.9.3",
+  "org.scala-lang.modules" %% "scala-collection-compat" % "2.0.0",
+  "org.scalatest"          %% "scalatest"               % "3.0.8" % Test
 )
 
 // ---------------------------------------------------------------------------

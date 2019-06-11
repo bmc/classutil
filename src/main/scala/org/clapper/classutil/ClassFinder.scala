@@ -1,40 +1,3 @@
-/*
-  ---------------------------------------------------------------------------
-  This software is released under a BSD license, adapted from
-  http://opensource.org/licenses/bsd-license.php
-
-  Copyright (c) 2010-2018, Brian M. Clapper
-  All rights reserved.
-
-  Redistribution and use in source and binary forms, with or without
-  modification, are permitted provided that the following conditions are
-  met:
-
-   * Redistributions of source code must retain the above copyright notice,
-    this list of conditions and the following disclaimer.
-
-   * Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in the
-    documentation and/or other materials provided with the distribution.
-
-   * Neither the names "clapper.org", "ClassUtil", nor the names of its
-    contributors may be used to endorse or promote products derived from
-    this software without specific prior written permission.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-  IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
-  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  ---------------------------------------------------------------------------
-*/
-
 /** This library provides methods for locating and filtering classes
   * quickly--faster, in fact, than can be done with Java or Scala runtime
   * reflection. Under the covers, it uses the ASM bytecode library, though
@@ -48,6 +11,8 @@ package org.clapper.classutil
 import java.io.{File, InputStream}
 import java.util.jar.{JarFile, Manifest => JarManifest}
 import java.util.zip.{ZipEntry, ZipFile}
+
+import org.clapper.classutil.ScalaCompat._
 
 import scala.annotation.tailrec
 import scala.language.reflectiveCalls
@@ -299,10 +264,12 @@ trait ClassInfo extends BaseInfo {
   * lazy iterator. The iterator can then be filtered, mapped, or passed to
   * the utility methods in the `ClassFinder` companion object.
   *
-  * @param path                    a sequence of directories, jars and zips to search
+  * @param path                    a sequence of directories, jars and zips to
+  *                                search
   * @param maybeOverrideAsmVersion the version of asm to be used. Defaults to v6.
-  *                                To override use one of the ASM-fields in [[org.objectweb.asm.Opcodes]].
-  *                                (e.g. [[org.objectweb.asm.Opcodes.ASM5]])
+  *                                To override use one of the ASM-fields in
+  *                                `org.objectweb.asm.Opcodes` (e.g.,
+  *                                (`org.objectweb.asm.Opcodes.ASM5`).
   */
 class ClassFinder(path: Seq[File], maybeOverrideAsmVersion: Option[Int]) {
   val classpath: List[File] = path.toList
@@ -312,23 +279,26 @@ class ClassFinder(path: Seq[File], maybeOverrideAsmVersion: Option[Int]) {
     * `ClassInfo` object. The `ClassInfo` objects are returned lazily,
     * rather than loaded all up-front.
     *
-    * @return a `Stream` of `ClassInfo` objects
+    * @return a `LazyList` of `ClassInfo` objects. When compiling against
+    *         versions of Scala prior to 2.13.0, this result is really a
+    *         `scala.Stream` object. (There's a compatibility type definition
+    *         with the `classutil` library.)
     */
-  def getClasses(): Stream[ClassInfo] = find(classpath)
+  def getClasses(): LazyList[ClassInfo] = find(classpath)
 
   /* ---------------------------------------------------------------------- *\
    Private Methods
    \* ---------------------------------------------------------------------- */
 
-  private def find(path: Seq[File]): Stream[ClassInfo] = {
+  private def find(path: Seq[File]): LazyList[ClassInfo] = {
     path match {
-      case Nil => Stream.empty[ClassInfo]
+      case Nil => LazyList.empty[ClassInfo]
       case item :: Nil => findClassesIn(item)
       case item :: tail => findClassesIn(item) ++ find(tail)
     }
   }
 
-  private def findClassesIn(f: File): Stream[ClassInfo] = {
+  private def findClassesIn(f: File): LazyList[ClassInfo] = {
     val name = f.getPath.toLowerCase
 
     if (name.endsWith(".jar"))
@@ -338,10 +308,10 @@ class ClassFinder(path: Seq[File], maybeOverrideAsmVersion: Option[Int]) {
     else if (f.isDirectory)
       processDirectory(f)
     else
-      Stream.empty[ClassInfo]
+      LazyList.empty[ClassInfo]
   }
 
-  private def processJar(file: File): Stream[ClassInfo] = {
+  private def processJar(file: File): LazyList[ClassInfo] = {
     val jar = new JarFile(file)
     val list1 = processOpenZip(file, jar)
 
@@ -374,23 +344,25 @@ class ClassFinder(path: Seq[File], maybeOverrideAsmVersion: Option[Int]) {
     }
   }
 
-  private def processZip(file: File): Stream[ClassInfo] =
+  private def processZip(file: File): LazyList[ClassInfo] =
     processOpenZip(file, new ZipFile(file))
 
-  private def processOpenZip(file: File, zipFile: ZipFile) = {
-    import scala.collection.JavaConverters._
+  private def processOpenZip(file:    File,
+                             zipFile: ZipFile): LazyList[ClassInfo] = {
+    import org.clapper.classutil.ScalaCompat.CollectionConverters._
 
     val classInfoIterators =
       zipFile
         .entries
         .asScala
-        .toStream
         .filter((e: ZipEntry) => isClass(e))
         .map((e: ZipEntry) => classData(zipFile.getInputStream(e), file))
 
-    for {it   <- classInfoIterators
-         data <- it}
-    yield data
+    LazyList.from(
+      for {it   <- classInfoIterators
+           data <- it}
+      yield data
+    )
   }
 
   // Structural type that matches both ZipEntry and File
@@ -402,7 +374,7 @@ class ClassFinder(path: Seq[File], maybeOverrideAsmVersion: Option[Int]) {
   private def isClass(e: FileEntry): Boolean =
     (!e.isDirectory) && e.getName.toLowerCase.endsWith(".class")
 
-  private def processDirectory(dir: File): Stream[ClassInfo] = {
+  private def processDirectory(dir: File): LazyList[ClassInfo] = {
     import java.io.FileInputStream
 
     import grizzled.file.Implicits._
@@ -456,8 +428,9 @@ object ClassFinder {
     *                                objects representing directories, jars and zip files
     *                                to search. Defaults to `classpath` if empty.
     * @param maybeOverrideAsmVersion the version of asm to be used. Defaults to v6.
-    *                                To override use one of the ASM-fields in [[org.objectweb.asm.Opcodes]].
-    *                                (e.g. [[org.objectweb.asm.Opcodes.ASM5]])
+    *                                To override use one of the ASM-fields in
+    *                                `org.objectweb.asm.Opcodes` (e.g.,
+    *                                (`org.objectweb.asm.Opcodes.ASM5`).
     * @return a new `ClassFinder` object
     */
   def apply(path: Seq[File] = Seq.empty[File], maybeOverrideAsmVersion: Option[Int] = None): ClassFinder =
@@ -476,8 +449,8 @@ object ClassFinder {
     *
     * @return a map of (classname, `ClassInfo`) pairs
     */
-  def classInfoMap(stream: Stream[ClassInfo]): Map[String, ClassInfo] =
-    classInfoMap(stream.toIterator)
+  def classInfoMap(stream: LazyList[ClassInfo]): Map[String, ClassInfo] =
+    classInfoMap(stream.iterator)
 
   /** Convenience method that scans the specified classes for all concrete
     * classes that are subclasses of a superclass or trait. A subclass, in this
@@ -507,12 +480,18 @@ object ClassFinder {
     *
     * @param ancestor the `Class` object of the superclass or trait for which
     *                 to find descendent concrete subclasses
-    * @param classes  the stream of `ClassInfo` objects to search
+    * @param classes  the `LazyList` of `ClassInfo` objects to search. (Note
+    *                 that in versions of Scala prior to 2.13.0, this lazy
+    *                 list should really be a `Stream`. A compatibility type
+    *                 definition within this library ensures that methods
+    *                 returning `LazyList` really return `Stream`, in that
+    *                 case.)
+    *
     * @return an iterator of `ClassInfo` objects that are concrete subclasses
     *         of `ancestor`. The iterator will be empty if no matching classes
     *         could be found.
     */
-  def concreteSubclasses(ancestor: Class[_], classes: Stream[ClassInfo]):
+  def concreteSubclasses(ancestor: Class[_], classes: LazyList[ClassInfo]):
     Iterator[ClassInfo] = {
     findConcreteSubclasses(ancestor.getName, ClassFinder.classInfoMap(classes))
   }
@@ -522,13 +501,19 @@ object ClassFinder {
     *
     * @param ancestor the name of the class for which to find descendent
     *                 concrete subclasses
-    * @param classes  the stream of `ClassInfo` objects to search
+    * @param classes  the `LazyList` of `ClassInfo` objects to search. (Note
+    *                 that in versions of Scala prior to 2.13.0, this lazy
+    *                 list should really be a `Stream`. A compatibility type
+    *                 definition within this library ensures that methods
+    *                 returning `LazyList` really return `Stream`, in that
+    *                 case.)
+    *
     * @return an iterator of `ClassInfo` objects that are concrete subclasses
     *         of `ancestor`. The iterator will be empty if no matching classes
     *         could be found.
     * @see `concreteSubclasses(Class[_], Stream[ClassInfo])`
     */
-  def concreteSubclasses(ancestor: String, classes: Stream[ClassInfo]):
+  def concreteSubclasses(ancestor: String, classes: LazyList[ClassInfo]):
     Iterator[ClassInfo] = {
     findConcreteSubclasses(ancestor, ClassFinder.classInfoMap(classes))
   }
@@ -542,7 +527,7 @@ object ClassFinder {
     *   val classes = finder.getClasses  // classes is an Stream[ClassInfo]
     *   // Of course, it's easier just to call the version that takes a
     *   // Stream...
-    *   ClassFinder.concreteSubclasses(classOf[Baz], classes.toIterator)
+    *   ClassFinder.concreteSubclasses(classOf[Baz], classes.iterator)
     * }}}
     * @param ancestor the `Class` object of the superclass or trait for which
     *                 to find descendent concrete subclasses
@@ -567,7 +552,7 @@ object ClassFinder {
     *   val classes = finder.getClasses  // classes is an Stream[ClassInfo]
     *   // Of course, it's easier just to call the version that takes a
     *   // Stream...
-    *   ClassFinder.concreteSubclasses("org.example.Foo", classes.toIterator)
+    *   ClassFinder.concreteSubclasses("org.example.Foo", classes.iterator)
     * }}}
     * @param ancestor the name of the class for which to find descendent
     *                 concrete subclasses
@@ -669,7 +654,7 @@ object ClassFinder {
       .map { classInfo =>
         classes
           .values
-          .toIterator
+          .iterator
           .filter(_.isConcrete)
           .filter(c => classMatches(classInfo, Seq(c)))
       }

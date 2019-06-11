@@ -29,7 +29,15 @@ ClassUtil is fast for several reasons:
 Please see the full documentation on the [library's home page][] for all the
 gory details, including caveats.
 
-ClassUtil is copyright &copy; 2010-2018 [Brian M. Clapper][] and is released
+ClassUtil is copyright &copy; 2010-2019 [Brian M. Clapper][].
+ 
+Versions prior to 1.5.0 were licensed under the
+[3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause).
+
+Version 1.5.0 and on are licensed under the
+[Apache License, version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
+ and is released
 under a new BSD license.
 
 [library's home page]: http://software.clapper.org/classutil

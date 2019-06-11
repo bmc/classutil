@@ -130,7 +130,7 @@ class ClassUtilSpec extends BaseSpec {
       def d(s: String): String = {""}
       def e(s: Array[String]): String = {""}
       def f(s: Array[String], i: Int, f: Float): Double = {0.0d}
-      def g(m: Map[Int, String], s: String): Seq[String] = {Seq("")}
+      def g(m: Map[Int, String], s: String): Array[String] = {Array("")}
     }
 
     val methodMap = classOf[Foo].getMethods.map{m => m.getName -> m}.toMap
@@ -141,7 +141,7 @@ class ClassUtilSpec extends BaseSpec {
       (methodMap("d"), "(Ljava/lang/String;)Ljava/lang/String;"),
       (methodMap("e"), "([Ljava/lang/String;)Ljava/lang/String;"),
       (methodMap("f"), "([Ljava/lang/String;IF)D"),
-      (methodMap("g"), "(Lscala/collection/immutable/Map;Ljava/lang/String;)Lscala/collection/Seq;")
+      (methodMap("g"), "(Lscala/collection/immutable/Map;Ljava/lang/String;)[Ljava/lang/String;")
     )
 
     def methodToString(m: java.lang.reflect.Method): String = {
@@ -209,7 +209,7 @@ class ClassUtilSpec extends BaseSpec {
   }
 
   "scalaAccessorMethods" should "find all getters" in {
-    case class Foo(fieldA: String, fieldB: Int, i: BigInt, s: String)
+    class Foo(val fieldA: String, val fieldB: Int, val i: BigInt, val s: String)
     val methodNames = ClassUtil.scalaAccessorMethods(classOf[Foo]).map(_.getName)
     methodNames should have length 4
     methodNames.toSet should be (Set("fieldA", "fieldB", "i", "s"))
