@@ -31,14 +31,11 @@ gory details, including caveats.
 
 ClassUtil is copyright &copy; 2010-2019 [Brian M. Clapper][].
  
-Versions prior to 1.5.0 were licensed under the
-[3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause).
+- Versions prior to 1.5.0 were licensed under the
+  [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause).
 
-Version 1.5.0 and on are licensed under the
-[Apache License, version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
-
- and is released
-under a new BSD license.
+- Version 1.5.0 and on are licensed under the
+  [Apache License, version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 
 [library's home page]: http://software.clapper.org/classutil
 [ASM]: http://asm.ow2.org/
