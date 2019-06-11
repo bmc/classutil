@@ -51,7 +51,9 @@ ClassUtil is published to my [Bintray Maven repository][], which is
 automatically linked to Bintray's [JCenter][] repository. It's also sync'd
 to Maven Central.
 
-* Versions 1.0.13 and newer support Scala 2.10, 2.11, and 2.12.
+* Version 1.5.0 and newer support Scala 2.11, 2.12 and 2.13. (Support
+  for 2.10 has been dropped.)
+* Versions 1.0.13 through 1.4.x support Scala 2.10, 2.11, and 2.12.
 * Versions 1.0.7 through 1.0.12 support Scala 2.10, 2.11, and 2.12-Mx.
 * Version 1.0.5 supports Scala 2.10 and 2.11.
 * Versions 1.0.1 through 1.0.4 support Scala 2.10.
@@ -66,7 +68,7 @@ Specify the `classutil` artifact:
     <dependency>
       <groupId>org.clapper</groupId>
       <artifactId>classutil_2.11</artifactId>
-      <version>1.4.0</version>
+      <version>1.5.0</version>
     </dependency>
 
 For more information on using Maven and Scala, see Josh Suereth's
@@ -76,7 +78,7 @@ For more information on using Maven and Scala, see Josh Suereth's
 
 With SBT 0.13.x or 1.x, use:
 
-    libraryDependencies += "org.clapper" %% "classutil" % "1.4.0"
+    libraryDependencies += "org.clapper" %% "classutil" % "1.5.0"
 
 to get the latest version of ClassUtil.
 
@@ -548,8 +550,12 @@ Brian M. Clapper, [bmc@clapper.org][]
 
 # Copyright and License
 
-The ClassUtil Library is copyright &copy; 2010-2011 Brian M. Clapper and is
-released under a [BSD License][].
+The ClassUtil Library is copyright &copy; 2010-2019 Brian M. Clapper;
+
+- Version 1.5.0 and on are licensed under the
+  [Apache License, version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+- Versions prior to 1.5.0 were licensed under the
+  [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause).
 
 # Patches
 
@@ -561,7 +567,6 @@ request. Along with any patch you send:
 * Please indicate that you license the work to the ClassUtil project
   under a [BSD License][].
 
-[BSD License]: license.html
 [GitHub repository]: http://github.com/bmc/classutil
 [GitHub]: http://github.com/bmc/
 [downloads page]: http://github.com/bmc/classutil/downloads
