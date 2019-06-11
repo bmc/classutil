@@ -1,5 +1,9 @@
 # Change log for ClassUtil library
 
+Version 1.5.1:
+
+* Updated license in `build.sbt`, so it'll be reflected in the POM.
+
 Version 1.5.0:
 
 * Now compiles against Scala 2.13.0, as well as 2.12.x and 2.11.x.
