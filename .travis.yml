@@ -17,7 +17,7 @@ before_cache:
   - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
 
 jdk:
-  - oraclejdk8
+  - openjdk8
 
 scala:
   - 2.11.12
