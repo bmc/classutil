@@ -18,6 +18,7 @@ before_cache:
 
 jdk:
   - openjdk8
+  - openjdk11
 
 scala:
   - 2.11.12
