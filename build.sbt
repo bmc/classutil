@@ -17,7 +17,7 @@ description := "A library for fast runtime class-querying, and more"
 
 scalaVersion := "2.13.0"
 
-crossScalaVersions := Seq("2.11.12", "2.12.8", "2.13.0")
+crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.0")
 
 // For compatibility between 2.13.0 and prior versions, we need version-specific
 // compatibility code.
