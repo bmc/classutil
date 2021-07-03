@@ -73,7 +73,7 @@ wartremoverErrors in (Compile, compile) ++= Seq(
 // ---------------------------------------------------------------------------
 // Dependendencies
 
-val asmVersion = "7.1"
+val asmVersion = "9.2"
 
 libraryDependencies ++= Seq(
   "org.ow2.asm"             % "asm"                     % asmVersion,
